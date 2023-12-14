@@ -16,7 +16,6 @@ app.use(cors());
 		//! LOGIN
 		app.post('/login', User.login);
 		//! CRUD USER
-
 	//^ BUS AGENCIES
 		//! - Carris
 		//! - Carris Metropolitana

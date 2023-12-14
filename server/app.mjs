@@ -22,6 +22,46 @@ app.use(cors());
 		//app.put('/user', User.update);
 		//app.delete('/user', User.delete);
 
+	/**
+	 * GET ALL AGENCIES
+	 * 		^^^^ each 24h fetch
+	 * DB post
+	 * 
+	 * type ferry, train, etc.
+	 * 
+	 * agencies > trips > stations > region
+	 * agency : {
+	 *  id: 'fet',
+	 * 	name: 'Fertagus',
+	 * 	info: {},
+	 * 	routes: {
+	 * 		north: [
+	 * 		 'Roma-Areeiro - Setúbal',
+	 * 		 'Roma-Areeiro - Setúbal',
+	 * 		]
+	 * 		south: [
+	 * 			'Setubal - QQlr'
+	 * 		]
+	 * 	}
+	 * }
+	 * 
+	 * stations: {
+	 * 	id: 'fet'
+	 *  stops: [
+	 *  {
+	 *   nome: 'corroios',
+	 * 	area: 'setubal'
+	 *   coors: '242323,5235,23'
+	 *   connections: [
+	 *   	mts: ,
+	 *      carris: ,
+	 *      fertagus: 
+	 *   ]
+	 *  }
+	 *  'corroios'
+	 *  ]
+	 * }
+	 **/
 	//^ BUS AGENCIES
 		//! - Carris
 		//! - Carris Metropolitana

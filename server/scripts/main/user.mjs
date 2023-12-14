@@ -4,6 +4,8 @@ import CryptoJS from 'crypto-js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KEY).toString();
+
 export const User = {
 	//^ CRUD
 	create: () => {},
@@ -23,8 +25,8 @@ export const User = {
 			else {
 				jwt.sign(
 					{
-						id: new ObjectId(result._id).toString(),
-						username: result.username
+						id: encrypt(new ObjectId(result._id).toString()),
+						username: encrypt(result.username)
 					},
 					process.env.SECRET_TOKEN_KEY,
 					//! { expiresIn: '30s' },

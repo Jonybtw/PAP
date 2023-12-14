@@ -7,6 +7,7 @@ const app = express();
 
 //* libs
 import { User } from './scripts/main/user.mjs';
+import { Auth } from './scripts/utils/auth.mjs';
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -15,7 +16,9 @@ app.use(cors());
 	//^ USER
 		//! LOGIN
 		app.post('/login', User.login);
+		app.use(Auth.use);
 		//! CRUD USER
+		app.get('/user', User.get);
 	//^ BUS AGENCIES
 		//! - Carris
 		//! - Carris Metropolitana

@@ -7,3 +7,16 @@ window.onscroll = function () {
     document.getElementById("navbar").classList.remove("shrink");
   }
 };
+
+
+/*
+let params = new URLSearchParams();
+params.append('username', vardoUser);
+params.append('password', password);
+
+let result = await axios.post('/login', params, {})
+if (!result) ..
+else {
+  login -> redirect
+}
+*/

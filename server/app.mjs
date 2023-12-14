@@ -14,11 +14,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors());
 
 	//^ USER
-		//! LOGIN
 		app.post('/login', User.login);
 		app.use(Auth.use);
 		//! CRUD USER
+		//app.post('/user', User.create);
 		app.get('/user', User.get);
+		//app.put('/user', User.update);
+		//app.delete('/user', User.delete);
+
 	//^ BUS AGENCIES
 		//! - Carris
 		//! - Carris Metropolitana

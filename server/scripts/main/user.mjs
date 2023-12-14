@@ -7,13 +7,15 @@ import jwt from 'jsonwebtoken';
 const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KEY).toString();
 const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
 
+//! HANDLE USER MODEL
+
 //TODO: MAKE USER MODEL
 /*
 	(my suggestion)
 	{
 		data: {
 			username: --,
-			birthday: --,
+			birth: --,
 			address: --,
 			routes: [],
 			...
@@ -35,7 +37,9 @@ const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KE
 
 export const User = {
 	//^ CRUD
-	create: () => {},
+	create: async (request, response) => {
+
+	},
 	get: async (request, response) => {
 		let id;
     if (!request.params.idUser) {

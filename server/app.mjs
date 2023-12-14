@@ -17,7 +17,7 @@ app.use(cors());
 		app.post('/login', User.login);
 		app.use(Auth.use);
 		//! CRUD USER
-		app.post('/user', User.create);
+		app.post('/user', User.create); //! HANDLE ERRORs
 		app.get('/user', User.get);
 		//app.put('/user', User.update);
 		//app.delete('/user', User.delete);

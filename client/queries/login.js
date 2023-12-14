@@ -19,10 +19,9 @@ form.addEventListener('submit', async (e) => {
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState == 4 && xhr.status == 200) {
-				localStorage.setItem('token', xhr.responseText.slice(1, -1));
+				localStorage.setItem('token', xhr.responseText.slice(1,-1));
 			}
 		}
 		xhr.send(params);
 	}
-
 });

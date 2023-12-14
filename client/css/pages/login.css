@@ -23,17 +23,19 @@ section#login-form > form {
 }
 
 section#login-form > form input[type='text'],
-section#login-form > form input[type='button'] {
+section#login-form > form input[type='password'],
+section#login-form > form input[type='submit'] {
     border-radius: 4px;
     border: 0;
 }
 
-section#login-form > form input[type='text'] {
+section#login-form > form input[type='text'],
+section#login-form > form input[type='password'] {
     padding: 0.5rem 1rem;
     width: 20rem;
 }
 
-section#login-form > form input[type='button'] {
+section#login-form > form input[type='submit'] {
     padding: 0.5rem;
     width: 100%;
     background-color: var(--primary-color);

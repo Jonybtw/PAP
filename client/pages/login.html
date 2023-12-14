@@ -15,16 +15,17 @@
 		<h1>RouteWise</h1>
 	</section>
 	<section id="login-form">
-		<form action="../js/main.js">
+		<form action="login.html" method="post" id="login" autocomplete="off">
 			<h3>Iniciar Sessão</h3>
-			<input type="text" placeholder="Nome de utilizador">
-			<input type="text" placeholder="Palavra-Passe">
-			<input type="button" value="Iniciar Sessão">
+			<input type="text" name="username" placeholder="Nome de utilizador">
+			<input type="password" name="password" placeholder="Palavra-Passe">
+			<input type="submit" value="Iniciar Sessão">
 			<section>
 				<input type="checkbox">
 				<label>Relembrar deste dispositivo</label>
 			</section>
 		</form>
 	</section>
+	<script src="../queries/login.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KEY).toString();
+const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
 
 //TODO: MAKE USER MODEL
 /*
@@ -14,12 +15,12 @@ const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KE
 			username: --,
 			birthday: --,
 			address: --,
+			routes: [],
 			...
 		},
 		contacts: {
 			email: --,
 			phone: --,
-			social: --
 		},
 		settings: {
 			isDarkMode: --
@@ -35,7 +36,36 @@ const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KE
 export const User = {
 	//^ CRUD
 	create: () => {},
-	get: () => {},
+	get: async (request, response) => {
+		let id;
+    if (!request.params.idUser) {
+      id = request.id;
+    } else if (request.params.idUser.length !== 24) {
+      response.status(404).json('Not Valid');
+      return;
+    } else {
+      id = request.params.idUser;
+    }
+    let query = {_id: new ObjectId(id)};
+    let projection = {
+      projection: {
+        _id: 1,
+        name: 1,
+				password: 1,
+				username: 1
+      }
+    };
+		let result = await collectionUsers.findOne(query, projection);
+		if (!result) response.status(404).json('Not Found');
+		else {
+			response.status(200).json({
+				_id: result._id,
+				name: result.name,
+				password: result.password,
+				username: result.username
+			});
+		}
+	},
 	update: () => {},
 	delete: () => {},
 	//^ LOGIN

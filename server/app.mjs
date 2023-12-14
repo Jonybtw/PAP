@@ -1,8 +1,12 @@
+//* dependencies
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 const app = express();
+
+//* libs
+import { User } from './scripts/main/user.mjs';
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -10,6 +14,7 @@ app.use(cors());
 
 	//^ USER
 		//! LOGIN
+		app.post('/login', User.login);
 		//! CRUD USER
 
 	//^ BUS AGENCIES

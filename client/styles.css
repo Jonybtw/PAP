@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -9,7 +13,7 @@ body {
   
   nav {
     background-color: #333;
-    padding: 15px;
+    padding: 40px;
   }
   
   ul {
@@ -44,10 +48,6 @@ body {
   
   h1, h2 {
     color: #333;
-  }
-  
-  p {
-    line-height: 1.6;
   }
   
   .content-section a {
@@ -122,3 +122,15 @@ body {
     color: white;
   }
   
+  #navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #333;
+    padding: 25px;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+  }
+  
+  #navbar.shrink {
+    padding: 15px;
+  }

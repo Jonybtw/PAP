@@ -1,88 +1,72 @@
 <!DOCTYPE html>
-<br lang="pt">
+<html lang="pt-PT">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
   <title>RouteWise</title>
+  <script src="script.js"></script>
 </head>
-<br>
 
+<body>
 
-<nav id="navbar">
-  <ul>
-    <li><a href="#homepage">Homepage</a></li>
-    <li><a href="#login">Login</a></li>
-    <li><a href="#horarios">Horários</a></li>
-    <li><a href="#contactos">Contatos</a></li>
-    <!-- Adicione mais itens conforme necessário -->
-  </ul>
-</nav>
+  <nav class="navbar">
+    <button class="open-sidebar-button" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar">
+      <a class="close-btn" onclick="toggleSidebar()">X</a>
+      <a href="#">Cidades</a>
+      <a href="#">Contato</a>
+      <a href="#">Cidades</a>
+    </div>
+    <div class="logo">
+      Route<span class="wise">Wise</span>
+    </div>
+    <div class="buttons">
+      <button class="login-button">Iniciar Sessão</button>
+      <button class="register-button">Registar</button>
+    </div>
+  </nav>
 
-<section id="homepage" class="content-section">
-</br>
-  <h1>Bem-vindo ao RouteWise!</h1>
-  <div class="search-box">
-    <input type="text" id="origem" placeholder="Origem">
-    <input type="text" id="destino" placeholder="Destino">
-    <button onclick="buscarCaminho()">Buscar Caminho</button>
+  <div class="center-content">
+    <h1 class="title">Route<span class="wise">Wise</span></h1>
+    <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span
+        class="blue">Eficiência</span></p>
+
+    <div class="rounded-box">
+      <h2 class="intro-text">Traz-me a algum lado</h2>
+      <p class="sub-text">Planeia uma trajetória na nossa Web App!</p>
+      <div class="input-group">
+        <input type="text" placeholder="Início" class="start-input">
+        <input type="text" placeholder="Fim" class="end-input">
+      </div>
+      <button class="search-button">Pesquisar</button>
+      <div class="button-group">
+        <button class="swap-button">Trocar</button>
+        <button class="change-city-button">Mudar Cidade</button>
+      </div>
+    </div>
+
+    <div class="cities-box">
+      <h2 class="cities-title">Cidades Disponíveis</h2>
+      <p class="cities-description">Explore as cidades disponíveis e descubra novos destinos emocionantes.</p>
+      <br><a href="cidades.html" class="cities-button">Cidades</a>
+    </div>
   </div>
-  <div class="app-info">
-    <p>RouteWise é a solução perfeita para encontrar os melhores caminhos e horários de transporte na sua cidade. Seu companheiro confiável para navegar pela cidade.</p>
-  </div>
-</section>
 
-<section id="login" class="content-section">
-  <h2>Login</h2>
-  <p>Faça o login na sua conta para aproveitar ao máximo a RouteWise.</p>
-  <form>
-    <label for="username">Nome de Utilizador:</label>
-    <input type="text" id="username" name="username">
-    <label for="password">Senha:</label>
-    <input type="password" id="password" name="password">
-    <button type="submit">Login</button>
-    <p>Esqueceste-te da senha? <a href="">Resetar</a></p>
-    <p>Não tens conta? <a href="">Registar</a></p>
-  </form>
-</section>
+  <footer>
+    <div class="footer-content">
+      <h2 class="footer-title">Route<span class="wise">Wise</span></h2>
+      <p class="footer-text">Navegue com <span class="blue">Inteligência</span>, Navegue com <span
+          class="blue">Eficiência</span></p>
+      <div class="footer-links">
+        <a href="sobrenos.html">Sobre Nós</a>
+        <a href="contato.html">Contato</a>
+        <a href="cidades.html">Cidades</a>
+      </div>
+    </div>
+  </footer>
 
-<section id="horarios" class="content-section">
-  <h2>Horários Disponíveis</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Dia da Semana</th>
-        <th>Horário</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Segunda-feira</td>
-        <td>07:00 - 09:00</td>
-      </tr>
-      <tr>
-        <td>Terça-feira</td>
-        <td>12:00 - 14:00</td>
-      </tr>
-      <tr>
-        <td>Quarta-feira</td>
-        <td>18:00 - 20:00</td>
-      </tr>
-      <!-- Adicione mais dias e horários conforme necessário -->
-    </tbody>
-  </table>
-</section>
-
-<section id="contactos" class="content-section">
-  <h2>Entre em Contato</h2>
-  <p>Estamos aqui para ajudar! Entre em contato connosco para obter mais informações ou esclarecer dúvidas.</p>
-  <ul>
-    <li>Email: <a href="mailto:info@RouteWise.com">info@routewise.com</a></li>
-    <li>Telefone: (+351) XXX XXX XXX</li>
-    <li>Endereço: Rua da RouteWise, 123</li>
-  </ul>
-</section>
-<script src="script.js"></script>
 </body>
+
 </html>

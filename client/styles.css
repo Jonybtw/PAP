@@ -21,6 +21,7 @@ body {
   margin-left: 40px;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .wise {
@@ -107,6 +108,7 @@ footer {
   color: #fff;
   padding: 20px 0;
   text-align: center;
+  width: 100%;
 }
 
 .footer-content {

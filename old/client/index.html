@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>RouteWise</title>
+  <script src="script.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <button class="open-sidebar-button" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar">
+      <a class="close-btn" onclick="toggleSidebar()">X</a>
+      <a href="cidades.html">Cidades</a>
+      <a href="horarios.html">Horários & Agências</a>
+      <a href="contato.html">Contato</a>
+      <a href="sobrenos.html">Sobre Nós</a>
+    </div>
+    <div class="overlay" onclick="toggleSidebar()"></div>
+    <div class="logo" onclick="redirectToIndex()">
+      Route<span class="wise">Wise</span>
+    </div>
+    <div class="buttons">
+      <button class="login-button" onclick="login()">Iniciar Sessão</button>
+      <button class="register-button" onclick="register()">Registar</button>
+    </div>
+  </nav>
+
+  <div class="center-content">
+    <h1 class="title">Route<span class="wise">Wise</span></h1>
+    <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span
+        class="blue">Eficiência</span></p>
+
+    <div class="rounded-box">
+      <h2 class="intro-text">Traz-me a algum lado</h2>
+      <p class="sub-text">Planeia uma trajetória na nossa Web App!</p>
+      <div class="input-group">
+        <input type="text" placeholder="Início" class="start-input">
+        <input type="text" placeholder="Fim" class="end-input">
+      </div>
+      <button class="search-button">Pesquisar</button>
+      <div class="button-group">
+        <button class="swap-button">Trocar</button>
+        <button class="change-city-button">Mudar Cidade</button>
+      </div>
+    </div>
+
+    <div class="cities-box">
+      <h2 class="cities-title">Cidades Disponíveis</h2>
+      <p class="cities-description">Explore as cidades disponíveis e descubra novos destinos.</p>
+      <br><a href="cidades.html" class="cities-button">Cidades</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <h2 class="footer-title">Route<span class="wise">Wise</span></h2>
+      <p class="footer-text">Navegue com <span class="blue">Inteligência</span>, Navegue com <span
+          class="blue">Eficiência</span></p>
+      <div class="footer-links">
+        <a href="sobrenos.html">Sobre Nós</a>
+        <a href="contato.html">Contato</a>
+        <a href="cidades.html">Cidades</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

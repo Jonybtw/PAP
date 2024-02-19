@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RouteWise</title>
     <link rel="stylesheet" href="css/main.css">
-    
+
 </head>
+
 <body>
     <header>
         <!-- NAV BTN -->
@@ -18,8 +20,28 @@
     </header>
 
     <main>
-
         <section id="particles"></section>
+        <h1 class="title">Route<span class="wise">Wise</span></h1>
+        <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span class="blue">Eficiência</span></p>
+        <div class="rounded-box">
+            <h2 class="intro-text">Traz-me a algum lado</h2>
+            <p class="sub-text">Planeia uma trajetória na nossa Web App!</p>
+            <div class="input-group">
+                <input type="text" placeholder="Início" class="start-input">
+                <input type="text" placeholder="Fim" class="end-input">
+            </div>
+            <button class="search-button">Pesquisar</button>
+            <div class="button-group">
+                <button class="swap-button">Trocar</button>
+                <button class="change-city-button">Mudar Cidade</button>
+            </div>
+        </div>
+
+        <div class="cities-box">
+            <h2 class="cities-title">Cidades Disponíveis</h2>
+            <p class="cities-description">Explore as cidades disponíveis e descubra novos destinos.</p>
+            <br><a href="cidades.html" class="cities-button">Cidades</a>
+        </div>
     </main>
 
     <footer>
@@ -33,4 +55,5 @@
     </footer>
     <script src="js/particles.js"></script>
 </body>
+
 </html>

@@ -27,12 +27,14 @@
         <div class="rounded-box">
             <div class="input-group">
                 <h1 class="title2">Criar Conta</h1>
-                <input type="text" placeholder="Nome de utilizador" class="username">
-                <input type="text" placeholder="E-mail" class="email">
-                <input type="password" placeholder="Senha" class="password">
-                <input type="password" placeholder="Confirmar Senha" class="confirmpassword">
+                <form id="registerForm" onsubmit="registerUser(); return false;">
+                    <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput">
+                    <input type="text" placeholder="E-mail" class="email" id="emailInput">
+                    <input type="password" placeholder="Senha" class="password" id="passwordInput">
+                    <input type="password" placeholder="Confirmar Senha" class="confirmpassword" id="confirmpasswordInput">
+                    <input type="submit" name="search-button" id="submitButton" value="Registar Conta">
+                </form>
             </div>
-            <button class="search-button">Iniciar Sessão</button>
         </div>
     </main>
 
@@ -45,6 +47,58 @@
             <a href="horarios.html">Horários</a>
         </nav>
     </footer>
+    <script>
+        function registerUser() {
+          // Get form elements
+          const username = document.getElementById('usernameInput').value;
+          const email = document.getElementById('emailInput').value;
+          const password = document.getElementById('passwordInput').value;
+          const confirmPassword = document.getElementById('confirmpasswordInput').value;
+      
+          // Create an XMLHttpRequest object
+          const xhr = new XMLHttpRequest();
+      
+          // Open the request (POST method, URL for user registration)
+          xhr.open('POST', 'http://127.0.0.1:3512/user');
+      
+          // Set request headers (optional, but recommended for content type)
+          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      
+          // Function to handle the response
+          // !!!!!!!!!!!!!! LOGICA DE MOSTRAR MENSAGEM DE SUCESSO/ERRO NAO ESTA A FUNFAR !!!!!!!!!!!!!!!
+          xhr.onload = function() {
+            if (xhr.status === 200 || (xhr.status === 201 && response.success)) { // Successful response
+              const response = JSON.parse(xhr.responseText);
+              if (response.success) {
+                // Handle successful registration (e.g., display success message, redirect to login page)
+                console.log('Registration successful:', response.message);
+                // Consider redirecting or showing a success message
+              } else {
+                // Handle registration errors (display error messages)
+                console.error('Registration error:', response.message);
+                // Display appropriate error messages to the user
+              }
+            } else {
+              // Handle non-200 status codes (errors)
+                console.error('Registration failed with status:', xhr.status);
+                // Display an error message to the user
+            }
+          };
+      
+          // Function to handle errors during request
+          xhr.onerror = function() {
+            console.error('Error registering user:', xhr.statusText);
+            // Display an error message to the user indicating network or other issues
+          };
+      
+          // Create a URL-encoded string from form data
+          const formData = `username=${username}&email=${email}&password=${password}&confirmPassword=${confirmPassword}`;
+      
+          // Send the request with the encoded form data
+          xhr.send(formData);
+        }
+      </script>
+      
 </body>
 
 </html>

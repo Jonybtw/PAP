@@ -38,7 +38,69 @@ const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KE
 export const User = {
 	//^ CRUD
 	create: async (request, response) => {
+		try {
+			// Destructure user data with validation (using optional chaining)
+			const { username, email, password, confirmPassword } = request.body || {};
+			if (!username || !email || !password || !confirmPassword) {
+				return response.status(401).json('Missing required fields.');
+			}
+			// Efficiently check for existing username and email using findOne with $or operator
+			const existingUser = await collectionUsers.findOne({
+				$or: [{ 'data.username': username }, { 'contacts.email': email }]
+			});
+			
+			if (existingUser) {
+				const conflictField = existingUser.data.username === username ? 'username' : 'email';
+				return response.status(409).json(`Conflict: '${conflictField}' already exists.`);
+			}
 
+			// Validate email format using a regular expression (optional)
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!emailRegex.test(email)) {
+				return response.status(400).json('Invalid email format.');
+			}
+	
+			// Check password confirmation
+			if (password !== confirmPassword) {
+				return response.status(400).json('Passwords do not match.');
+			}
+	
+			// Hash password securely using bcrypt (10 rounds recommended)
+			const hashedPassword = await bcrypt.hash(password, 12);
+	
+			// Create new user document
+			const newUser = {
+				data: {
+					username: username,
+					name: null,
+					birth: null,
+					address: null,
+					routes: null
+				},
+				contacts: {
+					email: encrypt(email),
+					phone: null
+				},
+				settings: {
+					isDarkMode: null,
+					mainColor: null
+				},
+				auth: {
+					password: hashedPassword,
+					role: null,
+				}
+				// Add other user fields as needed (e.g., firstName, lastName)
+			};
+	
+			// Insert user into MongoDB collection
+			const result = await collectionUsers.insertOne(newUser);
+			if(!result) response.status(401).json('Erro ao criar');
+			else response.status(201).json('User registered successfully.');
+			// Handle successful registration (avoid sensitive data)
+		} catch (error) {
+			console.error('Error registering user:', error);
+			response.status(500).json('Internal server error.'); // Generic error for security
+		}
 	},
 	get: async (request, response) => {
 		let id;

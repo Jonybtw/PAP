@@ -31,7 +31,7 @@
                     <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput">
                     <input type="text" placeholder="E-mail" class="email" id="emailInput">
                     <input type="password" placeholder="Senha" class="password" id="passwordInput">
-                    <input type="password" placeholder="Confirmar Senha" class="confirmpassword" id="confirmpasswordInput">
+                    <input type="password" placeholder="Confirmar Senha" class="confirmpassword" id="confirmPasswordInput">
                     <input type="submit" class="register-button" name="register-button" id="submitButton" value="Registar Conta">
                 </form>
             </div>
@@ -53,19 +53,18 @@
           const username = document.getElementById('usernameInput').value;
           const email = document.getElementById('emailInput').value;
           const password = document.getElementById('passwordInput').value;
-          const confirmPassword = document.getElementById('confirmpasswordInput').value;
-      
-          // Create an XMLHttpRequest object
-          const xhr = new XMLHttpRequest();
-      
-          // Open the request (POST method, URL for user registration)
-          xhr.open('POST', 'http://127.0.0.1:3512/user');
-      
-          // Set request headers (optional, but recommended for content type)
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      
-          // Function to handle the response
-          // !!!!!!!!!!!!!! LOGICA DE MOSTRAR MENSAGEM DE SUCESSO/ERRO NAO ESTA A FUNFAR !!!!!!!!!!!!!!!
+          const confirmPassword = document.getElementById('confirmPasswordInput').value;
+          
+            // Create an XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+          
+            // Open the request (POST method, URL for user registration)
+            xhr.open('POST', 'http://127.0.0.1:3512/user');
+          
+            // Set request headers (optional, but recommended for content type)
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+          
+            // Function to handle the response
           xhr.onload = function() {
             if (xhr.status === 200 || (xhr.status === 201 && response.success)) { // Successful response
               const response = JSON.parse(xhr.responseText);
@@ -78,6 +77,9 @@
                 console.error('Registration error:', response.message);
                 // Display appropriate error messages to the user
               }
+            } else if (xhr.status === 409) { // Conflict error
+              console.error('Registration failed: User already exists');
+              // Display an error message to the user indicating that the user already exists
             } else {
               // Handle non-200 status codes (errors)
                 console.error('Registration failed with status:', xhr.status);

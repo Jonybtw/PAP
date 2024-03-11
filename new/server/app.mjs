@@ -19,7 +19,7 @@ app.use(cors());
 		app.use(Auth.use);
 		//! CRUD USER
 		app.get('/user', User.get);
-		//app.put('/user', User.update);
+		app.put('/user', User.update);
 		//app.delete('/user', User.delete);
 
 	//^ BUS AGENCIES

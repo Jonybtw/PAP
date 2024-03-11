@@ -70,31 +70,32 @@ export const User = {
 	
 			// Create new user document
 			const newUser = {
+				_id: new ObjectId(),
 				data: {
 					username: username,
-					name: null,
-					birth: null,
-					address: null,
-					routes: null
+					name: encrypt("teste"),
+					birth: encrypt("teste"),
+					address: encrypt("teste"),
+					routes: []
 				},
 				contacts: {
 					email: encrypt(email),
-					phone: null
+					phone: encrypt("teste")
 				},
 				settings: {
-					isDarkMode: null,
-					mainColor: null
+					isDarkMode: "teste",
+					mainColor: "teste"
 				},
 				auth: {
 					password: hashedPassword,
-					role: null,
+					role: "teste",
 				}
 				// Add other user fields as needed (e.g., firstName, lastName)
 			};
 	
 			// Insert user into MongoDB collection
 			const result = await collectionUsers.insertOne(newUser);
-			if(!result) response.status(401).json('Erro ao criar');
+			if(!result) response.status(401).json('Error registering user.');
 			else response.status(201).json('User registered successfully.');
 			// Handle successful registration (avoid sensitive data)
 		} catch (error) {
@@ -128,28 +129,60 @@ export const User = {
 			response.status(200).json({
 				_id: result._id,
 				data: {
-					username: result.data.username,
+					username: result.data?.username ?? null,
 					name: decrypt(result.data.name),
 					birth: decrypt(result.data.birth),
 					address: decrypt(result.data.address),
-					routes: result.data.routes
+					routes: result.data?.routes ?? null
 				},
 				contacts: {
-					email: decrypt(result.contacts.email),
-					phone: decrypt(result.contacts.phone)
+					email: decrypt(result.contacts?.email) ?? result.contacts.email,
+					phone: decrypt(result.data.address)
 				},
 				settings: {
-					isDarkMode: result.settings.isDarkMode,
-					mainColor: result.settings.mainColor
+					isDarkMode: result.settings?.isDarkMode ?? null,
+					mainColor: result.settings?.mainColor ?? null
 				},
 				auth: {
-					password: result.auth.password,
-					role: result.auth.role,
+					password: result.auth?.password ?? null,
+					role: result.auth?.role ?? null,
 				}
 			});
 		}
 	},
-	update: () => {},
+	
+	update: async (request, response) => {
+		try {
+		  // Destructure user data with validation (using optional chaining)
+		  const { username, email, password, name, birth, address, phone, isDarkMode, mainColor, role } = request.body || {};
+	  
+		  // Create updated user document
+		  const updatedUser = {
+			...(username && { 'data.username': username }),
+			...(name && { 'data.name': encrypt(name) }),
+			...(birth && { 'data.birth': encrypt(birth) }),
+			...(address && { 'data.address': encrypt(address) }),
+			...(email && { 'contacts.email': encrypt(email) }),
+			...(phone && { 'contacts.phone': encrypt(phone) }),
+			...(isDarkMode !== undefined && { 'settings.isDarkMode': isDarkMode }),
+			...(mainColor && { 'settings.mainColor': mainColor }),
+			...(password && { 'auth.password': await bcrypt.hash(password, 12) }),
+			...(role && { 'auth.role': role }),
+		  };
+	  
+		  // Update user in MongoDB collection
+		  const result = await collectionUsers.updateOne(
+			{ _id: new ObjectId(request.params.idUser) }, 
+			{ $set: updatedUser }
+		  );
+		  if(result.modifiedCount === 0) response.status(401).json('Error updating user.');
+		  else response.status(200).json('User updated successfully.');
+		} catch (error) {
+		  console.error('Error updating user:', error);
+		  response.status(500).json('Internal server error.'); // Generic error for security
+		}
+	  },
+
 	delete: () => {},
 	//^ LOGIN
 	login: async (request, response) => {

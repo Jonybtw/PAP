@@ -22,59 +22,62 @@
         <div class="rounded-box">
           <h2>Perfil</h2>
           <ul class="profile-info">
-              <li>
-                  <label for="username">Nome de Utilizador:</label>
-                  <span id="username"></span>
-              </li>
-              <li>
-                  <label for="name">Nome Completo:</label>
-                  <span id="name"></span>
-              </li>
-              <li>
-                  <label for="birth">Data de Nascimento:</label>
-                  <span id="birth"></span>
-              </li>
-              <li>
-                  <label for="address">Endereço:</label>
-                  <span id="address"></span>
-              </li>
-              <li>
-                  <label for="routes">Rotas:</label>
-                  <span id="routes"></span>
-              </li>
-              <li>
-                  <label for="email">Email:</label>
-                  <span id="email"></span>
-              </li>
-              <li>
-                  <label for="phone">Telefone:</label>
-                  <span id="phone"></span>
-              </li>
-          </ul>
+            <li>
+                <label for="username">Nome de Utilizador:</label>
+                <input id="username" type="text" readonly>
+            </li>
+            <li>
+                <label for="name">Nome Completo:</label>
+                <input id="name" type="text">
+            </li>
+            <li>
+                <label for="birth">Data de Nascimento:</label>
+                <input id="birth" type="text">
+            </li>
+            <li>
+                <label for="address">Endereço:</label>
+                <input id="address" type="text">
+            </li>
+            <li>
+                <label for="routes">Rotas:</label>
+                <input id="routes" type="text">
+            </li>
+            <li>
+                <label for="email">Email:</label>
+                <input id="email" type="text">
+            </li>
+            <li>
+                <label for="phone">Telefone:</label>
+                <input id="phone" type="text">
+            </li>
+        </ul>
+        <br>
+        <h2>Configurações</h2>
+        <ul class="profile-settings">
+            <li>
+                <label for="isDarkMode">Modo Escuro:</label>
+                <input id="isDarkMode" type="text">
+            </li>
+            <li>
+                <label for="mainColor">Cor Principal:</label>
+                <input id="mainColor" type="text">
+            </li>
+        </ul>
+        <br>
+        <h2>Autenticação</h2>
+        <ul class="profile-auth">
+            <li>
+                <label for="password">Senha:</label>
+                <input id="password" type="password">
+            </li>
+            <li>
+                <label for="role">Função:</label>
+                <input id="role" type="text" readonly>
+            </li>
+        </ul>
           <br>
-          <h2>Configurações</h2>
-          <ul class="profile-settings">
-              <li>
-                  <label for="isDarkMode">Modo Escuro:</label>
-                  <span id="isDarkMode"></span>
-              </li>
-              <li>
-                  <label for="mainColor">Cor Principal:</label>
-                  <span id="mainColor"></span>
-              </li>
-          </ul>
-          <br>
-          <h2>Autenticação</h2>
-          <ul class="profile-auth">
-              <li>
-                  <label for="password">Senha:</label>
-                  <span id="password"></span>
-              </li>
-              <li>
-                  <label for="role">Função:</label>
-                  <span id="role"></span>
-              </li>
-          </ul>
+          <button class="saveButton"id="saveButton">Save</button>
+        <button class="logoutButton">Logout</button>
       </div>
           
     </main>
@@ -88,8 +91,10 @@
             <a href="../utils/horarios.html">Horários</a>
         </nav>
     </footer>
-    <script src="../../js/checkLogin.js""></script>
-    <script src="../../js/getUser.js""></script>
+    <script src="../../js/checkLogin.js"></script>
+    <script src="../../js/getUser.js"></script>
+    <script src="../../js/updateUser.js"></script>
+    <script src="../../js/logout.js"></script>
 </body>
 
 </html>

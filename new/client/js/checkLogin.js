@@ -13,9 +13,14 @@ function getCookie(cname) {
     return "";
 }
 
-window.onload = () => {
-    if (!getCookie('token')) {
+if (!getCookie('token')) {
+    if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('register.html') && !window.location.pathname.includes('profile.html')) {
+        window.location.href = "../../pages/auth/login.html";
+    } else if (window.location.pathname.includes('profile.html')) {
         window.location.href = "../../pages/auth/login.html";
     }
+} else {
+    if (window.location.pathname.includes('login.html') || window.location.pathname.includes('register.html')) {
+        window.location.href = "../../index.html";
+    }
 }
-  

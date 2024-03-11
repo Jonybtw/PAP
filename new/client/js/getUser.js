@@ -21,8 +21,6 @@ function fetchUserInfo() {
       try {
         const user = JSON.parse(this.responseText);
 
-        console.log(this.responseText);
-
         // Access individual data points
         const userId = user._id;
         const username = user.data.username;
@@ -38,17 +36,17 @@ function fetchUserInfo() {
         const role = user.auth.role;
 
         // Update HTML elements with retrieved information (excluding password)
-        document.getElementById('username').textContent = username;
-        document.getElementById('name').textContent = name;
-        document.getElementById('birth').textContent = birth;
-        document.getElementById('address').textContent = address;
-        document.getElementById('routes').textContent = routes;
-        document.getElementById('email').textContent = email;
-        document.getElementById('phone').textContent = phone;
-        document.getElementById('isDarkMode').textContent = isDarkMode;
-        document.getElementById('mainColor').textContent = mainColor;
-        document.getElementById('password').textContent = password;
-        document.getElementById('role').textContent = role;
+        document.getElementById('username').value = username;
+        document.getElementById('name').value = name;
+        document.getElementById('birth').value = birth;
+        document.getElementById('address').value = address;
+        document.getElementById('routes').value = routes.join(', ');
+        document.getElementById('email').value = email;
+        document.getElementById('phone').value = phone;
+        document.getElementById('isDarkMode').value = isDarkMode;
+        document.getElementById('mainColor').value = mainColor;
+        document.getElementById('password').value = password;
+        document.getElementById('role').value = role;
 
         // Use appropriate data types if needed (e.g., Date object for birth)
       } catch (error) {

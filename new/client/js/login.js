@@ -20,5 +20,7 @@ window.onload = () => {
     if (getCookie('token')) {
         loginBtn.style.display = 'none';
         registerBtn.style.display = 'none';
+        var perfilBtn = document.getElementById('perfilBtn');
+        perfilBtn.style.display = 'block';
     }
 }

@@ -79,6 +79,7 @@ footer nav {
   margin: 2rem auto;
   max-width: 600px;
   text-align: center;
+  width: 45%;
 }
 
 .intro-text {
@@ -200,4 +201,35 @@ footer nav {
 
 .slogan{
   text-align: center;
+}
+
+.logoutButton, .saveButton {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logoutButton:hover, .saveButton:hover {
+  background-color: #2980b9;
+}
+
+ul.profile-info, ul.profile-settings, ul.profile-auth {
+  list-style-type: none;
+}
+
+input[type="text"], input[type="password"] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  color: #000000;
 }

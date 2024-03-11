@@ -103,6 +103,7 @@ export const User = {
 			response.status(500).json('Internal server error.'); // Generic error for security
 		}
 	},
+	
 	get: async (request, response) => {
 		let id;
 		if (!request.params.idUser) {
@@ -153,35 +154,52 @@ export const User = {
 	
 	update: async (request, response) => {
 		try {
-		  // Destructure user data with validation (using optional chaining)
-		  const { username, email, password, name, birth, address, phone, isDarkMode, mainColor, role } = request.body || {};
-	  
-		  // Create updated user document
-		  const updatedUser = {
-			...(username && { 'data.username': username }),
-			...(name && { 'data.name': encrypt(name) }),
-			...(birth && { 'data.birth': encrypt(birth) }),
-			...(address && { 'data.address': encrypt(address) }),
-			...(email && { 'contacts.email': encrypt(email) }),
-			...(phone && { 'contacts.phone': encrypt(phone) }),
-			...(isDarkMode !== undefined && { 'settings.isDarkMode': isDarkMode }),
-			...(mainColor && { 'settings.mainColor': mainColor }),
-			...(password && { 'auth.password': await bcrypt.hash(password, 12) }),
-			...(role && { 'auth.role': role }),
-		  };
-	  
-		  // Update user in MongoDB collection
-		  const result = await collectionUsers.updateOne(
-			{ _id: new ObjectId(request.params.idUser) }, 
-			{ $set: updatedUser }
-		  );
-		  if(result.modifiedCount === 0) response.status(401).json('Error updating user.');
-		  else response.status(200).json('User updated successfully.');
+			// Destructure user data with validation
+			const { username, email, password, name, birth, address, phone, isDarkMode, mainColor, role } = request.body ?? {};
+
+			// Hash password separately to handle errors
+			let hashedPassword;
+			if (password) {
+				try {
+					hashedPassword = await bcrypt.hash(password, 12);
+				} catch (error) {
+					console.error('Error hashing password:', error);
+					return response.status(400).json('Invalid password.');
+				}
+			}
+
+			// Check if user exists
+			const userExists = await collectionUsers.findOne({ _id: new ObjectId(request.params.idUser) });
+			if (!userExists) {
+				return response.status(404).json('User not found.'); // Return error response if user is not found
+			}
+
+			// Create updated user document
+			const updatedUser = {
+				...(username && { 'data.username': username }),
+				...(name && { 'data.name': encrypt(name) }),
+				...(birth && { 'data.birth': encrypt(birth) }),
+				...(address && { 'data.address': encrypt(address) }),
+				...(email && { 'contacts.email': encrypt(email) }),
+				...(phone && { 'contacts.phone': encrypt(phone) }),
+				...(isDarkMode !== undefined && { 'settings.isDarkMode': isDarkMode }),
+				...(mainColor && { 'settings.mainColor': mainColor }),
+				...(hashedPassword && { 'auth.password': hashedPassword }),
+				...(role && { 'auth.role': role }),
+			};
+
+			// Update user in MongoDB collection
+			const result = await collectionUsers.updateOne(
+				{ _id: new ObjectId(request.params.idUser) },
+				{ $set: updatedUser }
+			);
+			if (result.modifiedCount === 0) return response.status(404).json('User not found.');
+			return response.status(200).json('User updated successfully.');
 		} catch (error) {
-		  console.error('Error updating user:', error);
-		  response.status(500).json('Internal server error.'); // Generic error for security
+			console.error('Error updating user:', error);
+			return response.status(500).json('Internal server error.'); // Generic error for security
 		}
-	  },
+	},
 
 	delete: () => {},
 	//^ LOGIN

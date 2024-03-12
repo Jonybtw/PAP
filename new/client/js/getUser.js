@@ -40,7 +40,7 @@ function fetchUserInfo() {
         document.getElementById('name').value = name;
         document.getElementById('birth').value = birth;
         document.getElementById('address').value = address;
-        document.getElementById('routes').value = routes.join(', ');
+        document.getElementById('routes').value = routes;
         document.getElementById('email').value = email;
         document.getElementById('phone').value = phone;
         document.getElementById('isDarkMode').value = isDarkMode;

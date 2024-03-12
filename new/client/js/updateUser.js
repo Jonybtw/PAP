@@ -20,9 +20,7 @@ async function updateUserInfo() {
         },
     };
 
-    console.log('Updated data:', updatedData);
     const token = getCookie('token');
-    console.log('Token:', token);
 
     // Replace with the correct server endpoint (ensure proper CORS configuration)
     try {

@@ -203,7 +203,23 @@ footer nav {
   text-align: center;
 }
 
-.logoutButton, .saveButton {
+.logoutButton {
+  background-color: red; /* Changed color to red */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px; /* Add margin to separate buttons */
+}
+
+.logoutButton:hover {
+  background-color: #962121; /* Darker red on hover */
+}
+
+.saveButton {
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -214,15 +230,16 @@ footer nav {
   transition: background-color 0.3s ease;
 }
 
-.logoutButton:hover, .saveButton:hover {
+.saveButton:hover {
   background-color: #2980b9;
 }
+
 
 ul.profile-info, ul.profile-settings, ul.profile-auth {
   list-style-type: none;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="date"], input[type="email"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -233,3 +250,58 @@ input[type="text"], input[type="password"] {
   font-size: 16px;
   color: #000000;
 }
+
+
+input[readonly] {
+  background-color: #999999;
+  cursor: not-allowed;
+  border: none;
+  box-shadow: inset 0 0 3px #616161;
+  pointer-events: none;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle-switch input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked + .toggle-slider {
+  background-color: #2196F3;
+}
+
+input[type="checkbox"]:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+

@@ -45,22 +45,22 @@ export const User = {
                 _id: new ObjectId(),
                 data: {
                     username: username,
-                    name: encrypt("teste"),
-                    birth: encrypt("teste"),
-                    address: encrypt("teste"),
+                    name: null,
+                    birth: null,
+                    address: null,
                     routes: []
                 },
                 contacts: {
                     email: encrypt(email),
-                    phone: encrypt("teste")
+                    phone: null
                 },
                 settings: {
-                    isDarkMode: "teste",
-                    mainColor: "teste"
+                    isDarkMode: null,
+                    mainColor: null
                 },
                 auth: {
                     password: hashedPassword,
-                    role: "teste",
+                    role: null,
                 }
             };
     
@@ -100,22 +100,22 @@ export const User = {
             response.status(200).json({
                 _id: result._id,
                 data: {
-                    username: result.data?.username ?? null,
-                    name: decrypt(result.data.name),
-                    birth: decrypt(result.data.birth),
-                    address: decrypt(result.data.address),
-                    routes: result.data?.routes ?? null
+                    username: result.data?.username,
+                    name: result.data?.name ? decrypt(result.data.name) : null,
+                    birth: result.data?.birth ? decrypt(result.data.birth) : null,
+                    address: result.data?.address ? decrypt(result.data.address) : null,
+                    routes: result.data?.routes ?? []
                 },
                 contacts: {
-                    email: decrypt(result.contacts?.email) ?? result.contacts.email,
-                    phone: decrypt(result.data.address)
+                    email: result.contacts?.email ? decrypt(result.contacts.email) : null,
+                    phone: result.contacts?.phone ? decrypt(result.contacts.phone) : null
                 },
                 settings: {
                     isDarkMode: result.settings?.isDarkMode ?? null,
                     mainColor: result.settings?.mainColor ?? null
                 },
                 auth: {
-                    password: result.auth?.password ?? null,
+                    password: result.auth?.password,
                     role: result.auth?.role ?? null,
                 }
             });
@@ -123,55 +123,54 @@ export const User = {
     },
 
     update: async (request, response) => {
-		try {
-			// Extract JWT token from request headers
-			const token = request.headers.authorization;
-			if (!token) {
-				return response.status(401).json('Authorization token missing.');
-			}
-	
-			// Decrypt user ID from JWT token
-			const decodedToken = jwt.decode(token);
-			if (!decodedToken || !decodedToken.id) {
-				return response.status(401).json('Invalid token.');
-			}
-			const decryptedUserId = CryptoJS.AES.decrypt(decodedToken.id, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
-	
-			// Check if user exists
-			const userToUpdate = await collectionUsers.findOne({ _id: new ObjectId(decryptedUserId) });
-			if (!userToUpdate) {
-				return response.status(404).json('User not found.');
-			}
-	
-			// Extract fields from request body
-			const { username, email, password, name, birth, address, phone, isDarkMode, mainColor, role } = request.body ?? {};
-	
-			// Update user fields if provided
-			if (username) userToUpdate.data.username = username;
-			if (name) userToUpdate.data.name = encrypt(name);
-			if (birth) userToUpdate.data.birth = encrypt(birth);
-			if (address) userToUpdate.data.address = encrypt(address);
-			if (email) userToUpdate.contacts.email = encrypt(email);
-			if (phone) userToUpdate.contacts.phone = encrypt(phone);
-			if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode.toString();
-			if (mainColor) userToUpdate.settings.mainColor = mainColor;
-			if (password) {
-				// Hash password
-				const hashedPassword = await bcrypt.hash(password, 12);
-				userToUpdate.auth.password = hashedPassword;
-			}
-			if (role) userToUpdate.auth.role = role;
-	
-			// Update user in the database
-			await collectionUsers.updateOne({ _id: new ObjectId(decryptedUserId) }, { $set: userToUpdate });
-	
-			// Return success response
-			return response.status(200).json('User data updated successfully.');
-		} catch (error) {
-			console.error('Error updating user:', error);
-			return response.status(500).json('Internal server error.');
-		}
-	},	
+        try {
+            // Extract JWT token from request headers
+            const token = request.headers.authorization;
+            if (!token) {
+                return response.status(401).json('Authorization token missing.');
+            }
+    
+            // Decrypt user ID from JWT token
+            const decodedToken = jwt.decode(token);
+            if (!decodedToken || !decodedToken.id) {
+                return response.status(401).json('Invalid token.');
+            }
+            const decryptedUserId = CryptoJS.AES.decrypt(decodedToken.id, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
+    
+            // Check if user exists
+            const userToUpdate = await collectionUsers.findOne({ _id: new ObjectId(decryptedUserId) });
+            if (!userToUpdate) {
+                return response.status(404).json('User not found.');
+            }
+    
+            // Extract fields from request body
+            const { email, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
+    
+            // Update user fields if provided
+            if (name !== undefined) userToUpdate.data.name = name ? encrypt(name) : '';
+            if (birth !== undefined) userToUpdate.data.birth = birth ? encrypt(birth) : '';
+            if (address !== undefined) userToUpdate.data.address = address ? encrypt(address) : '';
+            if (email !== undefined) userToUpdate.contacts.email = email ? encrypt(email) : '';
+            if (phone !== undefined) userToUpdate.contacts.phone = phone ? encrypt(phone) : '';
+            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? isDarkMode.toString() : null;
+            if (mainColor !== undefined) userToUpdate.settings.mainColor = mainColor ? mainColor : '';
+            if (password !== undefined && password !== '') {
+                // Hash password
+                const hashedPassword = await bcrypt.hash(password, 12);
+                userToUpdate.auth.password = hashedPassword;
+            }
+    
+            // Update user in the database
+            await collectionUsers.updateOne({ _id: new ObjectId(decryptedUserId) }, { $set: userToUpdate });
+    
+            // Return success response
+            return response.status(200).json('User data updated successfully.');
+        } catch (error) {
+            console.error('Error updating user:', error);
+            return response.status(500).json('Internal server error.');
+        }
+    },
+    
 
     delete: () => {},
 

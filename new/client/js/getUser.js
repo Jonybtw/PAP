@@ -30,7 +30,7 @@ function fetchUserInfo() {
         const routes = user.data.routes; // Array of routes
         const email = user.contacts.email;
         const phone = user.contacts.phone;
-        const isDarkMode = user.settings.isDarkMode;
+        const isDarkMode = user.settings.isDarkMode === "true";
         const mainColor = user.settings.mainColor;
         const password = user.auth.password; // **Note: Avoid accessing password directly.**
         const role = user.auth.role;
@@ -43,7 +43,7 @@ function fetchUserInfo() {
         document.getElementById('routes').value = routes;
         document.getElementById('email').value = email;
         document.getElementById('phone').value = phone;
-        document.getElementById('isDarkMode').value = isDarkMode;
+        document.getElementById('isDarkMode').checked = isDarkMode;
         document.getElementById('mainColor').value = mainColor;
         document.getElementById('password').value = password;
         document.getElementById('role').value = role;

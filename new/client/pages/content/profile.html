@@ -32,7 +32,7 @@
             </li>
             <li>
                 <label for="birth">Data de Nascimento:</label>
-                <input id="birth" type="text">
+                <input id="birth" type="date">
             </li>
             <li>
                 <label for="address">Endereço:</label>
@@ -44,7 +44,7 @@
             </li>
             <li>
                 <label for="email">Email:</label>
-                <input id="email" type="text">
+                <input id="email" type="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
             </li>
             <li>
                 <label for="phone">Telefone:</label>
@@ -55,12 +55,17 @@
         <h2>Configurações</h2>
         <ul class="profile-settings">
             <li>
+                <br>
                 <label for="isDarkMode">Modo Escuro:</label>
-                <input id="isDarkMode" type="text">
+                <label class="toggle-switch">
+                    <input id="isDarkMode" type="checkbox">
+                    <span class="toggle-slider"></span>
+                </label>
             </li>
             <li>
+                <br>
                 <label for="mainColor">Cor Principal:</label>
-                <input id="mainColor" type="text">
+                <input id="mainColor" type="color">
             </li>
         </ul>
         <br>
@@ -76,8 +81,8 @@
             </li>
         </ul>
           <br>
-          <button class="saveButton"id="saveButton">Save</button>
-        <button class="logoutButton">Logout</button>
+          <button class="saveButton"id="saveButton">Guardar</button>
+        <button class="logoutButton">Sair</button>
       </div>
           
     </main>

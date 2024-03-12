@@ -148,12 +148,12 @@ export const User = {
 	
 			// Update user fields if provided
 			if (username) userToUpdate.data.username = username;
-			if (name) userToUpdate.data.name = name;
-			if (birth) userToUpdate.data.birth = birth;
-			if (address) userToUpdate.data.address = address;
-			if (email) userToUpdate.contacts.email = email;
-			if (phone) userToUpdate.contacts.phone = phone;
-			if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode;
+			if (name) userToUpdate.data.name = encrypt(name);
+			if (birth) userToUpdate.data.birth = encrypt(birth);
+			if (address) userToUpdate.data.address = encrypt(address);
+			if (email) userToUpdate.contacts.email = encrypt(email);
+			if (phone) userToUpdate.contacts.phone = encrypt(phone);
+			if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode.toString();
 			if (mainColor) userToUpdate.settings.mainColor = mainColor;
 			if (password) {
 				// Hash password

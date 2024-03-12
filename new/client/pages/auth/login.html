@@ -22,16 +22,18 @@
     <main>
         <div class="slogan">
             <h1 class="title">Route<span class="wise">Wise</span></h1>
-        <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span class="blue">Eficiência</span></p>
+            <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span class="blue">Eficiência</span></p>
         </div>
         <div class="rounded-box">
             <div class="input-group">
-              <h1 class="title2">Iniciar Sessão</h1>
-              <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput" required>
-              <input type="password" placeholder="Senha" class="password" id="passwordInput" required>
+                <h1 class="title2">Iniciar Sessão</h1>
+                <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput" required>
+                <input type="password" placeholder="Palavra-passe" class="password" id="passwordInput" required>
             </div>
             <button class="search-button" type="submit" onclick="loginFunc()">Iniciar Sessão</button>
-          </div>
+            <br><br>
+            <p>Não tenho conta, <a href="register.html">criar uma</a>.</p>
+        </div>
     </main>
 
     <footer>
@@ -49,18 +51,22 @@
             const username = document.getElementById('usernameInput');
             const password = document.getElementById('passwordInput');
 
-            if (!username.value && !password.value) {
-                // If not
+            if (!username.value || !password.value) {
+                alert('Por favor, insira o nome de utilizador e a palavra-passe.');
             } else {
                 var xhr = new XMLHttpRequest();
-    
+
                 var data = new URLSearchParams();
                 data.append('username', username.value);
                 data.append('password', password.value);
-    
+
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        readyToken(xhr.response);
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            readyToken(xhr.response);
+                        } else {
+                            alert('Credenciais inválidas. Por favor, tente novamente.');
+                        }
                     }
                 }
                 xhr.open('POST', 'http://127.0.0.1:3512/login', true);
@@ -75,4 +81,5 @@
         }
     </script>
 </body>
+
 </html>

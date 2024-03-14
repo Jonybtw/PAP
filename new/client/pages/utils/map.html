@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            /* Set the size of the div element that contains the map */
+            #map {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;  /* Set the height to 100% of the viewport height */
+                width: 100%;  /* Set the width to 100% of the viewport width */
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Mapa</h3>
+        <!--The div element for the map -->
+        <div id="map"></div>
+        <div>
+            <input type="text" id="search-input" placeholder="Search for a place">
+            <button onclick="searchPlace()">Search</button>
+        </div>
+        <div>
+            <input type="text" id="start-input" placeholder="Start place">
+            <input type="text" id="end-input" placeholder="End place">
+            <button onclick="showRoute()">Show Route</button>
+        </div>
+        <script>
+            let map;
+            let directionsService;
+            let directionsRenderer;
+
+            // Initialize and add the map
+            function initMap() {
+                // Default location (Lisbon)
+                const defaultLocation = { lat: 38.7223, lng: -9.1393 };
+                // Ask for user's location
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        // The map, centered at user's location or default location
+                        map = new google.maps.Map(
+                            document.getElementById('map'), { zoom: 12, center: userLocation || defaultLocation });
+                        // The marker, positioned at user's location or default location
+                        const marker = new google.maps.Marker({ position: userLocation || defaultLocation, map: map });
+                    },
+                    function() {
+                        // The map, centered at default location
+                        map = new google.maps.Map(
+                            document.getElementById('map'), { zoom: 12, center: defaultLocation });
+                        // The marker, positioned at default location
+                        const marker = new google.maps.Marker({ position: defaultLocation, map: map });
+                    }
+                );
+
+                directionsService = new google.maps.DirectionsService();
+                directionsRenderer = new google.maps.DirectionsRenderer();
+                directionsRenderer.setMap(map);
+            }
+
+            // Search for a place
+            function searchPlace() {
+                const searchInput = document.getElementById('search-input').value;
+                const request = {
+                    query: searchInput,
+                    fields: ['name', 'geometry']
+                };
+                const service = new google.maps.places.PlacesService(map);
+                service.findPlaceFromQuery(request, function(results, status) {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        if (results[0]) {
+                            map.setCenter(results[0].geometry.location);
+                            const marker = new google.maps.Marker({
+                                map: map,
+                                position: results[0].geometry.location
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Show route from start place to end place
+            function showRoute() {
+                const startInput = document.getElementById('start-input').value;
+                const endInput = document.getElementById('end-input').value;
+                const request = {
+                    origin: startInput,
+                    destination: endInput,
+                    travelMode: 'DRIVING'
+                };
+                directionsService.route(request, function(result, status) {
+                    if (status == 'OK') {
+                        directionsRenderer.setDirections(result);
+                    }
+                });
+            }
+        </script>
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU_6M9ichQSJ4iqWHiuRkhmsN5h7IRJEI&callback=initMap">
+        </script>
+    </body>
+</html>

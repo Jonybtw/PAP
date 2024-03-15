@@ -1,105 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            /* Set the size of the div element that contains the map */
-            #map {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;  /* Set the height to 100% of the viewport height */
-                width: 100%;  /* Set the width to 100% of the viewport width */
-            }
-        </style>
-    </head>
-    <body>
-        <h3>Mapa</h3>
-        <!--The div element for the map -->
-        <div id="map"></div>
-        <div>
-            <input type="text" id="search-input" placeholder="Search for a place">
-            <button onclick="searchPlace()">Search</button>
-        </div>
-        <div>
-            <input type="text" id="start-input" placeholder="Start place">
-            <input type="text" id="end-input" placeholder="End place">
-            <button onclick="showRoute()">Show Route</button>
-        </div>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mapa</title>
+        <link rel="stylesheet" href="../../css/mapa.css"/>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
         <script>
-            let map;
-            let directionsService;
-            let directionsRenderer;
-
-            // Initialize and add the map
-            function initMap() {
-                // Default location (Lisbon)
-                const defaultLocation = { lat: 38.7223, lng: -9.1393 };
-                // Ask for user's location
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        // The map, centered at user's location or default location
-                        map = new google.maps.Map(
-                            document.getElementById('map'), { zoom: 12, center: userLocation || defaultLocation });
-                        // The marker, positioned at user's location or default location
-                        const marker = new google.maps.Marker({ position: userLocation || defaultLocation, map: map });
-                    },
-                    function() {
-                        // The map, centered at default location
-                        map = new google.maps.Map(
-                            document.getElementById('map'), { zoom: 12, center: defaultLocation });
-                        // The marker, positioned at default location
-                        const marker = new google.maps.Marker({ position: defaultLocation, map: map });
-                    }
-                );
-
-                directionsService = new google.maps.DirectionsService();
-                directionsRenderer = new google.maps.DirectionsRenderer();
-                directionsRenderer.setMap(map);
-            }
-
-            // Search for a place
-            function searchPlace() {
-                const searchInput = document.getElementById('search-input').value;
-                const request = {
-                    query: searchInput,
-                    fields: ['name', 'geometry']
-                };
-                const service = new google.maps.places.PlacesService(map);
-                service.findPlaceFromQuery(request, function(results, status) {
-                    if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        if (results[0]) {
-                            map.setCenter(results[0].geometry.location);
-                            const marker = new google.maps.Marker({
-                                map: map,
-                                position: results[0].geometry.location
-                            });
-                        }
-                    }
-                });
-            }
-
-            // Show route from start place to end place
-            function showRoute() {
-                const startInput = document.getElementById('start-input').value;
-                const endInput = document.getElementById('end-input').value;
-                const request = {
-                    origin: startInput,
-                    destination: endInput,
-                    travelMode: 'DRIVING'
-                };
-                directionsService.route(request, function(result, status) {
-                    if (status == 'OK') {
-                        directionsRenderer.setDirections(result);
-                    }
-                });
-            }
+            ((g) => {
+                var h,
+                    a,
+                    k,
+                    p = "The Google Maps JavaScript API",
+                    c = "google",
+                    l = "importLibrary",
+                    q = "__ib__",
+                    m = document,
+                    b = window;
+                b = b[c] || (b[c] = {});
+                var d = b.maps || (b.maps = {}),
+                    r = new Set(),
+                    e = new URLSearchParams(),
+                    u = () =>
+                        h ||
+                        (h = new Promise(async (f, n) => {
+                            await (a = m.createElement("script"));
+                            e.set("libraries", [...r] + "");
+                            for (k in g)
+                                e.set(
+                                    k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                                    g[k]
+                                );
+                            e.set("callback", c + ".maps." + q);
+                            a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                            d[q] = f;
+                            a.onerror = () => (h = n(Error(p + " could not load.")));
+                            a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                            m.head.append(a);
+                        }));
+                d[l]
+                    ? console.warn(p + " only loads once. Ignoring:", g)
+                    : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+            })({
+                key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
+                v: "beta",
+                language: "pt-PT",
+                libraries: "places, marker",
+            });
         </script>
-        <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU_6M9ichQSJ4iqWHiuRkhmsN5h7IRJEI&callback=initMap">
-        </script>
+        <script type="module" src="../../js/mapa.js"></script>
+    </head>
+
+    <body>
+        <div id="map" style="height: 800px; width: 1200px"></div>
     </body>
 </html>

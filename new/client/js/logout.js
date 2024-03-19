@@ -12,6 +12,10 @@ window.onload = function() {
                 // Check if the cookie was successfully destroyed
                 if (document.cookie.indexOf('token=') === -1) {
                     console.log('Cookie destroyed successfully');
+                    
+                    // Clear the localStorage
+                    localStorage.clear();
+                    
                     // Redirect to the login page
                     window.location.href = '../../pages/auth/login.html';
                 } else {

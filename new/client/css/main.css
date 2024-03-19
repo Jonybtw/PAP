@@ -14,7 +14,7 @@
 }
 
 #logo span {
-  color: var(--primary-color) !important;
+  color: var(--main-color) !important;
 }
 
 header {
@@ -63,7 +63,7 @@ footer {
 }
 
 footer span#mark {
-  color: var(--primary-color);
+  color: var(--main-color);
 }
 
 footer nav {
@@ -192,11 +192,11 @@ footer nav {
 }
 
 .wise{
-  color: blue;
+  color: var(--main-color);
 }
 
 .blue {
-  color: blue;
+  color: var(--main-color);
 }
 
 .slogan{
@@ -234,7 +234,6 @@ footer nav {
   background-color: #2980b9;
 }
 
-
 ul.profile-info, ul.profile-settings, ul.profile-auth {
   list-style-type: none;
 }
@@ -250,7 +249,6 @@ input[type="text"], input[type="password"], input[type="date"], input[type="emai
   font-size: 16px;
   color: #000000;
 }
-
 
 input[readonly] {
   background-color: #999999;
@@ -305,3 +303,19 @@ input[type="checkbox"]:checked + .toggle-slider:before {
   transform: translateX(20px);
 }
 
+/* Added select box styles */
+select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  color: #000000;
+}
+
+select option{
+  color:#000000;
+}

@@ -40,7 +40,15 @@ function fetchUserInfo() {
         document.getElementById('name').value = name;
         document.getElementById('birth').value = birth;
         document.getElementById('address').value = address;
-        document.getElementById('routes').value = routes;
+        const routesSelect = document.getElementById('routes');
+        routesSelect.innerHTML = ''; // Clear existing options
+
+        routes.forEach((route) => {
+          const option = document.createElement('option');
+          option.value = route;
+          option.text = route;
+          routesSelect.appendChild(option);
+        });
         document.getElementById('email').value = email;
         document.getElementById('phone').value = phone;
         document.getElementById('isDarkMode').checked = isDarkMode;

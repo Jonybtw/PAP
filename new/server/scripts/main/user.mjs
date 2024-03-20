@@ -144,13 +144,14 @@ export const User = {
             }
     
             // Extract fields from request body
-            const { email, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
+            const { email, routes, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
     
             // Update user fields if provided
             if (name !== undefined) userToUpdate.data.name = name ? encrypt(name) : '';
             if (birth !== undefined) userToUpdate.data.birth = birth ? encrypt(birth) : '';
             if (address !== undefined) userToUpdate.data.address = address ? encrypt(address) : '';
             if (email !== undefined) userToUpdate.contacts.email = email ? encrypt(email) : '';
+            if (routes !== undefined) userToUpdate.data.routes = routes ?? [];
             if (phone !== undefined) userToUpdate.contacts.phone = phone ? encrypt(phone) : '';
             if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? isDarkMode.toString() : null;
             if (mainColor !== undefined) userToUpdate.settings.mainColor = mainColor ? mainColor : '';
@@ -170,7 +171,6 @@ export const User = {
             return response.status(500).json('Internal server error.');
         }
     },
-    
 
     delete: () => {},
 

@@ -3,7 +3,8 @@ function updateUserInfo() {
     const name = document.getElementById('name').value;
     const birth = document.getElementById('birth').value;
     const address = document.getElementById('address').value;
-    const routes = document.getElementById('routes').value;
+    const routesSelect = document.getElementById('routes'); // Get the routes dropdown
+    const selectedRoutes = Array.from(routesSelect.selectedOptions).map(option => option.value); // Get selected routes as an array
     const emailField = document.getElementById('email');
     const email = emailField.value;
     const phoneField = document.getElementById('phone');
@@ -31,7 +32,7 @@ function updateUserInfo() {
     formData.append('name', name);
     formData.append('birth', birth);
     formData.append('address', address);
-    formData.append('routes', routes);
+    formData.append('routes', JSON.stringify(selectedRoutes)); // Convert array to JSON string
     formData.append('email', email);
     formData.append('phone', phone);
     formData.append('isDarkMode', isDarkMode);

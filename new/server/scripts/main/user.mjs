@@ -115,7 +115,7 @@ export const User = {
                     mainColor: result.settings?.mainColor ?? null
                 },
                 auth: {
-                    password: result.auth?.password,
+                    password: result.auth?.password ?? null,
                     role: result.auth?.role ?? null,
                 }
             });

@@ -3,13 +3,11 @@ function updateUserInfo() {
     const name = document.getElementById('name').value;
     const birth = document.getElementById('birth').value;
     const address = document.getElementById('address').value;
-    const routesSelect = document.getElementById('routes'); // Get the routes dropdown
-    const selectedRoutes = Array.from(routesSelect.selectedOptions).map(option => option.value); // Get selected routes as an array
     const emailField = document.getElementById('email');
     const email = emailField.value;
     const phoneField = document.getElementById('phone');
     const phone = phoneField.value;
-    const isDarkMode = document.getElementById('isDarkMode').checked;
+    const isDarkMode = document.getElementById('isDarkMode').checked; // Retrieve the value of the checkbox
     const mainColor = document.getElementById('mainColor').value;
     const password = document.getElementById('password').value;
 
@@ -32,7 +30,6 @@ function updateUserInfo() {
     formData.append('name', name);
     formData.append('birth', birth);
     formData.append('address', address);
-    formData.append('routes', JSON.stringify(selectedRoutes)); // Convert array to JSON string
     formData.append('email', email);
     formData.append('phone', phone);
     formData.append('isDarkMode', isDarkMode);

@@ -104,14 +104,13 @@ export const User = {
                     name: result.data?.name ? decrypt(result.data.name) : null,
                     birth: result.data?.birth ? decrypt(result.data.birth) : null,
                     address: result.data?.address ? decrypt(result.data.address) : null,
-                    routes: result.data?.routes ?? []
                 },
                 contacts: {
                     email: result.contacts?.email ? decrypt(result.contacts.email) : null,
                     phone: result.contacts?.phone ? decrypt(result.contacts.phone) : null
                 },
                 settings: {
-                    isDarkMode: result.settings?.isDarkMode ?? null,
+                    isDarkMode: result.settings?.isDarkMode !== null ? Boolean(result.settings.isDarkMode) : null,
                     mainColor: result.settings?.mainColor ?? null
                 },
                 auth: {
@@ -151,9 +150,8 @@ export const User = {
             if (birth !== undefined) userToUpdate.data.birth = birth ? encrypt(birth) : '';
             if (address !== undefined) userToUpdate.data.address = address ? encrypt(address) : '';
             if (email !== undefined) userToUpdate.contacts.email = email ? encrypt(email) : '';
-            if (routes !== undefined) userToUpdate.data.routes = routes ?? [];
             if (phone !== undefined) userToUpdate.contacts.phone = phone ? encrypt(phone) : '';
-            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? isDarkMode.toString() : null;
+            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? JSON.parse(isDarkMode) : false;  
             if (mainColor !== undefined) userToUpdate.settings.mainColor = mainColor ? mainColor : '';
             if (password !== undefined && password !== '') {
                 // Hash password

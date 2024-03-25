@@ -203,7 +203,7 @@ footer nav {
   text-align: center;
 }
 
-.logoutButton {
+.logoutButton, .delete-button{
   background-color: red; /* Changed color to red */
   color: white;
   border: none;
@@ -219,7 +219,7 @@ footer nav {
   background-color: #962121; /* Darker red on hover */
 }
 
-.saveButton {
+.saveButton, .add-button, .edit-button{
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -234,8 +234,8 @@ footer nav {
   background-color: #2980b9;
 }
 
-ul.profile-info, ul.profile-settings, ul.profile-auth {
-  list-style-type: none;
+ul, li {
+  list-style: none;
 }
 
 input[type="text"], input[type="password"], input[type="date"], input[type="email"] {

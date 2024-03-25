@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RouteWise</title>
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+
+<body>
+    <header>
+        <!-- NAV BTN -->
+        <h1 id="logo"><span>Route</span>Wise</h1>
+    </header>
+
+    <main>
+        <div class="slogan">
+            <h1 class="title">Route<span class="wise">Wise</span></h1>
+            <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span class="blue">Eficiência</span></p>
+        </div>
+        <div class="rounded-box">
+            <h2>Rotas</h2>
+            <ul class="routes">
+                <li>
+                    <br>
+                    <h3>Adicionar Rota</h3>
+                    <form>
+                        <label for="route-name">Nome da Rota:</label>
+                        <input type="text" id="route-name" name="route-name" required>
+                        <button class="add-button">Adicionar</button>
+                    </form>
+                    <br>
+                </li>
+                <li>
+                    <h3>Mostrar Rotas</h3>
+                    <ul>
+                        <!-- List of routes -->
+                        <li>Rota 1</li>
+                        <li>Rota 2</li>
+                        <li>Rota 3</li>
+                    </ul>
+                    <br>
+                </li>
+                <!-- Edit Routes Section -->
+                <li>
+                    <h3>Editar Rotas</h3>
+                    <form>
+                        <!-- Edit route form fields -->
+                        <label for="edit-route-name">Nome da Rota:</label>
+                        <select id="edit-route-select" name="edit-route-select" required></select>
+                        <input type="text" id="edit-route-name" name="edit-route-name" required>
+                        <button class="edit-button">Editar</button>
+                    </form>
+                    <br>
+                </li>
+                <!-- Delete Routes Section -->
+                <li>
+                    <h3>Apagar Rotas</h3>
+                    <form>
+                        <!-- Delete route form fields -->
+                        <label for="delete-route-name">Nome da Rota:</label>
+                        <select id="delete-route-name" name="delete-route-name" required></select>
+                        <button class="delete-button">Apagar</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <h1 id="logo"><span>Route</span>Wise</h1>
+        <span>Navegue com <span id="mark">Inteligência</span>, Navegue com <span id="mark">Eficiência</span></span>
+        <nav>
+            <a href="sobrenos.html">Sobre Nós</a>
+            <a href="contacto.html">Contactos</a>
+            <a href="../utils/horarios.html">Horários</a>
+        </nav>
+    </footer>
+    <script src="../../js/checkLogin.js"></script>
+    <script src="../../js/getUser.js"></script>
+    <script src="../../js/updateUser.js"></script>
+    <script src="../../js/mainColor.js"></script>
+    <script src="../../js/logout.js"></script>
+</body>
+
+</html>

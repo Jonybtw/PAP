@@ -22,5 +22,7 @@ window.onload = () => {
         registerBtn.style.display = 'none';
         var perfilBtn = document.getElementById('perfilBtn');
         perfilBtn.style.display = 'block';
+        var routesBtn = document.getElementById('routesBtn');
+        routesBtn.style.display = 'block';
     }
 }

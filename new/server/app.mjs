@@ -8,6 +8,7 @@ const app = express();
 //* libs
 import { User } from './scripts/main/user.mjs';
 import { Auth } from './scripts/utils/auth.mjs';
+import { Routes } from './scripts/main/routes.mjs';
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
@@ -21,6 +22,7 @@ app.use(cors());
 		app.get('/user', User.get);
 		app.put('/user', User.update);
 		//app.delete('/user', User.delete);
+		app.get('/routes', Routes.getAll);
 
 	//^ BUS AGENCIES
 		//! - Carris

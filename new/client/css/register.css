@@ -52,6 +52,11 @@
     padding-top: 4rem;
   }
   
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--background-color);
+  }
+  
   footer {
     background-color: var(--background-color);
     padding: 1rem;

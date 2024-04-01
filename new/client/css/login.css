@@ -26,6 +26,11 @@
     position: fixed;
     width: 100%;
   }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--background-color);
+  }
   
   header section {
     display: flex;

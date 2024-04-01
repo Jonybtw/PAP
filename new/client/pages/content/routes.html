@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RouteWise</title>
+    <link rel="stylesheet" href="../../css/rotas.css">
     <link rel="stylesheet" href="../../css/main.css">
+    
 </head>
 
 <body>
@@ -15,56 +17,51 @@
     </header>
 
     <main>
-        <div class="slogan">
-            <h1 class="title">Route<span class="wise">Wise</span></h1>
-            <p class="tagline">Navegue com <span class="blue">Inteligência</span>, Navegue com <span class="blue">Eficiência</span></p>
-        </div>
-        <div class="rounded-box">
-            <h2>Rotas</h2>
-            <ul class="routes">
-                <li>
-                    <br>
-                    <h3>Adicionar Rota</h3>
-                    <form>
-                        <label for="route-name">Nome da Rota:</label>
-                        <input type="text" id="route-name" name="route-name" required>
-                        <button class="add-button">Adicionar</button>
-                    </form>
-                    <br>
-                </li>
-                <li>
-                    <h3>Mostrar Rotas</h3>
-                    <ul>
-                        <!-- List of routes -->
-                        <li>Rota 1</li>
-                        <li>Rota 2</li>
-                        <li>Rota 3</li>
-                    </ul>
-                    <br>
-                </li>
-                <!-- Edit Routes Section -->
-                <li>
-                    <h3>Editar Rotas</h3>
-                    <form>
-                        <!-- Edit route form fields -->
-                        <label for="edit-route-name">Nome da Rota:</label>
-                        <select id="edit-route-select" name="edit-route-select" required></select>
-                        <input type="text" id="edit-route-name" name="edit-route-name" required>
-                        <button class="edit-button">Editar</button>
-                    </form>
-                    <br>
-                </li>
-                <!-- Delete Routes Section -->
-                <li>
-                    <h3>Apagar Rotas</h3>
-                    <form>
-                        <!-- Delete route form fields -->
-                        <label for="delete-route-name">Nome da Rota:</label>
-                        <select id="delete-route-name" name="delete-route-name" required></select>
-                        <button class="delete-button">Apagar</button>
-                    </form>
-                </li>
-            </ul>
+        <div id="container">
+            <div id="rotas">
+                <input type="text" id="searchBox" placeholder="Procurar rota...">
+                <ul id="routeList">
+                    <li>
+                        <div class="route">
+                            <h3>Rota 1</h3>
+                            <p>Início: Localização A</p>
+                            <p>Fim: Localização B</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="route">
+                            <h3>Rota 2</h3>
+                            <p>Início: Localização C</p>
+                            <p>Fim: Localização D</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="route">
+                            <h3>Rota 3</h3>
+                            <p>Início: Localização E</p>
+                            <p>Fim: Localização F</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="route">
+                            <h3>Rota 4</h3>
+                            <p>Início: Localização G</p>
+                            <p>Fim: Localização H</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="route">
+                            <h3>Rota 5</h3>
+                            <p>Início: Localização I</p>
+                            <p>Fim: Localização J</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="mapa">
+                <div id="mapBox">MAPA AQUI</div>
+            </div>
         </div>
     </main>
 
@@ -78,8 +75,6 @@
         </nav>
     </footer>
     <script src="../../js/checkLogin.js"></script>
-    <script src="../../js/getUser.js"></script>
-    <script src="../../js/updateUser.js"></script>
     <script src="../../js/mainColor.js"></script>
     <script src="../../js/logout.js"></script>
 </body>

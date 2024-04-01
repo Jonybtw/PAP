@@ -45,6 +45,11 @@ header section a:active {
   border-radius: 10px;
 }
 
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background-color);
+}
+
 main {
   background-color: var(--secondary-color);
   min-width: 100%;

@@ -1,0 +1,43 @@
+#container {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+#rotas {
+    width: 30vw;
+    height: 100vh;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid black;
+}
+
+#mapa {
+    width: 70vw;
+    height: 100vh;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid black;
+}
+
+.route {
+    background-color: #f2f2f2;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 2px solid #CCCCCC
+}
+
+.route h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.route p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}

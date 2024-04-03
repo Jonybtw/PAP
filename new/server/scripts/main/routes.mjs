@@ -64,8 +64,71 @@ export const Routes = {
       response.status(200).json(result.data?.routes);
     }
   },
-  get: async (request, response) => {},
-  update: async (request, response) => {},
+
+  get: async (request, response) => {
+    const { uId, routeId } = request.params;
+  
+    // Find the user
+    const user = await collectionUsers.findOne({ "data.users": uId });
+  
+    if (!user) {
+      response.status(404).json("User not found");
+      return;
+    }
+  
+    // Find the route
+    const route = user.data.routes.find(
+      (route) => route._id.toString() === routeId
+    );
+  
+    if (!route) {
+      response.status(404).json("Route not found");
+      return;
+    }
+  
+    // Send the route in the response
+    response.status(200).json(route);
+  },
+
+  update: async (request, response) => {
+    const { uId, routeId } = request.params;
+    const { Start, End } = request.body;
+  
+    // Find the user
+    const user = await collectionUsers.findOne({ "data.users": uId });
+  
+    if (!user) {
+      response.status(404).json("User not found");
+      return;
+    }
+  
+    // Find the route
+    const routeIndex = user.data.routes.findIndex(
+      (route) => route._id.toString() === routeId
+    );
+  
+    if (routeIndex === -1) {
+      response.status(404).json("Route not found");
+      return;
+    }
+  
+    // Update the route
+    user.data.routes[routeIndex].Start = Start;
+    user.data.routes[routeIndex].End = End;
+  
+    // Update the user document with the updated routes
+    const result = await collectionUsers.updateOne(
+      { _id: user._id },
+      { $set: { "data.routes": user.data.routes } }
+    );
+  
+    if (result.modifiedCount === 0) {
+      response.status(500).json("Failed to update route");
+    } else {
+      response.status(200).json({ message: "Route updated successfully", updatedRoute: user.data.routes[routeIndex] });
+    }
+  },
+
   delete: async (request, response) => {
     const { uId, routeId } = request.params;
 

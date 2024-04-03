@@ -4,12 +4,8 @@ import CryptoJS from "crypto-js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const encrypt = (value) =>
-  CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KEY).toString();
-const decrypt = (value) =>
-  CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KEY).toString(
-    CryptoJS.enc.Utf8
-  );
+const encrypt = (value) => CryptoJS.AES.encrypt(value, process.env.SECRET_AES_KEY).toString();
+const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
 
 export const Routes = {
   create: async (request, response) => {

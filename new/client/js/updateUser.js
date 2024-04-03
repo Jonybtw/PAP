@@ -57,7 +57,7 @@ function updateUserInfo() {
     };
 
     // Open a PUT request to the server endpoint
-    xhr.open('PUT', 'http://127.0.0.1:3512/user'); // Replace with your actual URL
+    xhr.open('PUT', 'http://127.0.0.1:420/user'); // Replace with your actual URL
 
     // Set the request headers
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

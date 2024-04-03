@@ -22,7 +22,12 @@ app.use(cors());
 		app.get('/user', User.get);
 		app.put('/user', User.update);
 		//app.delete('/user', User.delete);
+		app.post('/routes', Routes.create);
 		app.get('/routes', Routes.getAll);
+		app.get('/routes/:id', Routes.get);
+		app.put('/routes', Routes.update);
+		app.delete('/routes', Routes.delete);
+		
 
 	//^ BUS AGENCIES
 		//! - Carris

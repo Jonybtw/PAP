@@ -13,3 +13,4 @@ const mainDB = connection.db('data');
 
 export default mainDB;
 export const collectionUsers = mainDB.collection('users');
+export const collectionRoutes = mainDB.collection('routes');

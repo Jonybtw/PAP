@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { collectionUsers } from "../database/conn.mjs";
+import { collectionRoutes, collectionUsers } from "../database/conn.mjs";
 import CryptoJS from "crypto-js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -9,36 +9,55 @@ const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KE
 
 export const Routes = {
   create: async (request, response) => {
-    const { uId, Start, End } = request.body;
-
-    // Create a new route object
-    const newRoute = {
-      _id: new ObjectId(),
-      Start,
-      End,
-    };
-
-    // Find the user and add the new route to their data
-    const user = await collectionUsers.findOne({ "data.users": uId });
-
-    if (!user) {
-      response.status(404).json("User not found");
+    let id;
+    if (!request.params.idUser) {
+      id = request.id;
+    } else if (request.params.idUser.length !== 24) {
+      response.status(404).json("Not Valid");
       return;
-    }
-
-    user.data.routes = user.data.routes || [];
-    user.data.routes.push(newRoute);
-
-    const result = await collectionUsers.updateOne(
-      { _id: user._id },
-      { $set: { "data.routes": user.data.routes } }
-    );
-
-    if (result.modifiedCount === 0) {
-      response.status(500).json("Failed to add route");
     } else {
-      response.status(200).json(newRoute);
+      id = request.params.idUser;
     }
+    let query = { _id: new ObjectId(id) };
+    let projection = {
+      projection: {
+        _id: 1,
+        data: 1,
+      },
+    };
+    let result = await collectionUsers.findOne(query, projection);
+    if (!result) response.status(404).json("Not Found User");
+    else {
+      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
+      let projectionRoutes = {
+        projection: {
+          _id: 1,
+          routes: 1
+        },
+      };
+
+      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
+      if (!resultRoutes) {
+          
+      } else {
+        resultRoutes?.routes.push({
+          _id: new ObjectId(),
+          Start: request.body.Start,
+          End: request.body.End
+        });
+
+        let queryUpdate = { _id: resultRoutes?._id };
+        let update = {
+          $set: {
+            routes: resultRoutes?.routes
+          },
+        };
+        let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
+        if (!resultUpdate) response.status(404).json("Not Found Update");
+        else response.status(200).json(resultRoutes?.routes);
+      }
+    }
+
   },
 
   getAll: async (request, response) => {

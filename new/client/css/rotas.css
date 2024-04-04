@@ -1,3 +1,8 @@
+header {
+    position: relative; /* or absolute, fixed, depending on your needs */
+    z-index: 1000; /* any number larger than the z-index of other elements */
+}
+
 #container {
     display: flex;
     padding: 10px;

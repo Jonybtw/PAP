@@ -43,7 +43,7 @@ function fetchUserInfo() {
     };
 
     // Replace with the correct server endpoint (ensure proper CORS configuration)
-    xhr.open('GET', 'http://127.0.0.1:3512/user'); // Replace with your actual URL
+    xhr.open('GET', 'http://127.0.0.1:420/user'); // Replace with your actual URL
     xhr.setRequestHeader('Authorization', getCookie('token'));
     xhr.send();
 }

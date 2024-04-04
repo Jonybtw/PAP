@@ -14,7 +14,7 @@
   }
   
   #logo span {
-    color: var(--primary-color) !important;
+    color: var(--main-color) !important;
   }
   
   header {
@@ -68,7 +68,7 @@
   }
   
   footer span#mark {
-    color: var(--primary-color);
+    color: var(--main-color);
   }
   
   footer nav {
@@ -205,11 +205,11 @@
   }
   
   .wise {
-    color: blue;
+    color: var(--main-color);
   }
   
   .blue {
-    color: blue;
+    color: var(--main-color);
   }
   
   .slogan {

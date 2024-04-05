@@ -3,11 +3,6 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
-
 router.get('/', (req, res) => {
   const token = req.query.token; // Retrieve token from query parameter
 

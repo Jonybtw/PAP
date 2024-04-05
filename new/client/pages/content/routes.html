@@ -1,128 +1,186 @@
 <!DOCTYPE html>
 <html lang="pt">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RouteWise</title>
-    <link rel="stylesheet" href="../../css/rotas.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/mapa.css"/>
-    
-</head>
+    <link rel="stylesheet" href="../../css/rotas.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="../../css/mapa.css" />
+  </head>
 
-<body>
+  <body>
     <header>
-        <!-- NAV BTN -->
-        <h1 id="logo"><span>Route</span>Wise</h1>
+      <!-- NAV BTN -->
+      <h1 id="logo"><span>Route</span>Wise</h1>
     </header>
 
     <main>
-        <div id="container">
-            <div id="rotas">
-                <input type="text" id="searchBox" placeholder="Procurar rota...">
-                <ul id="routeList">
-                    <li>
-                        <div class="route">
-                            <h3>Rota 1</h3>
-                            <p>Início: Localização A</p>
-                            <p>Fim: Localização B</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="route">
-                            <h3>Rota 2</h3>
-                            <p>Início: Localização C</p>
-                            <p>Fim: Localização D</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="route">
-                            <h3>Rota 3</h3>
-                            <p>Início: Localização E</p>
-                            <p>Fim: Localização F</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="route">
-                            <h3>Rota 4</h3>
-                            <p>Início: Localização G</p>
-                            <p>Fim: Localização H</p>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="route">
-                            <h3>Rota 5</h3>
-                            <p>Início: Localização I</p>
-                            <p>Fim: Localização J</p>
-                        </div>
-                    </li>
-                </ul>
+      <div id="container">
+        <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
+          <div
+            id="place-autocomplete-card"
+            class="place-autocomplete-card"
+            placeholder="Procurar lugar..."
+          ></div>
+          <div id="routeInfo"></div>
+          <hr />
+          <input
+            type="text"
+            id="searchBox"
+            placeholder="Procurar rotas salvas..."
+          />
+          <div id="1">
+            <div id="2">
+                
             </div>
-            
-            <div id="mapa">
-                <div id="mapBox">
-                    <script>
-                        ((g) => {
-                            var h,
-                                a,
-                                k,
-                                p = "The Google Maps JavaScript API",
-                                c = "google",
-                                l = "importLibrary",
-                                q = "__ib__",
-                                m = document,
-                                b = window;
-                            b = b[c] || (b[c] = {});
-                            var d = b.maps || (b.maps = {}),
-                                r = new Set(),
-                                e = new URLSearchParams(),
-                                u = () =>
-                                    h ||
-                                    (h = new Promise(async (f, n) => {
-                                        await (a = m.createElement("script"));
-                                        e.set("libraries", [...r] + "");
-                                        for (k in g)
-                                            e.set(
-                                                k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
-                                                g[k]
-                                            );
-                                        e.set("callback", c + ".maps." + q);
-                                        a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                                        d[q] = f;
-                                        a.onerror = () => (h = n(Error(p + " could not load.")));
-                                        a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                                        m.head.append(a);
-                                    }));
-                            d[l]
-                                ? console.warn(p + " only loads once. Ignoring:", g)
-                                : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
-                        })({
-                            key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
-                            v: "beta",
-                            language: "pt-PT",
-                            libraries: "places, marker",
-                        });
-                    </script>
-                    <script type="module" src="../../js/mapa.js"></script>
-                    <div id="map" style="height: 100%; width: 100%"></div>
+            <ul id="routeList">
+              <li>
+                <div class="route">
+                  <h3>Rota 1</h3>
+                  <p>Início: Localização A</p>
+                  <p>Fim: Localização B</p>
                 </div>
-            </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 2</h3>
+                  <p>Início: Localização C</p>
+                  <p>Fim: Localização D</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 3</h3>
+                  <p>Início: Localização E</p>
+                  <p>Fim: Localização F</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 4</h3>
+                  <p>Início: Localização G</p>
+                  <p>Fim: Localização H</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+              <li>
+                <div class="route">
+                  <h3>Rota 5</h3>
+                  <p>Início: Localização I</p>
+                  <p>Fim: Localização J</p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
+
+        <div id="mapa">
+          <div id="mapBox">
+            <script>
+              ((g) => {
+                var h,
+                  a,
+                  k,
+                  p = "The Google Maps JavaScript API",
+                  c = "google",
+                  l = "importLibrary",
+                  q = "__ib__",
+                  m = document,
+                  b = window;
+                b = b[c] || (b[c] = {});
+                var d = b.maps || (b.maps = {}),
+                  r = new Set(),
+                  e = new URLSearchParams(),
+                  u = () =>
+                    h ||
+                    (h = new Promise(async (f, n) => {
+                      await (a = m.createElement("script"));
+                      e.set("libraries", [...r] + "");
+                      for (k in g)
+                        e.set(
+                          k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                          g[k]
+                        );
+                      e.set("callback", c + ".maps." + q);
+                      a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                      d[q] = f;
+                      a.onerror = () => (h = n(Error(p + " could not load.")));
+                      a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                      m.head.append(a);
+                    }));
+                d[l]
+                  ? console.warn(p + " only loads once. Ignoring:", g)
+                  : (d[l] = (f, ...n) =>
+                      r.add(f) && u().then(() => d[l](f, ...n)));
+              })({
+                key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
+                v: "beta",
+                language: "pt-PT",
+              });
+            </script>
+            <script type="module" src="../../js/mapa.js"></script>
+            <div id="map" style="height: 100%; width: 100%"></div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
-        <h1 id="logo"><span>Route</span>Wise</h1>
-        <span>Navegue com <span id="mark">Inteligência</span>, Navegue com <span id="mark">Eficiência</span></span>
-        <nav>
-            <a href="sobrenos.html">Sobre Nós</a>
-            <a href="contacto.html">Contactos</a>
-            <a href="../utils/horarios.html">Horários</a>
-        </nav>
+      <h1 id="logo"><span>Route</span>Wise</h1>
+      <span
+        >Navegue com <span id="mark">Inteligência</span>, Navegue com
+        <span id="mark">Eficiência</span></span
+      >
+      <nav>
+        <a href="sobrenos.html">Sobre Nós</a>
+        <a href="contacto.html">Contactos</a>
+        <a href="../utils/horarios.html">Horários</a>
+      </nav>
     </footer>
     <script src="../../js/checkLogin.js"></script>
     <script src="../../js/mainColor.js"></script>
     <script src="../../js/logout.js"></script>
-</body>
-
+  </body>
 </html>

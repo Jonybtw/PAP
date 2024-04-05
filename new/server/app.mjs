@@ -3,25 +3,32 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
+
 const app = express();
 
 //* libs
 import { User } from './scripts/main/user.mjs';
 import { Auth } from './scripts/utils/auth.mjs';
 import { Routes } from './scripts/main/routes.mjs';
+import validateTokenRouter from './scripts/utils/validate_token.mjs';
 
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json()); // This line is needed to parse JSON request bodies
+app.use('/validate_token', validateTokenRouter); // Use app.use instead of app.post
 app.use(cors());
 
 	//^ USER
 		app.post('/login', User.login);
 		app.post('/user', User.create);
+
 		app.use(Auth.use);
+
 		//! CRUD USER
 		app.get('/user', User.get);
 		app.put('/user', User.update);
 		//app.delete('/user', User.delete);
+
 		//! CRUD ROUTES
 		app.post('/routes', Routes.create);
 		app.get('/routes', Routes.getAll);

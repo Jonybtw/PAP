@@ -46,3 +46,27 @@ header {
     font-size: 14px;
     margin: 0;
 }
+
+.place-autocomplete-card {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  color: #000000;
+  }
+  
+  gmp-place-autocomplete {
+    width: 300px;
+  }
+  
+  infowindow-content .title {
+    font-weight: bold;
+  }
+  
+  map .infowindow-content {
+    display: inline;
+  }

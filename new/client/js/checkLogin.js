@@ -24,3 +24,24 @@ if (!getCookie('token')) {
         window.location.href = "../../index.html";
     }
 }
+
+// JavaScript
+async function validateToken() {
+    const token = getCookie('token');
+    const response = await fetch('/validate_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `token=${encodeURIComponent(token)}`
+    });
+  
+    if (response.ok) {
+      console.log('Token is valid');
+    } else {
+      console.log('Token is not valid');
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; // Delete the token cookie
+    }
+  }
+  
+  validateToken();

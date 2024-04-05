@@ -41,6 +41,8 @@ async function initMap() {
     // If the place has a geometry, then present it on a map.
     if (place.viewport) {
       map.fitBounds(place.viewport);
+
+      
     } else {
       map.setCenter(place.location);
       map.setZoom(10);

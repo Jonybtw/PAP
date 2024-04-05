@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 
+dotenv.config();
 const app = express();
 
 //* libs
@@ -12,13 +13,14 @@ import { Auth } from './scripts/utils/auth.mjs';
 import { Routes } from './scripts/main/routes.mjs';
 import validateTokenRouter from './scripts/utils/validate_token.mjs';
 
-dotenv.config();
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(express.json()); // This line is needed to parse JSON request bodies
-app.use('/validate_token', validateTokenRouter); // Use app.use instead of app.post
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.json()); // Add this line to parse JSON request bodies
+app.use(express.json()); // Move this line before your routes
 
-	//^ USER
+		app.use('/validate_token', validateTokenRouter); // Use app.use instead of app.post
+
+		//^ USER
 		app.post('/login', User.login);
 		app.post('/user', User.create);
 
@@ -35,7 +37,7 @@ app.use(cors());
 		app.get('/routes/:id', Routes.get);
 		app.put('/routes/:id', Routes.update);
 		app.delete('/routes/:id', Routes.delete);
-		
+				
 
 	//^ BUS AGENCIES
 		//! - Carris

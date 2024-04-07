@@ -1,17 +1,19 @@
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
-  const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
+  const { DirectionsService, DirectionsRenderer } =
+  await google.maps.importLibrary("routes");
   const { Places } = await google.maps.importLibrary("places");
 
   const CenterOfPortugal = { lat: 39.4573914, lng: -8.0065354 };
-  const waypoint = { lat: 38.63206355815076, lng: -9.162405460490177 };
+  const RuaCorroios = { lat: 38.63206355815076, lng: -9.162405460490177 };
 
-    let map;
-    let marker;
-    let infoWindow;
+  let map;
+  let marker;
+  let infoWindow;
+  var startPoint = null;
 
- map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
     center: CenterOfPortugal,
     mapId: "667759e759cedcf9",
@@ -21,123 +23,108 @@ async function initMap() {
     mapTypeControl: false,
   });
 
-  const placeAutocomplete = new google.maps.places.PlaceAutocompleteElement();
-  placeAutocomplete.id = "place-autocomplete-card";
-  const card = document.getElementById("place-autocomplete-card");
+    new AutocompleteDirectionsHandler(map);
+}
 
-  card.appendChild(placeAutocomplete);
-  // Create the marker and info window
+class AutocompleteDirectionsHandler {
+  map;
+  originPlaceId;
+  destinationPlaceId;
+  travelMode;
+  directionsService;
+  directionsRenderer;
+  constructor(map) {
+    this.map = map;
+    this.originPlaceId = "";
+    this.destinationPlaceId = "";
+    this.travelMode = google.maps.TravelMode.WALKING;
+    this.directionsService = new google.maps.DirectionsService();
+    this.directionsRenderer = new google.maps.DirectionsRenderer();
+    this.directionsRenderer.setMap(map);
 
-  marker = new google.maps.marker.AdvancedMarkerElement({
-    map,
-  });
-  infoWindow = new google.maps.InfoWindow({});
+    const originInput = document.getElementById("origin-input");
+    const destinationInput = document.getElementById("destination-input");
+    const modeSelector = document.getElementById("mode-selector");
+    // Specify just the place data fields that you need.
+    const originAutocomplete = new google.maps.places.Autocomplete(
+      originInput,
+      { fields: ["place_id"] },
+    );
+    // Specify just the place data fields that you need.
+    const destinationAutocomplete = new google.maps.places.Autocomplete(
+      destinationInput,
+      { fields: ["place_id"] },
+    );
 
-  // Add the gmp-place select listener, and display the results on the map.
-  placeAutocomplete.addEventListener("gmp-placeselect", async ({ place }) => {
-    await place.fetchFields({
-      fields: ["displayName", "formattedAddress", "location"],
+    this.setupClickListener("changemode-walking",google.maps.TravelMode.WALKING,);
+    this.setupClickListener("changemode-transit",google.maps.TravelMode.TRANSIT,);
+    this.setupClickListener("changemode-driving",google.maps.TravelMode.DRIVING,);
+    this.setupPlaceChangedListener(originAutocomplete, "ORIG");
+    this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
+    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput,);
+    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+  }
+  // Sets a listener on a radio button to change the filter type on Places
+  // Autocomplete.
+  setupClickListener(id, mode) {
+    const radioButton = document.getElementById(id);
+
+    radioButton.addEventListener("click", () => {
+      this.travelMode = mode;
+      this.route();
     });
-    // If the place has a geometry, then present it on a map.
-    if (place.viewport) {
-      map.fitBounds(place.viewport);
+  }
+  setupPlaceChangedListener(autocomplete, mode) {
+    autocomplete.bindTo("bounds", this.map);
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
 
-      
-    } else {
-      map.setCenter(place.location);
-      map.setZoom(10);
+      if (!place.place_id) {
+        window.alert("Please select an option from the dropdown list.");
+        return;
+      }
+
+      if (mode === "ORIG") {
+        this.originPlaceId = place.place_id;
+      } else {
+        this.destinationPlaceId = place.place_id;
+      }
+
+      this.route();
+    });
+  }
+  route() {
+    if (!this.originPlaceId || !this.destinationPlaceId) {
+      return;
     }
 
-    let content =
-      '<div id="infowindow-content">' +
-      '<span id="place-displayname" class="title">' +
-      place.displayName +
-      "</span><br />" +
-      '<span id="place-address">' +
-      place.formattedAddress +
-      "</span>" +
-      "</div>";
+    const me = this;
 
-    updateInfoWindow(content, place.location);
-    marker.position = place.location;
-  });
-
-// Helper function to create an info window.
-function updateInfoWindow(content, center) {
-  infoWindow.setContent(content);
-  infoWindow.setPosition(center);
-  infoWindow.open({
-    map,
-    anchor: marker,
-    shouldFocus: false,
-  });
-}
-
-  // Initialize Directions Service and Renderer
-  const directionsService = new DirectionsService();
-  const directionsRenderer = new DirectionsRenderer();
-  directionsRenderer.setMap(map);
-
-  // Function to calculate and display route
-  async function calculateAndDisplayRoute(origin, destination) {
-    const request = {
-      origin: origin,
-      destination: destination,
-      travelMode: google.maps.TravelMode.DRIVING, // Use the google.maps object
-    };
-
-    const result = await directionsService.route(request);
-    directionsRenderer.setDirections(result);
-
-    // Extract the distance, duration, start address, and end address from the first route and leg
-    const route = result.routes[0];
-    const leg = route.legs[0];
-    const distance = leg.distance.text;
-    const duration = leg.duration.text;
-    const startAddress = leg.start_address;
-    const endAddress = leg.end_address;
-
-    // Display the distance, duration, start address, and end address
-    routeInfo.innerHTML = `
-    <div class="route">
-        <h3>Detalhes da Rota</h3>
-        <p><strong style="color: black;">Local de Partida:</strong> ${startAddress}</p>
-        <p><strong style="color: black;">Destino:</strong> ${endAddress}</p>
-        <p><strong style="color: black;">Distância:</strong> ${distance}</p>
-        <p><strong style="color: black;">Duração:</strong> ${duration}</p>
-    </div>
-    `;
-    routeInfo.style.color = "black";
-  }
-
-  // Request user's location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        map.setCenter({ lat: latitude, lng: longitude });
-
-        // Set marker at user's location
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-          position: { lat: latitude, lng: longitude },
-          map: map,
-        });
-
-        // Call the function to calculate and display route
-        await calculateAndDisplayRoute(
-          { lat: latitude, lng: longitude },
-          waypoint
-        );
+    this.directionsService.route(
+      {
+        origin: { placeId: this.originPlaceId },
+        destination: { placeId: this.destinationPlaceId },
+        travelMode: this.travelMode,
       },
-      (error) => {
-        console.error("Error getting user's location:", error);
-        map.setCenter(CenterOfPortugal); // Set center to waypoint
-      }
+      (response, status) => {
+        if (status === "OK") {
+          me.directionsRenderer.setDirections(response);
+          // Get distance and duration from the response
+          const distance = response.routes[0].legs[0].distance.text;
+          const duration = response.routes[0].legs[0].duration.text;
+
+          // Create a div to display the distance and duration
+          const div = document.createElement('div');
+          div.id = 'routeInfo';
+          div.innerHTML = `Distance: ${distance}, Duration: ${duration}`;
+        } else {
+          window.alert("Directions request failed due to " + status);
+        }
+      },
     );
-  } else {
-    console.error("Geolocation is not supported by this browser.");
-    map.setCenter(CenterOfPortugal); // Set center to waypoint
   }
 }
+
 
 initMap();

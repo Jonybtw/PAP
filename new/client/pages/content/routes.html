@@ -18,11 +18,37 @@
     <main>
       <div id="container">
         <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
-          <div
-            id="place-autocomplete-card"
-            class="place-autocomplete-card"
-            placeholder="Procurar lugar..."
-          ></div>
+          <div>
+      <input
+        id="origin-input"
+        class="controls"
+        type="text"
+        placeholder="Ponto de partida"
+      />
+
+      <input
+        id="destination-input"
+        class="controls"
+        type="text"
+        placeholder="Destino"
+      />
+
+      <div id="mode-selector" class="controls">
+        <input
+          type="radio"
+          name="type"
+          id="changemode-walking"
+          checked="checked"
+        />
+        <label for="changemode-walking">A pé</label>
+
+        <input type="radio" name="type" id="changemode-transit" />
+        <label for="changemode-transit">Transportes Públicos</label>
+
+        <input type="radio" name="type" id="changemode-driving" />
+        <label for="changemode-driving">Carro</label>
+      </div>
+    </div>
           <div id="routeInfo"></div>
           <hr />
           <input
@@ -30,8 +56,8 @@
             id="searchBox"
             placeholder="Procurar rotas salvas..."
           />
-          <div id="1">
-            <div id="2">
+          <div>
+            <div>
                 
             </div>
             <ul id="routeList">

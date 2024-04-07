@@ -81,7 +81,7 @@ class AutocompleteDirectionsHandler {
       const place = autocomplete.getPlace();
 
       if (!place.place_id) {
-        window.alert("Please select an option from the dropdown list.");
+        window.alert("Por favor escolhe uma opção da lista.");
         return;
       }
 
@@ -110,14 +110,21 @@ class AutocompleteDirectionsHandler {
       (response, status) => {
         if (status === "OK") {
           me.directionsRenderer.setDirections(response);
-          // Get distance and duration from the response
+
+          // Get distance and duration of the route
           const distance = response.routes[0].legs[0].distance.text;
           const duration = response.routes[0].legs[0].duration.text;
 
-          // Create a div to display the distance and duration
-          const div = document.createElement('div');
-          div.id = 'routeInfo';
-          div.innerHTML = `Distance: ${distance}, Duration: ${duration}`;
+          // Display distance and duration in the routeInfo div
+          const routeInfoDiv = document.getElementById('routeInfo');
+          routeInfoDiv.innerHTML = `
+            <div class="route">
+              <p><strong style="color: black;">Distância:</strong> ${distance}</p>
+              <p><strong style="color: black;">Duração:</strong> ${duration}</p>
+            </div>
+          `;
+        } else if (status === "ZERO_RESULTS") {
+          window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
         } else {
           window.alert("Directions request failed due to " + status);
         }

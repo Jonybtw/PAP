@@ -1,17 +1,13 @@
 async function initMap() {
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
-  const { DirectionsService, DirectionsRenderer } =
-  await google.maps.importLibrary("routes");
+  const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
   const { Places } = await google.maps.importLibrary("places");
 
   const CenterOfPortugal = { lat: 39.4573914, lng: -8.0065354 };
   const RuaCorroios = { lat: 38.63206355815076, lng: -9.162405460490177 };
 
   let map;
-  let marker;
-  let infoWindow;
-  var startPoint = null;
 
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
@@ -19,8 +15,9 @@ async function initMap() {
     mapId: "667759e759cedcf9",
     options: {
       gestureHandling: "greedy",
+      fullscreenControl: false,
     },
-    mapTypeControl: false,
+    mapTypeControl: true,
   });
 
     new AutocompleteDirectionsHandler(map);
@@ -40,7 +37,10 @@ class AutocompleteDirectionsHandler {
     this.travelMode = google.maps.TravelMode.WALKING;
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
+
     this.directionsRenderer.setMap(map);
+    sidebar = document.getElementById("sidebar");
+    this.directionsRenderer.setPanel(sidebar);
 
     const originInput = document.getElementById("origin-input");
     const destinationInput = document.getElementById("destination-input");
@@ -59,11 +59,10 @@ class AutocompleteDirectionsHandler {
     this.setupClickListener("changemode-walking",google.maps.TravelMode.WALKING,);
     this.setupClickListener("changemode-transit",google.maps.TravelMode.TRANSIT,);
     this.setupClickListener("changemode-driving",google.maps.TravelMode.DRIVING,);
+    this.setupClickListener("changemode-bicycling",google.maps.TravelMode.BICYCLING,);
     this.setupPlaceChangedListener(originAutocomplete, "ORIG");
     this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
-    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
-    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput,);
-    //this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+    this.setupClearButtonListener("clear-directions");
   }
   // Sets a listener on a radio button to change the filter type on Places
   // Autocomplete.
@@ -94,6 +93,20 @@ class AutocompleteDirectionsHandler {
       this.route();
     });
   }
+  // Add this function in your JavaScript code
+  setupClearButtonListener(id) {
+    const clearButton = document.getElementById(id);
+    const originInput = document.getElementById("origin-input");
+    const destinationInput = document.getElementById("destination-input");
+  
+    clearButton.addEventListener("click", () => {
+      this.directionsRenderer.setDirections({routes: []});
+      originPlaceId.value = '';
+      destinationPlaceId.value = '';
+      travelMode = null;
+    });
+  }
+  
   route() {
     if (!this.originPlaceId || !this.destinationPlaceId) {
       return;
@@ -110,28 +123,14 @@ class AutocompleteDirectionsHandler {
       (response, status) => {
         if (status === "OK") {
           me.directionsRenderer.setDirections(response);
-
-          // Get distance and duration of the route
-          const distance = response.routes[0].legs[0].distance.text;
-          const duration = response.routes[0].legs[0].duration.text;
-
-          // Display distance and duration in the routeInfo div
-          const routeInfoDiv = document.getElementById('routeInfo');
-          routeInfoDiv.innerHTML = `
-            <div class="route">
-              <p><strong style="color: black;">Distância:</strong> ${distance}</p>
-              <p><strong style="color: black;">Duração:</strong> ${duration}</p>
-            </div>
-          `;
         } else if (status === "ZERO_RESULTS") {
           window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
         } else {
-          window.alert("Directions request failed due to " + status);
+          window.alert("Pedido falhou com erro: " + status);
         }
       },
     );
   }
 }
-
 
 initMap();

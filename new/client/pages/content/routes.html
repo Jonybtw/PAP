@@ -32,14 +32,10 @@
         type="text"
         placeholder="Destino"
       />
+      <button button id="clear-directions">Clear Directions</button>
 
       <div id="mode-selector" class="controls">
-        <input
-          type="radio"
-          name="type"
-          id="changemode-walking"
-          checked="checked"
-        />
+        <input type="radio" name="type" id="changemode-walking" checked="checked"/>
         <label for="changemode-walking">A pé</label>
 
         <input type="radio" name="type" id="changemode-transit" />
@@ -47,9 +43,14 @@
 
         <input type="radio" name="type" id="changemode-driving" />
         <label for="changemode-driving">Carro</label>
+
+        <input type="radio" name="type" id="changemode-bicycling" />
+        <label for="changemode-bicycling">Bicicleta</label>
       </div>
     </div>
-          <div id="routeInfo"></div>
+          <div id="routeInfo">
+            <div id="sidebar"></div>
+          </div>
           <hr />
           <input
             type="text"

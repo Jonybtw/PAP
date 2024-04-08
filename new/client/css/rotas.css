@@ -10,7 +10,7 @@ header {
 }
 
 #rotas {
-    width: 30vw;
+    width: 25vw;
     height: 100vh;
     padding: 10px;
     border-radius: 10px;
@@ -19,7 +19,7 @@ header {
 }
 
 #mapa {
-    width: 70vw;
+    width: 75vw;
     height: 100vh;
     padding: 10px;
     border-radius: 10px;
@@ -81,6 +81,7 @@ header {
   background-color: #4d90fe;
   margin-left: 12px;
   padding: 5px 11px 0px 11px;
+  max-width: fit-content;
 }
 
 #mode-selector label {
@@ -89,3 +90,35 @@ header {
   font-weight: 300;
 }
 
+b, li * {
+  color: black;
+}
+
+#sidebar {
+  flex-basis: 15rem;
+  flex-grow: 1;
+  padding: 1rem;
+  max-width: 30rem;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+#sidebar {
+  flex: 0 1 auto;
+  padding: 0;
+}
+#sidebar > div {
+  padding: 0.5rem;
+}
+
+div.adp * , td *, .adp-summary *{
+  color: black;
+}
+
+div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
+  display: none;
+}
+
+.routeInfo{
+  align-self: center;
+}

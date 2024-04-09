@@ -47,28 +47,11 @@ header {
     margin: 0;
 }
 
-.controls {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 1px solid transparent;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  height: 32px;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
 #origin-input,
 #destination-input {
   background-color: #fff;
-  font-family: Roboto;
   font-size: 15px;
-  font-weight: 300;
   margin-left: 12px;
-  padding: 0 11px 0 13px;
-  text-overflow: ellipsis;
-  width: 300px;
 }
 
 #origin-input:focus,
@@ -79,15 +62,15 @@ header {
 #mode-selector {
   color: #fff;
   background-color: #4d90fe;
-  margin-left: 12px;
-  padding: 5px 11px 0px 11px;
+  padding: 15px;
   max-width: fit-content;
 }
 
 #mode-selector label {
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 300;
+  font-size: 15px;
+}
+
+.controls {
 }
 
 b, li * {
@@ -121,4 +104,51 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 
 .routeInfo{
   align-self: center;
+}
+
+#origin-input.controls.pac-target-input, #destination-input.controls.pac-target-input{
+  margin-left: 0px;
+  width: 75%;
+  
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  color: #000000;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.pac-container *, .gm-style-iw *{
+  color: black !important;
+}
+
+#clear-directions{
+  background-color: red;
+  border: none;
+  padding: 7.5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: -1px;
+}
+
+#clear-directions:hover {
+  background-color: #962121;
+}
+
+#swap-places{
+  background-color: rgb(0, 174, 255);
+  border: none;
+  padding: 7.5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#swap-places:hover{
+  background-color: rgb(0, 155, 226);
 }

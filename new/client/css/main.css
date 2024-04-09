@@ -13,10 +13,6 @@
   color: var(--text-color);
 }
 
-.pac-container *, .gm-style-iw *{
-  color: black !important;
-}
-
 #logo span {
   color: var(--main-color) !important;
 }

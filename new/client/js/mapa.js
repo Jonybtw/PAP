@@ -63,6 +63,7 @@ class AutocompleteDirectionsHandler {
     this.setupPlaceChangedListener(originAutocomplete, "ORIG");
     this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
     this.setupClearButtonListener("clear-directions");
+    this.setupSwapButtonListener("swap-places");
   }
   // Sets a listener on a radio button to change the filter type on Places
   // Autocomplete.
@@ -71,6 +72,7 @@ class AutocompleteDirectionsHandler {
 
     radioButton.addEventListener("click", () => {
       this.travelMode = mode;
+      this.directionsRenderer.setDirections({ routes: [] });
       this.route();
     });
   }
@@ -93,20 +95,6 @@ class AutocompleteDirectionsHandler {
       this.route();
     });
   }
-  // Add this function in your JavaScript code
-  setupClearButtonListener(id) {
-    const clearButton = document.getElementById(id);
-    const originInput = document.getElementById("origin-input");
-    const destinationInput = document.getElementById("destination-input");
-  
-    clearButton.addEventListener("click", () => {
-      this.directionsRenderer.setDirections({routes: []});
-      originPlaceId.value = '';
-      destinationPlaceId.value = '';
-      travelMode = null;
-    });
-  }
-  
   route() {
     if (!this.originPlaceId || !this.destinationPlaceId) {
       return;
@@ -130,6 +118,61 @@ class AutocompleteDirectionsHandler {
         }
       },
     );
+  }
+  route() {
+    if (!this.originPlaceId || !this.destinationPlaceId) {
+      return;
+    }
+
+    const me = this;
+
+    this.directionsService.route(
+      {
+        origin: { placeId: this.originPlaceId },
+        destination: { placeId: this.destinationPlaceId },
+        travelMode: this.travelMode,
+      },
+      (response, status) => {
+        if (status === "OK") {
+          me.directionsRenderer.setDirections(response);
+          document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
+        } else if (status === "ZERO_RESULTS") {
+          window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
+        } else {
+          window.alert("Pedido falhou com erro: " + status);
+        }
+      },
+    );
+  }
+  setupClearButtonListener(id) {
+    const clearButton = document.getElementById(id);
+
+    clearButton.style.display = "none"; // Hide the clear button initially
+
+    clearButton.addEventListener("click", () => {
+      this.originPlaceId = "";
+      this.destinationPlaceId = "";
+      document.getElementById("origin-input").value = "";
+      document.getElementById("destination-input").value = "";
+      this.directionsRenderer.setDirections({ routes: [] }); // Clear directions
+
+      clearButton.style.display = "none"; // Hide the clear button after clearing the route
+    });
+  }
+  setupSwapButtonListener(id) {
+    const swapButton = document.getElementById(id);
+
+    swapButton.addEventListener("click", () => {
+      [this.originPlaceId, this.destinationPlaceId] = [this.destinationPlaceId, this.originPlaceId];
+
+      // Swap the values of the input fields
+      var originInput = document.getElementById("origin-input");
+      var destinationInput = document.getElementById("destination-input");
+      [originInput.value, destinationInput.value] = [destinationInput.value, originInput.value];
+
+      // Recalculate and display the route
+      this.route();
+    });
   }
 }
 

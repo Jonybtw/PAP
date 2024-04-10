@@ -90,7 +90,11 @@ header {
   padding: 0.5rem;
 }
 
-.adp b, .adp-list b{
+hr{
+  margin: 0.5rem 0;
+}
+
+.adp b, .adp-list b, .adp-substep b{
   font-weight: bold;
 }
 

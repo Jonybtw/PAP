@@ -99,7 +99,6 @@
   }
   
   .input-group form {
-    padding-top: 20px;
     justify-content: center;
     align-items: center;
     gap: 1rem;
@@ -116,6 +115,7 @@
   .confirmpassword {
     width: 100%;
     padding: 0.5rem;
+    margin: 8px 0;
     border-radius: 5px;
     border: 1px solid var(--primary-color);
     color: gray;
@@ -127,6 +127,7 @@
     border: none;
     padding: 0.5rem 1rem;
     font-size: 1rem;
+    margin-top: 8px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;

@@ -258,10 +258,17 @@ ul, li {
   list-style: none;
 }
 
+li{
+  margin-bottom: 10px;
+}
+
+#username, #name, #birth, #address, #email, #phone, #password, #role{
+  margin-top: 10px;
+}
+
 input[type="text"], input[type="password"], input[type="date"], input[type="email"] {
   width: 100%;
   padding: 12px 20px;
-  margin: 8px 0;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;

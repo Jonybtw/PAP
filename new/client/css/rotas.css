@@ -64,6 +64,7 @@ header {
   background-color: #4d90fe;
   padding: 15px;
   max-width: fit-content;
+  border-radius: 5px;
 }
 
 #mode-selector label {
@@ -71,10 +72,7 @@ header {
 }
 
 .controls {
-}
 
-b, li * {
-  color: black;
 }
 
 #sidebar {
@@ -94,11 +92,46 @@ b, li * {
   padding: 0.5rem;
 }
 
-div.adp * , td *, .adp-summary *{
+b, li * {
+  color: black;
+  font-weight: bold;
+}
+
+.adp b, .adp-list b{
+  font-weight: bold;
+}
+
+div.adp * , td *, .adp-summary *, .adp-list *{
   color: black;
 }
 
+.adp-placemark, .adp-list{
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.adp-listheader{
+  text-transform: capitalize;
+}
+
+.adp-legal{
+  display: none;
+}
+
+ .adp-listheader{
+  font-weight: bold;
+  text-align: center;
+}
+
+.adp a{
+  color: blue;
+}
+
 div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
+  display: none;
+}
+
+#arrival-time, #departure-time{
   display: none;
 }
 
@@ -109,7 +142,6 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 #origin-input.controls.pac-target-input, #destination-input.controls.pac-target-input{
   margin-left: 0px;
   width: 75%;
-  
   margin: 8px 0;
   box-sizing: border-box;
   border: 2px solid #ccc;
@@ -117,7 +149,7 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
   background-color: #f8f8f8;
   font-size: 16px;
   color: #000000;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: proxima, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .pac-container *, .gm-style-iw *{

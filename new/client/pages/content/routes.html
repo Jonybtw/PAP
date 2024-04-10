@@ -1,220 +1,212 @@
 <!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RouteWise</title>
-    <link rel="stylesheet" href="../../css/rotas.css" />
-    <link rel="stylesheet" href="../../css/main.css" />
-    <link rel="stylesheet" href="../../css/mapa.css" />
-  </head>
 
-  <body>
-    <header>
-      <!-- NAV BTN -->
-      <h1 id="logo"><span>Route</span>Wise</h1>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RouteWise</title>
+  <link rel="stylesheet" href="../../css/rotas.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/mapa.css" />
+</head>
 
-    <main>
-      <div id="container">
-        <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
+<body>
+  <header>
+    <!-- NAV BTN -->
+    <h1 id="logo"><span>Route</span>Wise</h1>
+  </header>
+
+  <main>
+    <div id="container">
+      <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
+        <div>
+          <input id="origin-input" class="controls" type="text" placeholder="Ponto de partida" />
+
+          <input id="destination-input" class="controls" type="text" placeholder="Destino" />
+          <button id="clear-directions">Limpar Rota</button>
+          <button id="swap-places"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+            </svg></button>
+          <div id="mode-selector" class="controls">
+            <div>
+              <input type="radio" name="type" id="changemode-walking" checked="checked" />
+              <label for="changemode-walking">A pé🚶‍♂️</label>
+
+              <input type="radio" name="type" id="changemode-transit" />
+              <label for="changemode-transit">Transportes Públicos 🚌</label>
+            </div>
+
+            <div>
+              <input type="radio" name="type" id="changemode-driving" />
+              <label for="changemode-driving">Carro 🚗</label>
+
+              <input type="radio" name="type" id="changemode-bicycling" />
+              <label for="changemode-bicycling">Bicicleta 🚲</label>
+            </div>
+            <div>
+              <input style="color: black;" type="datetime-local" min="" id="departure-time" placeholder="Hora de Saída">
+              <input style="color: black;" type="datetime-local" min="" id="arrival-time" placeholder="Hora de Chegada">
+            </div>
+
+          </div>
+        </div>
+        <div id="routeInfo">
+          <div id="sidebar"></div>
+        </div>
+        <hr />
+        <input type="text" id="searchBox" placeholder="Procurar rotas salvas..." />
+        <div>
           <div>
-      <input
-        id="origin-input"
-        class="controls"
-        type="text"
-        placeholder="Ponto de partida"
-      />
 
-      <input
-        id="destination-input"
-        class="controls"
-        type="text"
-        placeholder="Destino"
-      />  
-      <button id="clear-directions">Limpar Rota</button>
-      <button id="swap-places"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-      </svg></button>
-      <div id="mode-selector" class="controls">
-        <div>
-          <input type="radio" name="type" id="changemode-walking" checked="checked"/>
-        <label for="changemode-walking">A pé🚶‍♂️</label>
-
-        <input type="radio" name="type" id="changemode-transit" />
-        <label for="changemode-transit">Transportes Públicos 🚌</label>
+          </div>
+          <ul id="routeList">
+            <li>
+              <div class="route">
+                <h3>Rota 1</h3>
+                <p>Início: Localização A</p>
+                <p>Fim: Localização B</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 2</h3>
+                <p>Início: Localização C</p>
+                <p>Fim: Localização D</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 3</h3>
+                <p>Início: Localização E</p>
+                <p>Fim: Localização F</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 4</h3>
+                <p>Início: Localização G</p>
+                <p>Fim: Localização H</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+            <li>
+              <div class="route">
+                <h3>Rota 5</h3>
+                <p>Início: Localização I</p>
+                <p>Fim: Localização J</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        
-        <div>
-          <input type="radio" name="type" id="changemode-driving" />
-        <label for="changemode-driving">Carro 🚗</label>
+      </div>
 
-        <input type="radio" name="type" id="changemode-bicycling" />
-        <label for="changemode-bicycling">Bicicleta 🚲</label>
+      <div id="mapa">
+        <div id="mapBox">
+          <script>
+            ((g) => {
+              var h,
+                a,
+                k,
+                p = "The Google Maps JavaScript API",
+                c = "google",
+                l = "importLibrary",
+                q = "__ib__",
+                m = document,
+                b = window;
+              b = b[c] || (b[c] = {});
+              var d = b.maps || (b.maps = {}),
+                r = new Set(),
+                e = new URLSearchParams(),
+                u = () =>
+                  h ||
+                  (h = new Promise(async (f, n) => {
+                    await (a = m.createElement("script"));
+                    e.set("libraries", [...r] + "");
+                    for (k in g)
+                      e.set(
+                        k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                        g[k]
+                      );
+                    e.set("callback", c + ".maps." + q);
+                    a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                    d[q] = f;
+                    a.onerror = () => (h = n(Error(p + " could not load.")));
+                    a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                    m.head.append(a);
+                  }));
+              d[l]
+                ? console.warn(p + " only loads once. Ignoring:", g)
+                : (d[l] = (f, ...n) =>
+                  r.add(f) && u().then(() => d[l](f, ...n)));
+            })({
+              key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
+              v: "beta",
+              language: "pt-PT",
+            });
+          </script>
+          <script type="module" src="../../js/mapa.js"></script>
+          <div id="map" style="height: 100%; width: 100%"></div>
         </div>
-        
       </div>
     </div>
-          <div id="routeInfo">
-            <div id="sidebar"></div>
-          </div>
-          <hr/>
-          <input
-            type="text"
-            id="searchBox"
-            placeholder="Procurar rotas salvas..."
-          />
-          <div>
-            <div>
-                
-            </div>
-            <ul id="routeList">
-              <li>
-                <div class="route">
-                  <h3>Rota 1</h3>
-                  <p>Início: Localização A</p>
-                  <p>Fim: Localização B</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 2</h3>
-                  <p>Início: Localização C</p>
-                  <p>Fim: Localização D</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 3</h3>
-                  <p>Início: Localização E</p>
-                  <p>Fim: Localização F</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 4</h3>
-                  <p>Início: Localização G</p>
-                  <p>Fim: Localização H</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-              <li>
-                <div class="route">
-                  <h3>Rota 5</h3>
-                  <p>Início: Localização I</p>
-                  <p>Fim: Localização J</p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+  </main>
 
-        <div id="mapa">
-          <div id="mapBox">
-            <script>
-              ((g) => {
-                var h,
-                  a,
-                  k,
-                  p = "The Google Maps JavaScript API",
-                  c = "google",
-                  l = "importLibrary",
-                  q = "__ib__",
-                  m = document,
-                  b = window;
-                b = b[c] || (b[c] = {});
-                var d = b.maps || (b.maps = {}),
-                  r = new Set(),
-                  e = new URLSearchParams(),
-                  u = () =>
-                    h ||
-                    (h = new Promise(async (f, n) => {
-                      await (a = m.createElement("script"));
-                      e.set("libraries", [...r] + "");
-                      for (k in g)
-                        e.set(
-                          k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
-                          g[k]
-                        );
-                      e.set("callback", c + ".maps." + q);
-                      a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                      d[q] = f;
-                      a.onerror = () => (h = n(Error(p + " could not load.")));
-                      a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                      m.head.append(a);
-                    }));
-                d[l]
-                  ? console.warn(p + " only loads once. Ignoring:", g)
-                  : (d[l] = (f, ...n) =>
-                      r.add(f) && u().then(() => d[l](f, ...n)));
-              })({
-                key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
-                v: "beta",
-                language: "pt-PT",
-              });
-            </script>
-            <script type="module" src="../../js/mapa.js"></script>
-            <div id="map" style="height: 100%; width: 100%"></div>
-          </div>
-        </div>
-      </div>
-    </main>
+  <footer>
+    <h1 id="logo"><span>Route</span>Wise</h1>
+    <span>Navegue com <span id="mark">Inteligência</span>, Navegue com
+      <span id="mark">Eficiência</span></span>
+    <nav>
+      <a href="sobrenos.html">Sobre Nós</a>
+      <a href="contacto.html">Contactos</a>
+      <a href="../utils/horarios.html">Horários</a>
+    </nav>
+  </footer>
+  <script src="../../js/checkLogin.js"></script>
+  <script src="../../js/mainColor.js"></script>
+  <script src="../../js/logout.js"></script>
+</body>
 
-    <footer>
-      <h1 id="logo"><span>Route</span>Wise</h1>
-      <span
-        >Navegue com <span id="mark">Inteligência</span>, Navegue com
-        <span id="mark">Eficiência</span></span
-      >
-      <nav>
-        <a href="sobrenos.html">Sobre Nós</a>
-        <a href="contacto.html">Contactos</a>
-        <a href="../utils/horarios.html">Horários</a>
-      </nav>
-    </footer>
-    <script src="../../js/checkLogin.js"></script>
-    <script src="../../js/mainColor.js"></script>
-    <script src="../../js/logout.js"></script>
-  </body>
 </html>

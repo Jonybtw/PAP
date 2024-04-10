@@ -71,9 +71,7 @@ header {
   font-size: 15px;
 }
 
-.controls {
 
-}
 
 #sidebar {
   flex-basis: 15rem;
@@ -92,11 +90,6 @@ header {
   padding: 0.5rem;
 }
 
-b, li * {
-  color: black;
-  font-weight: bold;
-}
-
 .adp b, .adp-list b{
   font-weight: bold;
 }
@@ -108,6 +101,9 @@ div.adp * , td *, .adp-summary *, .adp-list *{
 .adp-placemark, .adp-list{
   border-radius: 5px;
   padding: 5px;
+}
+.adp-summary-duration{
+  font-weight: bold;
 }
 
 .adp-listheader{

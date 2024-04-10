@@ -50,9 +50,6 @@ class AutocompleteDirectionsHandler {
     this.directionsRenderer.setPanel(sidebar);
     const originInput = document.getElementById("origin-input");
     const destinationInput = document.getElementById("destination-input");
-    const arrivalInput = document.getElementById("arrival-time");
-    const departureInput = document.getElementById("departure-time");
-    const modeSelector = document.getElementById("mode-selector");
     
     // Specify just the place data fields that you need.
     const originAutocomplete = new google.maps.places.Autocomplete(
@@ -156,8 +153,6 @@ class AutocompleteDirectionsHandler {
       this.destinationPlaceId = "";
       document.getElementById("origin-input").value = "";
       document.getElementById("destination-input").value = "";
-      const arrivalInput = document.getElementById("arrival-time");
-      const departureInput = document.getElementById("departure-time");
       document.getElementById("arrival-time").value = "";
       document.getElementById("departure-time").value = "";
       this.directionsRenderer.setDirections({ routes: [] }); // Clear directions
@@ -189,7 +184,6 @@ class AutocompleteDirectionsHandler {
 
     // Set traffic model (choose one)
      drivingOptions.trafficModel = google.maps.TrafficModel.BEST_GUESS;
-     console.log(drivingOptions);
     // drivingOptions.trafficModel = google.maps.TrafficModel.OPTIMISTIC;
     // drivingOptions.trafficModel = google.maps.TrafficModel.PESSIMISTIC;
 
@@ -198,13 +192,12 @@ class AutocompleteDirectionsHandler {
         origin: { placeId: this.originPlaceId },
         destination: { placeId: this.destinationPlaceId },
         travelMode: this.travelMode,
-        drivingOptions: drivingOptions, // Include drivingOptions
+         // Include drivingOptions
         provideRouteAlternatives: true,
       },
       (response, status) => {
         if (status === "OK") {
           me.directionsRenderer.setDirections(response);
-          console.log(response);
           document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
         } else if (status === "ZERO_RESULTS") {
           window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS

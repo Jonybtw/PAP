@@ -1,7 +1,4 @@
-/* Reutilize as variáveis e estilos do main.css */
 @import url("main.css");
-
-/* Estilos específicos para a página "agencias.html" */
 
 body {
     background-color: var(--secondary-color);

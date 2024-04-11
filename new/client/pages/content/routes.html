@@ -23,33 +23,64 @@
           <input id="origin-input" class="controls" type="text" placeholder="Ponto de partida" />
 
           <input id="destination-input" class="controls" type="text" placeholder="Destino" />
-          <button id="clear-directions">Limpar Rota</button>
+          <button id="clear-directions" style="display: none;">Limpar Rota</button>
           <button id="swap-places"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
               class="bi bi-arrow-down-up" viewBox="0 0 16 16">
               <path fill-rule="evenodd"
                 d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
             </svg></button>
           <div id="mode-selector" class="controls">
-            <div>
+              <h4>Meio de Deslocação:</h4>
               <input type="radio" name="type" id="changemode-walking" checked="checked" />
-              <label for="changemode-walking">A pé🚶‍♂️</label>
+              <label for="changemode-walking">A pé🚶‍♂️</label><br>
 
               <input type="radio" name="type" id="changemode-transit" />
-              <label for="changemode-transit">Transportes Públicos 🚌</label>
-            </div>
+              <label for="changemode-transit">Transportes Públicos 🚌</label><br>
 
-            <div>
+            
               <input type="radio" name="type" id="changemode-driving" />
-              <label for="changemode-driving">Carro 🚗</label>
+              <label for="changemode-driving">Carro 🚗</label><br>
 
               <input type="radio" name="type" id="changemode-bicycling" />
               <label for="changemode-bicycling">Bicicleta 🚲</label>
-            </div>
             <div>
-              <input style="color: black;" type="datetime-local" min="" id="departure-time" placeholder="Hora de Saída">
-              <input style="color: black;" type="datetime-local" min="" id="arrival-time" placeholder="Hora de Chegada">
+              <h4 style="display: none;">Partir á(s):</h4>
+              <input style="color: black;" type="datetime-local" min="" id="departure-time">
+              <h4 style="display: none;">Chegada á(s):</h4>
+              <input style="color: black;" type="datetime-local" min="" id="arrival-time">
             </div>
 
+          </div>
+          <div id="transit-options" style="display: none;"> 
+            <h3>Opções de Transporte Público</h3>
+            <h4>Preferência:</h4>
+            <input type="checkbox" id="mode-rail" value="RAIL">
+            <label for="mode-rail">Metropolitano</label><br>
+            <input type="checkbox" id="mode-bus" value="BUS">
+            <label for="mode-bus">Autocarro</label><br>
+            <input type="checkbox" id="mode-subway" value="SUBWAY">
+            <label for="mode-subway">Metro</label><br>
+            <input type="checkbox" id="mode-train" value="TRAIN">
+            <label for="mode-train">Comboio</label><br>
+            <input type="checkbox" id="mode-tram" value="TRAM">
+            <label for="mode-tram">Elétrico</label><br>
+      
+            <h4>Trajeto:</h4>
+            <input type="radio" name="routingPreference" id="preference-fewer-transfers" value="FEWER_TRANSFERS">
+            <label for="preference-fewer-transfers">Menos transbordos</label><br>
+            <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
+            <label for="preference-less-walking">Menos trajetos a pé</label><br>
+            <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
+            <label for="preference-less-walking">Acessível a pessoas em cadeiras de rodas</label>
+          </div>
+          <div id="unit-system">
+            <h4>Unidade de distância:</h4>
+            <input type="radio" id="metric" name="units" value="regional" checked>
+            <label for="metric">Automático</label><br>
+            <input type="radio" id="imperial" name="units" value="imperial">
+            <label for="imperial">milhas</label><br>
+            <input type="radio" id="metric" name="units" value="metric">
+            <label for="metric">km</label>
           </div>
         </div>
         <div id="routeInfo">

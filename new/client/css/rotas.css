@@ -1,50 +1,50 @@
 header {
-    position: relative; /* or absolute, fixed, depending on your needs */
-    z-index: 1000; /* any number larger than the z-index of other elements */
+  position: relative; /* or absolute, fixed, depending on your needs */
+  z-index: 1000; /* any number larger than the z-index of other elements */
 }
 
 #container {
-    display: flex;
-    padding: 10px;
-    gap: 10px;
+  display: flex;
+  padding: 10px;
+  gap: 10px;
 }
 
 #rotas {
-    width: 25vw;
-    height: 100vh;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    border: 1px solid black;
+  width: 25vw;
+  height: 100vh;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
 }
 
 #mapa {
-    width: 75vw;
-    height: 100vh;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    border: 1px solid black;
+  width: 75vw;
+  height: 100vh;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
 }
 
 .route {
-    background-color: #f2f2f2;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 2px solid #CCCCCC
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 2px solid #CCCCCC
 }
 
 .route h3 {
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 5px;
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 5px;
 }
 
 .route p {
-    color: #666;
-    font-size: 14px;
-    margin: 0;
+  color: #666;
+  font-size: 14px;
+  margin: 0;
 }
 
 #origin-input,
@@ -59,19 +59,26 @@ header {
   border-color: #4d90fe;
 }
 
+#mode-selector * {
+  color: #333 !important;
+}
+
 #mode-selector {
-  color: #fff;
   background-color: #4d90fe;
   padding: 15px;
   max-width: fit-content;
   border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
-#mode-selector label {
-  font-size: 15px;
+#mode-selector h3,
+#mode-selector h4 {
+  margin-top: 0; /* Remove default top margin */
 }
-
-
 
 #sidebar {
   flex-basis: 15rem;
@@ -82,48 +89,120 @@ header {
   box-sizing: border-box;
   overflow: auto;
 }
+
 #sidebar {
   flex: 0 1 auto;
   padding: 0;
 }
+
 #sidebar > div {
   padding: 0.5rem;
 }
 
-hr{
+hr {
   margin: 0.5rem 0;
 }
 
-.adp b, .adp-list b, .adp-substep b{
+#transit-options * {
+  color: #333;
+}
+
+#transit-options {
+  max-width: fit-content;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#unit-system * {
+  color: #333;
+}
+
+#unit-system {
+  max-width: fit-content;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.adp b, .adp-list b, td.adp-substep b {
   font-weight: bold;
 }
 
-div.adp * , td *, .adp-summary *, .adp-list *{
+/* Basic Styling for Radio Buttons */
+input[type="radio"] {
+  -webkit-appearance: none; /* Removes default browser styling */
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; /* Removes default margin */
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  border-radius: 50%; /* Makes it circular */
+  border: 2px solid #ccc; /* Adjust color and thickness */
+  outline: none; /* Removes outline on focus */
+  cursor: pointer; /* Changes cursor to pointer */
+}
+
+input[type="radio"]:checked {
+  background-color: #007bff; /* Adjust color */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type="radio"]:checked::before {
+  content: "";
+  display: block;
+  width: 10px; /* Adjust size */
+  height: 10px; /* Adjust size */
+  border-radius: 50%;
+  background-color: white; /* Adjust color */
+}
+
+/* Optional: Focus State */
+input[type="radio"]:focus {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adjust color and size */
+}
+
+/* Optional: Disabled State */
+input[type="radio"]:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+div.adp *, td *, .adp-summary *, .adp-list * {
   color: black;
 }
 
-.adp-placemark, .adp-list{
+.adp-placemark, .adp-list {
   border-radius: 5px;
   padding: 5px;
 }
-.adp-summary-duration{
+
+.adp-summary-duration {
   font-weight: bold;
 }
 
-.adp-listheader{
+.adp-listheader {
   text-transform: capitalize;
 }
 
-.adp-legal{
+.adp-legal {
   display: none;
 }
 
- .adp-listheader{
+.adp-listheader {
   font-weight: bold;
   text-align: center;
 }
 
-.adp a{
+.adp a {
   color: blue;
 }
 
@@ -131,15 +210,15 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
   display: none;
 }
 
-#arrival-time, #departure-time{
+#arrival-time, #departure-time {
   display: none;
 }
 
-.routeInfo{
+.routeInfo {
   align-self: center;
 }
 
-#origin-input.controls.pac-target-input, #destination-input.controls.pac-target-input{
+#origin-input.controls.pac-target-input, #destination-input.controls.pac-target-input {
   margin-left: 0px;
   width: 75%;
   margin: 8px 0;
@@ -152,11 +231,11 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
   font-family: proxima, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-.pac-container *, .gm-style-iw *{
+.pac-container *, .gm-style-iw * {
   color: black !important;
 }
 
-#clear-directions{
+#clear-directions {
   background-color: red;
   border: none;
   padding: 7.5px;
@@ -171,7 +250,7 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
   background-color: #962121;
 }
 
-#swap-places{
+#swap-places {
   background-color: rgb(0, 174, 255);
   border: none;
   padding: 7.5px;
@@ -181,6 +260,19 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
   transition: background-color 0.3s ease;
 }
 
-#swap-places:hover{
+#swap-places:hover {
   background-color: rgb(0, 155, 226);
+}
+
+/* Styling for Travel Mode Options */
+.travel-mode-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.travel-mode-icon {
+  font-size: 24px;
 }

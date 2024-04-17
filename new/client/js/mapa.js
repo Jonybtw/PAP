@@ -45,7 +45,7 @@ class AutocompleteDirectionsHandler {
     this.travelMode = google.maps.TravelMode.WALKING;
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
-    this.unitSystem = undefined; // Default to metric
+    this.unitSystem = null; // Default to metric
 
     // Add event listeners for unit system radio buttons
     document.querySelectorAll('#unit-system input[type="radio"]').forEach(radio => {
@@ -76,6 +76,13 @@ class AutocompleteDirectionsHandler {
     this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
     this.setupClearButtonListener("clear-directions");
     this.setupSwapButtonListener("swap-places");
+
+    this.getAvoidOptions = this.getAvoidOptions();
+    document.querySelectorAll('#avoid-options input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        this.route(); // Update the route when an avoid checkbox changes
+      });
+    });
   }
 
   setupClickListener(id, mode) {
@@ -83,14 +90,35 @@ class AutocompleteDirectionsHandler {
     const arrivalInput = document.getElementById("arrival-time");
     const departureInput = document.getElementById("departure-time");
     const transit_options = document.getElementById("transit-options");
+    const unitSystemRadios = document.querySelectorAll('#unit-system input[type="radio"]');
+    
     // Get references to the H4 elements
     const arrivalH4 = arrivalInput.previousElementSibling;
     const departureH4 = departureInput.previousElementSibling;
+    
 
     radioButton.addEventListener("click", () => {
       this.travelMode = mode;
       this.directionsRenderer.setDirections({ routes: [] });
       this.route();
+
+      const avoidOptionsDiv = document.getElementById("avoid-options");
+        if (mode === google.maps.TravelMode.DRIVING) {
+          avoidOptionsDiv.style.display = "block";
+          document.getElementById("avoid-highways").style.display = "block";
+          document.getElementById("avoid-tolls").style.display = "block";
+          document.getElementById("avoid-ferries").style.display = "block";
+        } else if (mode === google.maps.TravelMode.WALKING || mode === google.maps.TravelMode.BICYCLING) {
+          avoidOptionsDiv.style.display = "block";
+          document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
+          document.getElementById("avoid-tolls").style.display = "none";   // Hide tolls for walking/bicycling
+          document.getElementById("avoid-ferries").style.display = "block";
+        } else {
+          avoidOptionsDiv.style.display = "none";
+          document.getElementById("avoid-highways").style.display = "none";
+          document.getElementById("avoid-tolls").style.display = "none";
+          document.getElementById("avoid-ferries").style.display = "none";
+        }
 
       if (mode === google.maps.TravelMode.DRIVING) {
         departureInput.style.display = "block";
@@ -99,12 +127,17 @@ class AutocompleteDirectionsHandler {
         arrivalH4.style.display = "none"; // Hide H4 for arrival
         arrivalInput.value = "";
         transit_options.style.display = "none";
+        document.getElementById("unit-system").style.display = "block";
       } else if (mode === google.maps.TravelMode.TRANSIT) {
         arrivalInput.style.display = "block";
         arrivalH4.style.display = "block"; // Show H4 for arrival
         departureInput.style.display = "block";
         departureH4.style.display = "block"; // Show H4 for departure
         transit_options.style.display = "block";
+        document.getElementById("unit-system").style.display = "none";
+        unitSystemRadios.forEach(radio => {
+          radio.checked = false;
+        });
       } else {
         arrivalInput.style.display = "none";
         arrivalH4.style.display = "none"; // Hide H4 for arrival
@@ -113,6 +146,7 @@ class AutocompleteDirectionsHandler {
         arrivalInput.value = "";
         departureInput.value = "";
         transit_options.style.display = "none";
+        document.getElementById("unit-system").style.display = "block";
       }
     });
   }
@@ -184,6 +218,19 @@ class AutocompleteDirectionsHandler {
     // No need to return the options directly, as they are now accessed through getSelectedOptions()
     // Instead, return a function to get the options when needed
     return getSelectedOptions;
+  }
+
+  getAvoidOptions() {
+    const avoidHighwaysCheckbox = document.getElementById("avoid-highways");
+    const avoidTollsCheckbox = document.getElementById("avoid-tolls");
+    const avoidFerriesCheckbox = document.getElementById("avoid-ferries");
+
+    return () => ({
+      avoidHighways: avoidHighwaysCheckbox.checked,
+      avoidTolls: avoidTollsCheckbox.checked,
+      avoidFerries: avoidFerriesCheckbox.checked,
+    });
+    console.log(avoidHighwaysCheckbox.checked, avoidTollsCheckbox.checked, avoidFerriesCheckbox.checked);
   }
 
   setupPlaceChangedListener(autocomplete, mode) {
@@ -260,13 +307,27 @@ class AutocompleteDirectionsHandler {
         departureTime: this.getDepartureTime(),
         ...this.getTransitOptions()(),
       };
+      request.unitSystem = google.maps.UnitSystem.METRIC;
     }
 
     // Only include driving options if driving mode is selected AND departure time is set
     if (this.travelMode === google.maps.TravelMode.DRIVING && this.getDepartureTime()) {
+      request.avoidHighways = this.getAvoidOptions().avoidHighways;
+      request.avoidTolls = this.getAvoidOptions().avoidTolls;
+      request.avoidFerries = this.getAvoidOptions().avoidFerries;
       request.drivingOptions = {
         departureTime: this.getDepartureTime(), // Requires Google Maps Platform Premium Plan
       };
+    }
+
+    if (this.travelMode === google.maps.TravelMode.DRIVING) {
+      request.avoidHighways = this.getAvoidOptions().avoidHighways;
+      request.avoidTolls = this.getAvoidOptions().avoidTolls;
+      request.avoidFerries = this.getAvoidOptions().avoidFerries;
+    }
+
+    else if ( this.travelMode === google.maps.TravelMode.WALKING || this.travelMode === google.maps.TravelMode.BICYCLING) {
+      request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
     console.log(request);
 

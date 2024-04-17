@@ -31,16 +31,12 @@
             </svg></button>
           <div id="mode-selector" class="controls">
               <h4>Meio de Deslocação:</h4>
-              <input type="radio" name="type" id="changemode-walking" checked="checked" />
-              <label for="changemode-walking">A pé🚶‍♂️</label><br>
-
-              <input type="radio" name="type" id="changemode-transit" />
-              <label for="changemode-transit">Transportes Públicos 🚌</label><br>
-
-            
               <input type="radio" name="type" id="changemode-driving" />
               <label for="changemode-driving">Carro 🚗</label><br>
-
+              <input type="radio" name="type" id="changemode-transit" />
+              <label for="changemode-transit">Transportes Públicos 🚌</label><br>
+              <input type="radio" name="type" id="changemode-walking" checked="checked" />
+              <label for="changemode-walking">A pé🚶‍♂️</label><br>
               <input type="radio" name="type" id="changemode-bicycling" />
               <label for="changemode-bicycling">Bicicleta 🚲</label>
             <div>
@@ -70,8 +66,12 @@
             <label for="preference-fewer-transfers">Menos transbordos</label><br>
             <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
             <label for="preference-less-walking">Menos trajetos a pé</label><br>
-            <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
-            <label for="preference-less-walking">Acessível a pessoas em cadeiras de rodas</label>
+          </div>
+          <div id="avoid-options">
+            <h4>Evitar:</h4>
+            <label id="avoid-highways"><input type="checkbox" id="avoid-highways"> Auto-estradas</label>
+            <label id="avoid-tolls"><input type="checkbox" id="avoid-tolls"> Portagens</label>
+            <label id="avoid-ferries"><input type="checkbox" id="avoid-ferries"> Ferries</label>
           </div>
           <div id="unit-system">
             <h4>Unidade de distância:</h4>

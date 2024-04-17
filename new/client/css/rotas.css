@@ -131,6 +131,21 @@ hr {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+#avoid-options * {
+  color: #333;
+}
+
+#avoid-options{
+  max-width: fit-content;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-grid;
+}
+
 .adp b, .adp-list b, td.adp-substep b {
   font-weight: bold;
 }

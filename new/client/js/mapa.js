@@ -91,11 +91,11 @@ class AutocompleteDirectionsHandler {
     const departureInput = document.getElementById("departure-time");
     const transit_options = document.getElementById("transit-options");
     const unitSystemRadios = document.querySelectorAll('#unit-system input[type="radio"]');
-    
+
     // Get references to the H4 elements
     const arrivalH4 = arrivalInput.previousElementSibling;
     const departureH4 = departureInput.previousElementSibling;
-    
+
 
     radioButton.addEventListener("click", () => {
       this.travelMode = mode;
@@ -103,22 +103,22 @@ class AutocompleteDirectionsHandler {
       this.route();
 
       const avoidOptionsDiv = document.getElementById("avoid-options");
-        if (mode === google.maps.TravelMode.DRIVING) {
-          avoidOptionsDiv.style.display = "block";
-          document.getElementById("avoid-highways").style.display = "block";
-          document.getElementById("avoid-tolls").style.display = "block";
-          document.getElementById("avoid-ferries").style.display = "block";
-        } else if (mode === google.maps.TravelMode.WALKING || mode === google.maps.TravelMode.BICYCLING) {
-          avoidOptionsDiv.style.display = "block";
-          document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
-          document.getElementById("avoid-tolls").style.display = "none";   // Hide tolls for walking/bicycling
-          document.getElementById("avoid-ferries").style.display = "block";
-        } else {
-          avoidOptionsDiv.style.display = "none";
-          document.getElementById("avoid-highways").style.display = "none";
-          document.getElementById("avoid-tolls").style.display = "none";
-          document.getElementById("avoid-ferries").style.display = "none";
-        }
+      if (mode === google.maps.TravelMode.DRIVING) {
+        avoidOptionsDiv.style.display = "block";
+        document.getElementById("avoid-highways").style.display = "block";
+        document.getElementById("avoid-tolls").style.display = "block";
+        document.getElementById("avoid-ferries").style.display = "block";
+      } else if (mode === google.maps.TravelMode.WALKING || mode === google.maps.TravelMode.BICYCLING) {
+        avoidOptionsDiv.style.display = "block";
+        document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
+        document.getElementById("avoid-tolls").style.display = "none";   // Hide tolls for walking/bicycling
+        document.getElementById("avoid-ferries").style.display = "block";
+      } else {
+        avoidOptionsDiv.style.display = "none";
+        document.getElementById("avoid-highways").style.display = "none";
+        document.getElementById("avoid-tolls").style.display = "none";
+        document.getElementById("avoid-ferries").style.display = "none";
+      }
 
       if (mode === google.maps.TravelMode.DRIVING) {
         departureInput.style.display = "block";
@@ -153,9 +153,16 @@ class AutocompleteDirectionsHandler {
 
   getDepartureTime() {
     const departureInput = document.getElementById("departure-time");
-    departureInput.addEventListener('input', () => {
-      this.route(); // Update route on input change
-      document.getElementById("arrival-time").value = ""; // Clear arrival time
+    departureInput.addEventListener('change', () => {
+      const currentTime = new Date();
+      const selectedTime = new Date(departureInput.value);
+      if (selectedTime < currentTime) {
+        departureInput.value = ""; // Clear input if selected time is in the past
+        alert('Data introduzida do passado, volte a introduzir.')
+      } else {
+        this.route(); // Update route on input change
+        document.getElementById("arrival-time").value = ""; // Clear arrival time
+      }
     });
     if (departureInput.value) {
       return new Date(departureInput.value);
@@ -165,9 +172,16 @@ class AutocompleteDirectionsHandler {
 
   getArrivalTime() {
     const arrivalInput = document.getElementById("arrival-time");
-    arrivalInput.addEventListener('input', () => {
-      this.route(); // Update route on input change
-      document.getElementById("departure-time").value = ""; // Clear departure time
+    arrivalInput.addEventListener('change', () => {
+      const currentTime = new Date();
+      const selectedTime = new Date(arrivalInput.value);
+      if (selectedTime < currentTime) {
+        arrivalInput.value = "";
+        alert('Data introduzida do passado, volte a introduzir.') // Clear input if selected time is in the past
+      } else {
+        this.route(); // Update route on input change
+        document.getElementById("departure-time").value = ""; // Clear departure time
+      }
     });
     if (arrivalInput.value) {
       return new Date(arrivalInput.value);
@@ -230,7 +244,6 @@ class AutocompleteDirectionsHandler {
       avoidTolls: avoidTollsCheckbox.checked,
       avoidFerries: avoidFerriesCheckbox.checked,
     });
-    console.log(avoidHighwaysCheckbox.checked, avoidTollsCheckbox.checked, avoidFerriesCheckbox.checked);
   }
 
   setupPlaceChangedListener(autocomplete, mode) {
@@ -326,10 +339,11 @@ class AutocompleteDirectionsHandler {
       request.avoidFerries = this.getAvoidOptions().avoidFerries;
     }
 
-    else if ( this.travelMode === google.maps.TravelMode.WALKING || this.travelMode === google.maps.TravelMode.BICYCLING) {
+    else if (this.travelMode === google.maps.TravelMode.WALKING || this.travelMode === google.maps.TravelMode.BICYCLING) {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
     console.log(request);
+    console.log(this.getAvoidOptions());
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {

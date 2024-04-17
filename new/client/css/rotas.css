@@ -27,6 +27,10 @@ header {
   border: 1px solid black;
 }
 
+#mapa * {
+  color: black;
+}
+
 .route {
   background-color: #f2f2f2;
   padding: 10px;

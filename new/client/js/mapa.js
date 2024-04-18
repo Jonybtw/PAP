@@ -235,9 +235,9 @@ class AutocompleteDirectionsHandler {
   }
 
   getAvoidOptions() {
-    const avoidHighwaysCheckbox = document.getElementById("avoid-highways");
-    const avoidTollsCheckbox = document.getElementById("avoid-tolls");
-    const avoidFerriesCheckbox = document.getElementById("avoid-ferries");
+    const avoidHighwaysCheckbox = document.getElementById("avoid-highways").querySelector("input");
+    const avoidTollsCheckbox = document.getElementById("avoid-tolls").querySelector("input");
+    const avoidFerriesCheckbox = document.getElementById("avoid-ferries").querySelector("input");
 
     return () => ({
       avoidHighways: avoidHighwaysCheckbox.checked,

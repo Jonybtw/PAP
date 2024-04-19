@@ -47,16 +47,6 @@ class AutocompleteDirectionsHandler {
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.unitSystem = null; // Default to metric
 
-    // Add event listeners for unit system radio buttons
-    document.querySelectorAll('#unit-system input[type="radio"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (radio.checked) {
-          this.unitSystem = google.maps.UnitSystem[radio.value];
-          this.route(); // Update the route when the unit system changes
-        }
-      });
-    });
-
     this.directionsRenderer.setMap(map);
     sidebar = document.getElementById("sidebar");
     this.directionsRenderer.setPanel(sidebar);
@@ -81,6 +71,16 @@ class AutocompleteDirectionsHandler {
     document.querySelectorAll('#avoid-options input[type="checkbox"]').forEach(checkbox => {
       checkbox.addEventListener('change', () => {
         this.route(); // Update the route when an avoid checkbox changes
+      });
+    });
+
+    // Add event listeners for unit system radio buttons
+    document.querySelectorAll('#unit-system input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.checked) {
+          this.unitSystem = google.maps.UnitSystem[radio.value];
+          this.route(); // Update the route when the unit system changes
+        }
       });
     });
   }

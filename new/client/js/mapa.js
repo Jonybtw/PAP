@@ -37,6 +37,7 @@ class AutocompleteDirectionsHandler {
   travelMode;
   directionsService;
   directionsRenderer;
+  trafficLayer;
 
   constructor(map) {
     this.map = map;
@@ -46,6 +47,7 @@ class AutocompleteDirectionsHandler {
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.unitSystem = null; // Default to metric
+    this.trafficLayer = new google.maps.TrafficLayer();
 
     this.directionsRenderer.setMap(map);
     sidebar = document.getElementById("sidebar");
@@ -67,22 +69,23 @@ class AutocompleteDirectionsHandler {
     this.setupClearButtonListener("clear-directions");
     this.setupSwapButtonListener("swap-places");
 
-    this.getAvoidOptions = this.getAvoidOptions();
-    document.querySelectorAll('#avoid-options input[type="checkbox"]').forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
-        this.route(); // Update the route when an avoid checkbox changes
-      });
-    });
-
-    // Add event listeners for unit system radio buttons
     document.querySelectorAll('#unit-system input[type="radio"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (radio.checked) {
           this.unitSystem = google.maps.UnitSystem[radio.value];
-          this.route(); // Update the route when the unit system changes
+          this.route();
         }
       });
     });
+
+    this.getAvoidOptions = this.getAvoidOptions();
+    document.querySelectorAll('#avoid-options input[type="checkbox"]').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        this.route();
+      });
+    });
+
+    
   }
 
   setupClickListener(id, mode) {
@@ -108,16 +111,19 @@ class AutocompleteDirectionsHandler {
         document.getElementById("avoid-highways").style.display = "block";
         document.getElementById("avoid-tolls").style.display = "block";
         document.getElementById("avoid-ferries").style.display = "block";
+        trafficLayer.setMap(map);
       } else if (mode === google.maps.TravelMode.WALKING || mode === google.maps.TravelMode.BICYCLING) {
         avoidOptionsDiv.style.display = "block";
         document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
         document.getElementById("avoid-tolls").style.display = "none";   // Hide tolls for walking/bicycling
         document.getElementById("avoid-ferries").style.display = "block";
+        trafficLayer.setMap(null);
       } else {
         avoidOptionsDiv.style.display = "none";
         document.getElementById("avoid-highways").style.display = "none";
         document.getElementById("avoid-tolls").style.display = "none";
         document.getElementById("avoid-ferries").style.display = "none";
+        trafficLayer.setMap(null);
       }
 
       if (mode === google.maps.TravelMode.DRIVING) {
@@ -347,12 +353,14 @@ class AutocompleteDirectionsHandler {
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
-        me.directionsRenderer.setDirections(response);
-        document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
+      me.directionsRenderer.setDirections(response);
+      document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
       } else if (status === "ZERO_RESULTS") {
-        window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
+      window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
+      } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {
+      window.alert("A rota excede o comprimento máximo permitido."); // Display a message for MAX_ROUTE_LENGTH_EXCEEDED
       } else {
-        window.alert("Pedido falhou com erro: " + status);
+      window.alert("Pedido falhou com erro: " + status);
       }
     });
   }

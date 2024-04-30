@@ -367,3 +367,24 @@ class AutocompleteDirectionsHandler {
 }
 
 initMap();
+
+window.onload = function() {
+  const routes = [
+    { start: 'Localização A', end: 'Localização B' },
+    { start: 'Localização C', end: 'Localização D' },
+  ];
+
+  const routeList = document.getElementById('routeList');
+
+  routes.forEach((route, index) => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      <div class="route">
+        <h3>Rota ${index + 1}</h3>
+        <p>Início: ${route.start}</p>
+        <p>Fim: ${route.end}</p>
+      </div>
+    `;
+    routeList.appendChild(listItem);
+  });
+};

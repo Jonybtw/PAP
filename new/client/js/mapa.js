@@ -37,8 +37,7 @@ class AutocompleteDirectionsHandler {
   travelMode;
   directionsService;
   directionsRenderer;
-  trafficLayer;
-
+  //trafficLayer;
   constructor(map) {
     this.map = map;
     this.originPlaceId = "";
@@ -47,7 +46,7 @@ class AutocompleteDirectionsHandler {
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.unitSystem = null; // Default to metric
-    this.trafficLayer = new google.maps.TrafficLayer();
+    //this.trafficLayer = new google.maps.TrafficLayer();
 
     this.directionsRenderer.setMap(map);
     sidebar = document.getElementById("sidebar");
@@ -111,19 +110,19 @@ class AutocompleteDirectionsHandler {
         document.getElementById("avoid-highways").style.display = "block";
         document.getElementById("avoid-tolls").style.display = "block";
         document.getElementById("avoid-ferries").style.display = "block";
-        trafficLayer.setMap(map);
+        //trafficLayer.setMap(map);
       } else if (mode === google.maps.TravelMode.WALKING || mode === google.maps.TravelMode.BICYCLING) {
         avoidOptionsDiv.style.display = "block";
         document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
         document.getElementById("avoid-tolls").style.display = "none";   // Hide tolls for walking/bicycling
         document.getElementById("avoid-ferries").style.display = "block";
-        trafficLayer.setMap(null);
+        //trafficLayer.setMap(null);
       } else {
         avoidOptionsDiv.style.display = "none";
         document.getElementById("avoid-highways").style.display = "none";
         document.getElementById("avoid-tolls").style.display = "none";
         document.getElementById("avoid-ferries").style.display = "none";
-        trafficLayer.setMap(null);
+        //trafficLayer.setMap(null);
       }
 
       if (mode === google.maps.TravelMode.DRIVING) {

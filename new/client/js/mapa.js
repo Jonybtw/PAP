@@ -1,14 +1,12 @@
+var map;
+
 async function initMap() {
-  const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
   const { DirectionsService, DirectionsRenderer, TrafficModel, TransitMode, TransitRoutePreference } = await google.maps.importLibrary("routes");
   const { Places } = await google.maps.importLibrary("places");
-  const { Geocoder } = await google.maps.importLibrary("geocoding");
-
   const CenterOfPortugal = { lat: 39.4573914, lng: -8.0065354 };
   const RuaCorroios = { lat: 38.63206355815076, lng: -9.162405460490177 };
 
-  let map;
   let sidebar;
   const currentDate = new Date();
   const currentDateTimeString = currentDate.toISOString().slice(0, 16);
@@ -28,6 +26,20 @@ async function initMap() {
   });
 
   new AutocompleteDirectionsHandler(map);
+}
+
+const { Map } = await google.maps.importLibrary("maps");
+const { Geocoder } = await google.maps.importLibrary("geocoding");
+const geocoder = new google.maps.Geocoder();
+function geocodePlaceId(geocoder, map, placeId) {
+  geocoder
+  .geocode({ placeId: placeId })
+  .then(({ results }) => {
+    map.setCenter(results[0].geometry.location);
+    console.log(results[0].geometry.location);
+    console.log(results[0].formatted_address);
+  })
+  .catch((e) => alert("Geocode was not successful for the following reason: " + e));
 }
 
 class AutocompleteDirectionsHandler {
@@ -348,7 +360,9 @@ class AutocompleteDirectionsHandler {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
     console.log(request);
-    console.log(this.getAvoidOptions());
+    console.log(request.destination.placeId)
+    console.log(request.origin.placeId)
+    geocodePlaceId(geocoder, map, request.destination.placeId, request.origin.placeId);
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
@@ -366,3 +380,24 @@ class AutocompleteDirectionsHandler {
 }
 
 initMap();
+
+window.onload = () => {
+  const routesEl = document.getElementById("routeList");
+  const routes = [
+    {
+      name: "Rota Name",
+      start: "Corroios",
+      end: "Costa"
+    }
+  ];
+  
+  routes.flatMap((route) =>
+    routesEl.innerHTML += '<li>' +
+                              '<div class="route">' +
+                                `<h3>${route.name}</h3>` +
+                                `<p>Início: ${route.start}</p>` +
+                                `<p>Fim: ${route.end}</p>` +
+                              '</div>' +
+                            '</li>'
+  );
+}

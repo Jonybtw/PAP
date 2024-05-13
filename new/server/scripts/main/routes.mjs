@@ -9,260 +9,69 @@ const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KE
 
 export const Routes = {
   create: async (request, response) => {
-    let id;
-    if (!request.params.idUser) {
-      id = request.id;
-    } else if (request.params.idUser.length !== 24) {
-      response.status(404).json("Not Valid");
-      return;
-    } else {
-      id = request.params.idUser;
-    }
-    let query = { _id: new ObjectId(id) };
-    let projection = {
-      projection: {
-        _id: 1,
-        data: 1,
-      },
-    };
-    let result = await collectionUsers.findOne(query, projection);
-    if (!result) response.status(404).json("Not Found User");
-    else {
-      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
-      let projectionRoutes = {
-        projection: {
-          _id: 1,
-          routes: 1
-        },
-      };
+    try {
+        const requestData = JSON.parse(Object.keys(request.body)[0]);
 
-      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-      if (!resultRoutes) {
-
-      } else {
-        resultRoutes?.routes.push({
-          _id: new ObjectId(),
-          Start: request.body.Start,
-          End: request.body.End
-        });
-
-        let queryUpdate = { _id: resultRoutes?._id };
-        let update = {
-          $set: {
-            routes: resultRoutes?.routes
-          },
-        };
-        let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
-        if (!resultUpdate) response.status(404).json("Not Found Update");
-        else response.status(200).json(resultRoutes?.routes);
-      }
-    }
-  },
-
-  getAll: async (request, response) => {
-    let id;
-    if (!request.params.idUser) {
-      id = request.id;
-    } else if (request.params.idUser.length !== 24) {
-      response.status(404).json("Not Valid");
-      return;
-    } else {
-      id = request.params.idUser;
-    }
-
-    let query = { _id: new ObjectId(id) };
-    let projection = {
-      projection: {
-        _id: 1,
-        data: 1,
-      },
-    };
-
-    let result = await collectionUsers.findOne(query, projection);
-    if (!result) {
-      response.status(404).json("Not Found User");
-    } else {
-      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
-      let projectionRoutes = {
-        projection: {
-          _id: 0,
-          routes: 1
-        },
-      };
-
-      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-      if (!resultRoutes) {
-        response.status(404).json("Not Found Routes");
-      } else {
-        response.status(200).json(resultRoutes.routes);
-      }
-    }
-  },
-
-  get: async (request, response) => {
-    let id;
-    if (!request.params.idUser) {
-      id = request.id;
-    } else if (request.params.idUser.length !== 24) {
-      response.status(404).json("Not Valid");
-      return;
-    } else {
-      id = request.params.idUser;
-    }
-
-    let query = { _id: new ObjectId(id) };
-    let projection = {
-      projection: {
-        _id: 1,
-        data: 1,
-      },
-    };
-
-    let result = await collectionUsers.findOne(query, projection);
-    if (!result) {
-      response.status(404).json("Not Found User");
-    } else {
-      let routeId = request.params.id;
-      if (!routeId || routeId.length !== 24) {
-        response.status(400).json("Not Valid Route ID");
-        return;
-      }
-
-      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
-      let projectionRoutes = {
-        projection: {
-          _id: 0,
-          routes: {
-            $elemMatch: { _id: new ObjectId(routeId) }
-          }
-        },
-      };
-
-      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-      if (!resultRoutes || !resultRoutes.routes || resultRoutes.routes.length === 0) {
-        response.status(404).json("Not Found Route");
-      } else {
-        response.status(200).json(resultRoutes.routes[0]);
-      }
-    }
-  },
-  update: async (request, response) => {
-    let id;
-    if (!request.params.idUser) {
-      id = request.id;
-    } else if (request.params.idUser.length !== 24) {
-      response.status(404).json("Not Valid");
-      return;
-    } else {
-      id = request.params.idUser;
-    }
-
-    let query = { _id: new ObjectId(id) };
-    let projection = {
-      projection: {
-        _id: 1,
-        data: 1,
-      },
-    };
-
-    let result = await collectionUsers.findOne(query, projection);
-    if (!result) {
-      response.status(404).json("Not Found User");
-    } else {
-      let routeId = request.params.id;
-      if (!routeId || routeId.length !== 24) {
-        response.status(400).json("Not Valid Route ID");
-        return;
-      }
-
-      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
-      let projectionRoutes = {
-        projection: {
-          _id: 0,
-          routes: {
-            $elemMatch: { _id: new ObjectId(routeId) }
-          }
-        },
-      };
-
-      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-      if (!resultRoutes || !resultRoutes.routes || resultRoutes.routes.length === 0) {
-        response.status(404).json("Not Found Route");
-      } else {
-        resultRoutes.routes[0] = {
-          _id: new ObjectId(routeId),
-          Start: request.body.Start,
-          End: request.body.End
-        };
-        let queryUpdate = { _id: new ObjectId(result.data?.routes), "routes._id": new ObjectId(routeId) };
-        let update = {
-          $set: {
-            "routes.$": resultRoutes.routes[0]
-          },
-        };
-        let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
-        if (!resultUpdate) response.status(404).json("Not Found Update");
-        else response.status(200).json(resultRoutes.routes[0]);
-      }
-    }
-  },
-  delete: async (request, response) => {
-    let id;
-    if (!request.params.idUser) {
-      id = request.id;
-    } else if (request.params.idUser.length !== 24) {
-      response.status(404).json("Not Valid");
-      return;
-    } else {
-      id = request.params.idUser;
-    }
-
-    let query = { _id: new ObjectId(id) };
-    let projection = {
-      projection: {
-        _id: 1,
-        data: 1,
-      },
-    };
-
-    let result = await collectionUsers.findOne(query, projection);
-    if (!result) {
-      response.status(404).json("Not Found User");
-    } else {
-      let routeId = request.params.id;
-      if (!routeId || routeId.length !== 24) {
-        response.status(400).json("Not Valid Route ID");
-        return;
-      }
-
-      let queryRoutes = { _id: new ObjectId(result.data?.routes) };
-      let projectionRoutes = {
-        projection: {
-          _id: 1,
-          routes: 1
-        },
-      };
-
-      let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-      if (!resultRoutes) {
-        response.status(404).json("Not Found Routes");
-      } else {
-        let routeIndex = resultRoutes.routes.findIndex(route => route._id.toString() === routeId);
-        if (routeIndex === -1) {
-          response.status(404).json("Not Found Route");
+        let id;
+        if (!request.params.idUser) {
+            id = request.id;
+        } else if (request.params.idUser.length !== 24) {
+            response.status(404).json("Not Valid");
+            return;
         } else {
-          resultRoutes.routes.splice(routeIndex, 1);
-          let queryUpdate = { _id: new ObjectId(result.data?.routes) };
-          let update = {
-            $set: {
-              routes: resultRoutes.routes
-            },
-          };
-          let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
-          if (!resultUpdate) response.status(404).json("Not Found Update");
-          else response.status(200).json(resultRoutes.routes);
+            id = request.params.idUser;
         }
-      }
+        let query = { _id: new ObjectId(id) };
+        let projection = {
+            projection: {
+                _id: 1,
+                data: 1,
+            },
+        };
+        let result = await collectionUsers.findOne(query, projection);
+        if (!result) {
+            response.status(404).json("Not Found User");
+            return;
+        } else {
+            let queryRoutes = { _id: new ObjectId(result.data?.routes) };
+            let projectionRoutes = {
+                projection: {
+                    _id: 1,
+                    routes: 1
+                },
+            };
+
+            let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
+            if (!resultRoutes) {
+                // Create a new routes document if not found
+                resultRoutes = { _id: new ObjectId(), routes: [] };
+            }
+            // Add new route to the routes array
+            resultRoutes.routes.push({
+                _id: new ObjectId(),
+                Start: requestData?.origin?.placeId,
+                End: requestData?.destination?.placeId,
+            });
+
+            let queryUpdate = { _id: resultRoutes._id };
+            let update = {
+                $set: {
+                    routes: resultRoutes.routes
+                },
+            };
+            let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
+            if (!resultUpdate) {
+                response.status(404).json("Not Found Update");
+                return;
+            } else {
+                response.status(200).json(resultRoutes.routes);
+                return;
+            }
+        }
+    } catch (error) {
+        console.error('Error creating route:', error);
+        response.status(500).json({ message: 'Internal server error' });
     }
-  }
+},
+
 };

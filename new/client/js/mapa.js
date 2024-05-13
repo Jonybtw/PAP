@@ -35,7 +35,6 @@ function geocodePlaceId(geocoder, map, placeId) {
   geocoder
   .geocode({ placeId: placeId })
   .then(({ results }) => {
-    map.setCenter(results[0].geometry.location);
     console.log(results[0].geometry.location);
     console.log(results[0].formatted_address);
   })
@@ -360,9 +359,20 @@ class AutocompleteDirectionsHandler {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
     console.log(request);
-    console.log(request.destination.placeId)
-    console.log(request.origin.placeId)
     geocodePlaceId(geocoder, map, request.destination.placeId, request.origin.placeId);
+
+    const xhr = new XMLHttpRequest();
+    const url = 'http://127.0.0.1:420/routes'; // Replace with your Node.js server address
+    const data = JSON.stringify(request);
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Authorization', getCookie('token'));
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log(xhr.responseText);
+      }
+    };
+    xhr.send(data);
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {

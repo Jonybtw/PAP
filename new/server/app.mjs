@@ -33,10 +33,10 @@ app.use(express.json()); // Move this line before your routes
 
 		//! CRUD ROUTES
 		app.post('/routes', Routes.create);
-		//app.get('/routes', Routes.getAll);
-		//app.get('/routes/:id', Routes.get);
-		//app.put('/routes/:id', Routes.update);
-		//app.delete('/routes/:id', Routes.delete);
+		app.get('/routes', Routes.getAll);
+		app.get('/routes/:id', Routes.get);
+		app.put('/routes/:id', Routes.update);
+		app.delete('/routes/:id', Routes.delete);
 				
 
 	//^ BUS AGENCIES

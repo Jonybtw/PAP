@@ -358,6 +358,7 @@ class AutocompleteDirectionsHandler {
     else if (this.travelMode === google.maps.TravelMode.WALKING || this.travelMode === google.maps.TravelMode.BICYCLING) {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
+    
     console.log(request);
     geocodePlaceId(geocoder, map, request.destination.placeId, request.origin.placeId);
 

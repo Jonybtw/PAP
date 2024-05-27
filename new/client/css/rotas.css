@@ -266,7 +266,22 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 }
 
 #clear-directions:hover {
-  background-color: #962121;
+  background-color: #571313;
+}
+
+#save {
+  background-color: rgb(55, 0, 255);
+  border: none;
+  padding: 7.5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: -1px;
+}
+
+#save:hover {
+  background-color: rgb(20, 0, 92);
 }
 
 #swap-places {

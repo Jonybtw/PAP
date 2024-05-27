@@ -26,19 +26,59 @@ async function initMap() {
   });
 
   new AutocompleteDirectionsHandler(map);
+
+    const xhr = new XMLHttpRequest();
+  
+    xhr.onload = function () {
+      if (this.status === 200) {
+        try {
+          const fetchedRoutes = JSON.parse(this.responseText);
+          const div = document.getElementById('routeList');
+          fetchedRoutes.forEach(async route => {
+            let start = await geocodePlaceId(geocoder, route.Start);
+            let end = await geocodePlaceId(geocoder, route.End);
+            //console.log(start.geometry.location, end.geometry.location);
+            div.innerHTML += '<li id="">' +
+                                '<div class="route">' +
+                                  `<p>Início: ${start.formatted_address}</p>` +
+                                  `<p>Fim: ${end.formatted_address}</p>` +
+                                '</div>' +
+                              '</li>';
+          });
+        } catch (error) {
+          console.error('Error parsing fetched routes:', error);
+        }
+      } else {
+        console.error('Failed to fetch routes:', this.statusText);
+      }
+    };
+  
+    xhr.onerror = function () {
+      console.error('Network error while fetching routes');
+    };
+  
+    // Replace with the correct server endpoint for fetching routes (ensure proper CORS configuration)
+    xhr.open('GET', 'http://127.0.0.1:420/routes'); // Replace with your actual URL
+    xhr.setRequestHeader('Authorization', getCookie('token')); // Assuming token-based auth
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send();
+  
+ 
 }
 
 const { Map } = await google.maps.importLibrary("maps");
 const { Geocoder } = await google.maps.importLibrary("geocoding");
 const geocoder = new google.maps.Geocoder();
-function geocodePlaceId(geocoder, map, placeId) {
-  geocoder
-  .geocode({ placeId: placeId })
-  .then(({ results }) => {
-    console.log(results[0].geometry.location);
-    console.log(results[0].formatted_address);
-  })
-  .catch((e) => alert("Geocode was not successful for the following reason: " + e));
+async function geocodePlaceId(geocoder, placeId) {
+  let result = {};
+
+  await geocoder
+    .geocode({ placeId: placeId })
+    .then(({ results }) => {
+      result = results[0];
+    })
+    .catch((e) => alert("Geocode was not successful for the following reason: " + e));
+  return result;
 }
 
 class AutocompleteDirectionsHandler {
@@ -358,22 +398,22 @@ class AutocompleteDirectionsHandler {
     else if (this.travelMode === google.maps.TravelMode.WALKING || this.travelMode === google.maps.TravelMode.BICYCLING) {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
-    
-    console.log(request);
-    geocodePlaceId(geocoder, map, request.destination.placeId, request.origin.placeId);
 
-    const xhr = new XMLHttpRequest();
-    const url = 'http://127.0.0.1:420/routes'; // Replace with your Node.js server address
-    const data = JSON.stringify(request);
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader('Authorization', getCookie('token'));
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        console.log(xhr.responseText);
-      }
-    };
-    xhr.send(data);
+    document.getElementById("save").addEventListener("click", () => {
+
+      const xhr = new XMLHttpRequest();
+      const url = 'http://127.0.0.1:420/routes'; // Replace with your Node.js server address
+      const data = JSON.stringify(request);
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Authorization', getCookie('token'));
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          console.log(xhr.responseText);
+        }
+      };
+      xhr.send(data);
+    });
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
@@ -391,24 +431,3 @@ class AutocompleteDirectionsHandler {
 }
 
 initMap();
-
-window.onload = () => {
-  const routesEl = document.getElementById("routeList");
-  const routes = [
-    {
-      name: "Rota Name",
-      start: "Corroios",
-      end: "Costa"
-    }
-  ];
-  
-  routes.flatMap((route) =>
-    routesEl.innerHTML += '<li>' +
-                              '<div class="route">' +
-                                `<h3>${route.name}</h3>` +
-                                `<p>Início: ${route.start}</p>` +
-                                `<p>Fim: ${route.end}</p>` +
-                              '</div>' +
-                            '</li>'
-  );
-}

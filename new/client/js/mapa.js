@@ -1,5 +1,127 @@
 var map;
 
+const { Map } = await google.maps.importLibrary("maps");
+const { Geocoder } = await google.maps.importLibrary("geocoding");
+const geocoder = new google.maps.Geocoder();
+async function geocodePlaceId(geocoder, placeId) {
+  let result = {};
+
+  await geocoder
+    .geocode({ placeId: placeId })
+    .then(({ results }) => {
+      result = results[0];
+    })
+    .catch((e) => alert("Geocode was not successful for the following reason: " + e));
+  return result;
+}
+
+async function fetchAndDisplayRoutes() {
+  const div = document.getElementById('routeList');
+  div.innerHTML = ''; 
+
+  try {
+    const fetchedRoutes = await fetchRoutesFromServer();
+    for (const route of fetchedRoutes) {
+      const start = await geocodePlaceId(geocoder, route.Start);
+      const end = await geocodePlaceId(geocoder, route.End);
+
+      const listItem = document.createElement('li');
+      listItem.id = route._id; 
+
+      const routeDiv = document.createElement('div');
+      routeDiv.classList.add('route');
+      routeDiv.innerHTML = `
+        <p><b>Início:</b> <input type="text" value="${start.formatted_address}" data-field="Start"></p>
+        <p><b>Fim:</b> <input type="text" value="${end.formatted_address}" data-field="End"></p>
+      `; 
+
+      // Add update button to the routeDiv
+      const updateButton = document.createElement('button');
+      updateButton.textContent = 'Atualizar';
+      updateButton.addEventListener('click', () => handleUpdateRoute(route._id, routeDiv)); 
+      routeDiv.appendChild(updateButton);
+
+      // Add delete button to the routeDiv
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Apagar';
+      deleteButton.classList.add('delete');
+      deleteButton.addEventListener('click', () => handleDeleteRoute(route._id));
+      routeDiv.appendChild(deleteButton);
+
+      listItem.appendChild(routeDiv);
+      div.appendChild(listItem);
+    }
+  } catch (error) {
+    console.error('Error fetching or displaying routes:', error);
+    // Handle errors (e.g., display an error message to the user)
+  }
+}
+
+// Function to fetch routes from server (replace with your actual implementation)
+async function fetchRoutesFromServer() {
+  const response = await fetch('http://127.0.0.1:420/routes', {
+    headers: { Authorization: getCookie('token') }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch routes: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+// Function to handle deleting a route
+async function handleDeleteRoute(routeId) {
+  try {
+    const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
+      method: 'DELETE',
+      headers: { Authorization: getCookie('token') }
+    });
+
+    if (response.ok) {
+      // Route deleted successfully, update the displayed list
+      fetchAndDisplayRoutes();
+    } else {
+      console.error(`Failed to delete route: ${response.statusText}`);
+      // Handle deletion error
+    }
+  } catch (error) {
+    console.error('Error deleting route:', error);
+    // Handle network or other errors
+  }
+}
+
+async function handleUpdateRoute(routeId, routeDiv) {
+  const startInput = routeDiv.querySelector('input[data-field="Start"]');
+  const endInput = routeDiv.querySelector('input[data-field="End"]');
+
+  try {
+    const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': getCookie('token')
+      },
+      body: new URLSearchParams({
+        Start: startInput.value,
+        End: endInput.value
+      }).toString()
+    });
+
+    if (response.ok) {
+      // Route updated successfully
+      fetchAndDisplayRoutes(); // Refresh the list to show updated route
+    } else {
+      console.error(`Failed to update route: ${response.statusText}`);
+      // Handle the error (e.g., display an error message)
+    }
+  } catch (error) {
+    console.error('Error updating route:', error);
+    // Handle network or other errors
+  }
+}
+
+fetchAndDisplayRoutes(); // Initial fetch and display
+
 async function initMap() {
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
   const { DirectionsService, DirectionsRenderer, TrafficModel, TransitMode, TransitRoutePreference } = await google.maps.importLibrary("routes");
@@ -26,59 +148,6 @@ async function initMap() {
   });
 
   new AutocompleteDirectionsHandler(map);
-
-    const xhr = new XMLHttpRequest();
-  
-    xhr.onload = function () {
-      if (this.status === 200) {
-        try {
-          const fetchedRoutes = JSON.parse(this.responseText);
-          const div = document.getElementById('routeList');
-          fetchedRoutes.forEach(async route => {
-            let start = await geocodePlaceId(geocoder, route.Start);
-            let end = await geocodePlaceId(geocoder, route.End);
-            //console.log(start.geometry.location, end.geometry.location);
-            div.innerHTML += '<li id="">' +
-                                '<div class="route">' +
-                                  `<p>Início: ${start.formatted_address}</p>` +
-                                  `<p>Fim: ${end.formatted_address}</p>` +
-                                '</div>' +
-                              '</li>';
-          });
-        } catch (error) {
-          console.error('Error parsing fetched routes:', error);
-        }
-      } else {
-        console.error('Failed to fetch routes:', this.statusText);
-      }
-    };
-  
-    xhr.onerror = function () {
-      console.error('Network error while fetching routes');
-    };
-  
-    // Replace with the correct server endpoint for fetching routes (ensure proper CORS configuration)
-    xhr.open('GET', 'http://127.0.0.1:420/routes'); // Replace with your actual URL
-    xhr.setRequestHeader('Authorization', getCookie('token')); // Assuming token-based auth
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send();
-  
- 
-}
-
-const { Map } = await google.maps.importLibrary("maps");
-const { Geocoder } = await google.maps.importLibrary("geocoding");
-const geocoder = new google.maps.Geocoder();
-async function geocodePlaceId(geocoder, placeId) {
-  let result = {};
-
-  await geocoder
-    .geocode({ placeId: placeId })
-    .then(({ results }) => {
-      result = results[0];
-    })
-    .catch((e) => alert("Geocode was not successful for the following reason: " + e));
-  return result;
 }
 
 class AutocompleteDirectionsHandler {
@@ -88,6 +157,7 @@ class AutocompleteDirectionsHandler {
   travelMode;
   directionsService;
   directionsRenderer;
+  fetchAndDisplayRoutes;
   //trafficLayer;
   constructor(map) {
     this.map = map;
@@ -97,6 +167,7 @@ class AutocompleteDirectionsHandler {
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
     this.unitSystem = null; // Default to metric
+    this.fetchAndDisplayRoutes = fetchAndDisplayRoutes;
     //this.trafficLayer = new google.maps.TrafficLayer();
 
     this.directionsRenderer.setMap(map);
@@ -135,7 +206,7 @@ class AutocompleteDirectionsHandler {
       });
     });
 
-    
+
   }
 
   setupClickListener(id, mode) {
@@ -399,32 +470,37 @@ class AutocompleteDirectionsHandler {
       request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
     }
 
-    document.getElementById("save").addEventListener("click", () => {
+    document.getElementById("save").addEventListener("click", async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:420/routes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',  // Send as JSON
+            'Authorization': getCookie('token')
+          },
+          body: JSON.stringify(request)  // Send the entire request object
+        });
 
-      const xhr = new XMLHttpRequest();
-      const url = 'http://127.0.0.1:420/routes'; // Replace with your Node.js server address
-      const data = JSON.stringify(request);
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader('Authorization', getCookie('token'));
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          console.log(xhr.responseText);
+        if (response.ok) {
+          fetchAndDisplayRoutes(); 
+        } else {
+          console.error(`Failed to save route: ${response.statusText}`);
         }
-      };
-      xhr.send(data);
+      } catch (error) {
+        console.error('Error saving route:', error);
+      }
     });
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
-      me.directionsRenderer.setDirections(response);
-      document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
+        me.directionsRenderer.setDirections(response);
+        document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
       } else if (status === "ZERO_RESULTS") {
-      window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
+        window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
       } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {
-      window.alert("A rota excede o comprimento máximo permitido."); // Display a message for MAX_ROUTE_LENGTH_EXCEEDED
+        window.alert("A rota excede o comprimento máximo permitido."); // Display a message for MAX_ROUTE_LENGTH_EXCEEDED
       } else {
-      window.alert("Pedido falhou com erro: " + status);
+        window.alert("Pedido falhou com erro: " + status);
       }
     });
   }

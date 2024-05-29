@@ -86,12 +86,47 @@ async function fetchAndDisplayRoutes() {
         });
         endInput.autocomplete = endAutocomplete;
       }
+
+      // Updated click event listener:
+      routeDiv.addEventListener("click", () => {
+        // Access the AutocompleteDirectionsHandler instance
+        const autocompleteDirectionsHandler = new AutocompleteDirectionsHandler(map); 
+        
+        // Set the origin and destination from the route data
+        const originInput = document.getElementById("origin-input");
+        const destinationInput = document.getElementById("destination-input");
+        originInput.value = route.Start; // Set the values in the input fields
+        destinationInput.value = route.End;
+
+        // Trigger a place change event to update the Place IDs and initiate the route calculation
+        google.maps.event.trigger(originInput, 'place_changed');
+        google.maps.event.trigger(destinationInput, 'place_changed');
+      });
     }
   } catch (error) {
     console.error('Error fetching or displaying routes:', error);
     // Handle errors (e.g., display an error message to the user)
   }
 }
+
+function filterRoutes() {
+  const searchTerm = normalizeString(document.getElementById('searchBox').value.toLowerCase());
+  const routeListItems = document.querySelectorAll('#routeList li');
+
+  routeListItems.forEach(item => {
+    const routeDiv = item.querySelector('.route');
+    const startAddress = normalizeString(routeDiv.querySelector('input[data-field="Start"]').value.toLowerCase());
+    const endAddress = normalizeString(routeDiv.querySelector('input[data-field="End"]').value.toLowerCase());
+
+    const isMatch = startAddress.includes(searchTerm) || endAddress.includes(searchTerm);
+    item.style.display = isMatch ? '' : 'none';
+  });
+}
+
+function normalizeString(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+document.getElementById('searchBox').addEventListener('keyup', filterRoutes);
 
 // Function to fetch routes from server (replace with your actual implementation)
 async function fetchRoutesFromServer() {
@@ -176,8 +211,6 @@ async function handleUpdateRoute(routeId, routeDiv) {
     // Handle other potential errors 
   }
 }
-
-
 
 fetchAndDisplayRoutes(); // Initial fetch and display
 
@@ -454,8 +487,7 @@ class AutocompleteDirectionsHandler {
 
   setupClearButtonListener(id) {
     const clearButton = document.getElementById(id);
-
-    clearButton.style.display = "none"; // Hide the clear button initially
+    const saveButton = document.getElementById("save");
 
     clearButton.addEventListener("click", () => {
       this.originPlaceId = "";
@@ -466,6 +498,7 @@ class AutocompleteDirectionsHandler {
       document.getElementById("departure-time").value = "";
       this.directionsRenderer.setDirections({ routes: [] }); // Clear directions
       clearButton.style.display = "none"; // Hide the clear button after clearing the route
+      saveButton.style.display = "none";
     });
   }
 
@@ -553,7 +586,8 @@ class AutocompleteDirectionsHandler {
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
         me.directionsRenderer.setDirections(response);
-        document.getElementById("clear-directions").style.display = "block"; // Show the clear button when there's a route
+        document.getElementById("clear-directions").style.display = "block";
+        document.getElementById("save").style.display = "block";
       } else if (status === "ZERO_RESULTS") {
         window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
       } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {

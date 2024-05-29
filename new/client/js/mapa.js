@@ -17,7 +17,7 @@ async function geocodePlaceId(geocoder, placeId) {
 
 async function fetchAndDisplayRoutes() {
   const div = document.getElementById('routeList');
-  div.innerHTML = ''; 
+  div.innerHTML = '';
 
   try {
     const fetchedRoutes = await fetchRoutesFromServer();
@@ -26,18 +26,19 @@ async function fetchAndDisplayRoutes() {
       const end = await geocodePlaceId(geocoder, route.End);
 
       const listItem = document.createElement('li');
-      listItem.id = route._id; 
+      listItem.id = route._id;
 
       const routeDiv = document.createElement('div');
       routeDiv.classList.add('route');
       routeDiv.innerHTML = `
-        <p><b>Início:</b> <input type="text" value="${start.formatted_address}" data-field="Start"></p>
-        <p><b>Fim:</b> <input type="text" value="${end.formatted_address}" data-field="End"></p>
-      `; 
+        <p><b>Início:</b> <input type="text" value="${start.formatted_address}" data-field="Start" data-place-id="${route.Start}" id="start_${route._id}"></p>
+        <p><b>Fim:</b> <input type="text" value="${end.formatted_address}" data-field="End" data-place-id="${route.End}" id="end_${route._id}"></p>
+      `;
 
       // Add update button to the routeDiv
       const updateButton = document.createElement('button');
       updateButton.textContent = 'Atualizar';
+      updateButton.classList.add('update');
       updateButton.addEventListener('click', () => handleUpdateRoute(route._id, routeDiv)); 
       routeDiv.appendChild(updateButton);
 
@@ -48,8 +49,43 @@ async function fetchAndDisplayRoutes() {
       deleteButton.addEventListener('click', () => handleDeleteRoute(route._id));
       routeDiv.appendChild(deleteButton);
 
-      listItem.appendChild(routeDiv);
       div.appendChild(listItem);
+      listItem.appendChild(routeDiv);
+
+      // Initialize Autocomplete for Start input
+      const startInput = document.getElementById(`start_${route._id}`);
+      if (!startInput.autocomplete) {
+        const startAutocomplete = new google.maps.places.Autocomplete(startInput, {
+          fields: ["place_id", "geometry", "formatted_address", "name"],
+        });
+
+        // Listen for place_changed to store Place ID and update input data attribute
+        startAutocomplete.addListener("place_changed", () => {
+          const place = startAutocomplete.getPlace();
+          if (place.place_id) {
+            startInput.dataset.placeId = place.place_id;
+            startInput.value = place.formatted_address; // Update displayed address in input
+          }
+        });
+        startInput.autocomplete = startAutocomplete;
+      }
+
+      // Initialize Autocomplete for End input (same as Start input)
+      const endInput = document.getElementById(`end_${route._id}`);
+      if (!endInput.autocomplete) {
+        const endAutocomplete = new google.maps.places.Autocomplete(endInput, {
+          fields: ["place_id", "geometry", "formatted_address", "name"],
+        });
+
+        endAutocomplete.addListener("place_changed", () => {
+          const place = endAutocomplete.getPlace();
+          if (place.place_id) {
+            endInput.dataset.placeId = place.place_id;
+            endInput.value = place.formatted_address; // Update displayed address in input
+          }
+        });
+        endInput.autocomplete = endAutocomplete;
+      }
     }
   } catch (error) {
     console.error('Error fetching or displaying routes:', error);
@@ -91,34 +127,57 @@ async function handleDeleteRoute(routeId) {
 }
 
 async function handleUpdateRoute(routeId, routeDiv) {
-  const startInput = routeDiv.querySelector('input[data-field="Start"]');
-  const endInput = routeDiv.querySelector('input[data-field="End"]');
-
   try {
+    // Get input elements for start and end
+    const startInput = routeDiv.querySelector('input[data-field="Start"]');
+    const endInput = routeDiv.querySelector('input[data-field="End"]');
+
+    // Check if input elements exist
+    if (!startInput || !endInput) {
+      console.error("Start or End input not found");
+      return;
+    }
+
+    // Get Place IDs directly from the input data attributes
+    const startPlaceId = startInput.dataset.placeId;
+    const endPlaceId = endInput.dataset.placeId; 
+
+    // Check if Place IDs are valid (if not they haven't changed the fields)
+    if (!startPlaceId || !endPlaceId) {
+      alert("Please select valid places from the dropdown lists.");
+      return;
+    }
+
+    // Prepare data for the update request
+    const updatedData = {
+      Start: startPlaceId,
+      End: endPlaceId
+    };
+
+    // Send the update request
     const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
       method: 'PUT',
-      headers: { 
+      headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': getCookie('token')
       },
-      body: new URLSearchParams({
-        Start: startInput.value,
-        End: endInput.value
-      }).toString()
+      body: new URLSearchParams(updatedData).toString()
     });
 
     if (response.ok) {
-      // Route updated successfully
-      fetchAndDisplayRoutes(); // Refresh the list to show updated route
+      // Refresh the route list upon successful update
+      fetchAndDisplayRoutes();
     } else {
       console.error(`Failed to update route: ${response.statusText}`);
-      // Handle the error (e.g., display an error message)
+      // Handle the error (e.g., display an error message to the user)
     }
   } catch (error) {
     console.error('Error updating route:', error);
-    // Handle network or other errors
+    // Handle other potential errors 
   }
 }
+
+
 
 fetchAndDisplayRoutes(); // Initial fetch and display
 

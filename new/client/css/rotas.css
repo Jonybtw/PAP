@@ -13,7 +13,7 @@ header {
   width: 25vw;
   height: 100vh;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border: 1px solid black;
 }
@@ -22,12 +22,23 @@ header {
   width: 75vw;
   height: 100vh;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border: 1px solid black;
 }
 
-#mapa * {
+.gm-iv-address div{
+  color: #fff !important;
+}
+.gm-iv-address-link a {
+  color: #aecbfa !important;
+}
+
+.gmnoprint * {
+  color: currentColor;
+}
+
+#mapa *:not(.gmnoprint span) {
   color: black;
 }
 

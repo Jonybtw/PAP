@@ -97,9 +97,10 @@ async function fetchAndDisplayRoutes() {
         const destinationInput = document.getElementById("destination-input");
         originInput.value = route.Start; // Set the values in the input fields
         destinationInput.value = route.End;
-        autocompleteDirectionsHandler.originPlaceId = route.Start;
-        autocompleteDirectionsHandler.destinationPlaceId = route.End;
-        autocompleteDirectionsHandler.route();
+
+        // Trigger a place change event to update the Place IDs and initiate the route calculation
+        google.maps.event.trigger(originInput, 'place_changed');
+        google.maps.event.trigger(destinationInput, 'place_changed');
       });
     }
   } catch (error) {

@@ -1,4 +1,5 @@
 var map;
+var autocompleteDirectionsHandler;
 
 const { Map } = await google.maps.importLibrary("maps");
 const { Geocoder } = await google.maps.importLibrary("geocoding");
@@ -17,10 +18,12 @@ async function geocodePlaceId(geocoder, placeId) {
 
 async function fetchAndDisplayRoutes() {
   const div = document.getElementById('routeList');
+  
   div.innerHTML = '';
 
   try {
     const fetchedRoutes = await fetchRoutesFromServer();
+    //
     for (const route of fetchedRoutes) {
       const start = await geocodePlaceId(geocoder, route.Start);
       const end = await geocodePlaceId(geocoder, route.End);
@@ -86,17 +89,17 @@ async function fetchAndDisplayRoutes() {
         });
         endInput.autocomplete = endAutocomplete;
       }
-
       // Updated click event listener:
       routeDiv.addEventListener("click", () => {
-        // Access the AutocompleteDirectionsHandler instance
-        const autocompleteDirectionsHandler = new AutocompleteDirectionsHandler(map); 
-        
+        autocompleteDirectionsHandler.originPlaceId = "";
+        autocompleteDirectionsHandler.destinationPlaceId = "";
+        autocompleteDirectionsHandler.directionsRenderer.setDirections({ routes: [] }); 
+
         // Set the origin and destination from the route data
         const originInput = document.getElementById("origin-input");
         const destinationInput = document.getElementById("destination-input");
-        originInput.value = route.Start; // Set the values in the input fields
-        destinationInput.value = route.End;
+        originInput.value = start.formatted_address; // Set the values in the input fields
+        destinationInput.value = end.formatted_address;
         autocompleteDirectionsHandler.originPlaceId = route.Start;
         autocompleteDirectionsHandler.destinationPlaceId = route.End;
         autocompleteDirectionsHandler.route();
@@ -218,7 +221,6 @@ async function initMap() {
   const { DirectionsService, DirectionsRenderer, TrafficModel, TransitMode, TransitRoutePreference } = await google.maps.importLibrary("routes");
   const { Places } = await google.maps.importLibrary("places");
   const CenterOfPortugal = { lat: 39.4573914, lng: -8.0065354 };
-  const RuaCorroios = { lat: 38.63206355815076, lng: -9.162405460490177 };
 
   let sidebar;
   const currentDate = new Date();
@@ -229,8 +231,8 @@ async function initMap() {
 
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 7,
-    center: CenterOfPortugal,
     mapId: "667759e759cedcf9",
+    center: CenterOfPortugal,
     options: {
       gestureHandling: "greedy",
       fullscreenControl: false,
@@ -238,7 +240,60 @@ async function initMap() {
     mapTypeControl: true,
   });
 
-  new AutocompleteDirectionsHandler(map);
+  autocompleteDirectionsHandler = new AutocompleteDirectionsHandler(map);
+/*
+  async function centerMapToLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          map.setCenter(userLocation);
+        },
+        async (error) => { // Fallback to IP-based geolocation on error
+          if (error.code === error.PERMISSION_DENIED) {
+            console.log('User denied geolocation permission.');
+          } else {
+            console.error('Error getting user location:', error);
+          }
+          try {
+            const response = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=2ae8ce43c0bd4ef5bbb89bd3678eea6f');
+            const data = await response.json();
+            const userCountry = data.country_name;
+  
+            const geocoderResult = await geocoder.geocode({ address: userCountry });
+            const location = geocoderResult.results[0].geometry.location;
+            map.setCenter(location);
+          } catch (error) {
+            console.error('Error centering map:', error);
+            // Handle errors gracefully (e.g., center on a default location)
+          }
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      // Directly use IP-based geolocation if not supported
+      try {
+        const response = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=2ae8ce43c0bd4ef5bbb89bd3678eea6f');
+        const data = await response.json();
+        const userCountry = data.country_name;
+  
+        const geocoderResult = await geocoder.geocode({ address: userCountry });
+        const location = geocoderResult.results[0].geometry.location;
+        map.setCenter(location);
+      } catch (error) {
+        console.error('Error centering map:', error);
+        // Handle errors gracefully (e.g., center on a default location)
+      }
+    }
+  }
+  
+  // Call this function when your map is initialized
+  centerMapToLocation();
+  */
+    
 }
 
 class AutocompleteDirectionsHandler {
@@ -466,23 +521,28 @@ class AutocompleteDirectionsHandler {
 
   setupPlaceChangedListener(autocomplete, mode) {
     autocomplete.bindTo("bounds", this.map);
+  
+    // Remove existing 'place_changed' listeners
+    google.maps.event.clearListeners(autocomplete, 'place_changed');
+  
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-
+  
       if (!place.place_id) {
-        window.alert("Por favor escolhe uma opção da lista.");
+        window.alert("Please choose an option from the list.");
         return;
       }
-
+  
       if (mode === "ORIG") {
         this.originPlaceId = place.place_id;
       } else {
         this.destinationPlaceId = place.place_id;
       }
-
+  
       this.route();
     });
   }
+  
 
   setupClearButtonListener(id) {
     const clearButton = document.getElementById(id);
@@ -503,15 +563,37 @@ class AutocompleteDirectionsHandler {
 
   setupSwapButtonListener(id) {
     const swapButton = document.getElementById(id);
-
+  
     swapButton.addEventListener("click", () => {
-      [this.originPlaceId, this.destinationPlaceId] = [this.destinationPlaceId, this.originPlaceId]; // Swap the values
-
+      // Get input elements
+      const originInput = document.getElementById("origin-input");
+      const destinationInput = document.getElementById("destination-input");
+  
+      // Remove existing Autocomplete instances (if any)
+      if (originInput.autocomplete) {
+        google.maps.event.clearInstanceListeners(originInput.autocomplete);
+        originInput.autocomplete = null;
+      }
+      if (destinationInput.autocomplete) {
+        google.maps.event.clearInstanceListeners(destinationInput.autocomplete);
+        destinationInput.autocomplete = null;
+      }
+      console.log("Antes: " + originInput.value, destinationInput.value);
       // Swap the values of the input fields
-      var originInput = document.getElementById("origin-input");
-      var destinationInput = document.getElementById("destination-input");
       [originInput.value, destinationInput.value] = [destinationInput.value, originInput.value];
-
+      console.log("Depois: " + originInput.value, destinationInput.value);
+  
+      // Swap the place IDs
+      [this.originPlaceId, this.destinationPlaceId] = [this.destinationPlaceId, this.originPlaceId];
+  
+      // Re-initialize Autocomplete for both inputs
+      const originAutocomplete = new google.maps.places.Autocomplete(originInput, { fields: ["place_id"] });
+      const destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput, { fields: ["place_id"] });
+  
+      // Set up place changed listeners for the re-initialized Autocomplete instances
+      this.setupPlaceChangedListener(originAutocomplete, "ORIG");
+      this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
+  
       // Recalculate and display the route
       this.route();
     });

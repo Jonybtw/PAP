@@ -60,7 +60,6 @@ export const User = {
                 },
                 auth: {
                     password: hashedPassword,
-                    role: null,
                 }
             };
     
@@ -115,7 +114,6 @@ export const User = {
                 },
                 auth: {
                     password: result.auth?.password ?? null,
-                    role: result.auth?.role ?? null,
                 }
             });
         }

@@ -244,7 +244,6 @@ async function initMap() {
     TransitRoutePreference,
   } = await google.maps.importLibrary("routes");
   const { Places } = await google.maps.importLibrary("places");
-  const CenterOfPortugal = { lat: 39.4573914, lng: -8.0065354 };
 
   let sidebar;
   const currentDate = new Date();
@@ -259,6 +258,7 @@ async function initMap() {
     options: {
       gestureHandling: "greedy",
       fullscreenControl: false,
+      scaleControl: true,
     },
     mapTypeControl: true,
   });
@@ -395,7 +395,7 @@ async function initMap() {
         markerOrigin = new google.maps.Marker({
           position: clickedLocation,
           map: map,
-          title: "Origin",
+          title: "Ponto de Partida",
         });
         document.getElementById("origin-input").value = formattedAddress;
         autocompleteDirectionsHandler.originPlaceId = placeId;
@@ -404,7 +404,7 @@ async function initMap() {
         markerDestination = new google.maps.Marker({
           position: clickedLocation,
           map: map,
-          title: "Destination",
+          title: "Destino",
         });
         document.getElementById("destination-input").value = formattedAddress;
         autocompleteDirectionsHandler.destinationPlaceId = placeId;
@@ -842,6 +842,7 @@ class AutocompleteDirectionsHandler {
           },
           body: JSON.stringify(request), // Send the entire request object
         });
+        console.log(JSON.stringify(request));
 
         if (response.ok) {
           fetchAndDisplayRoutes();

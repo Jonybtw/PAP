@@ -12,17 +12,27 @@ function getCookie(cname) {
     }
     return "";
 }
-
-window.onload = () => {
-    var loginBtn = document.getElementById('loginBtn');
-    var registerBtn = document.getElementById('registerBtn');
+    
+    
 
     if (getCookie('token')) {
-        loginBtn.style.display = 'none';
-        registerBtn.style.display = 'none';
+        var loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+            loginBtn.style.display = 'none';
+        }
+
+        var registerBtn = document.getElementById('registerBtn');
+        if (registerBtn) {
+            registerBtn.style.display = 'none';
+        }
+
         var perfilBtn = document.getElementById('perfilBtn');
-        perfilBtn.style.display = 'block';
+        if (perfilBtn) {
+            perfilBtn.style.display = 'block';
+        }
+
         var routesBtn = document.getElementById('routesBtn');
-        routesBtn.style.display = 'block';
+        if (routesBtn) {
+            routesBtn.style.display = 'block';
+        }
     }
-}

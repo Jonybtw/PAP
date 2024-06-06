@@ -16,7 +16,6 @@ function fetchUserInfo() {
                 const phone = user.contacts.phone;
                 const isDarkMode = user.settings.isDarkMode === true;
                 const mainColor = user.settings.mainColor;
-                const role = user.auth.role;
 
                 // Update HTML elements with retrieved information (excluding password)
                 document.getElementById('username').value = username;
@@ -27,7 +26,6 @@ function fetchUserInfo() {
                 document.getElementById('phone').value = phone;
                 document.getElementById('isDarkMode').checked = isDarkMode;
                 document.getElementById('mainColor').value = mainColor;
-                document.getElementById('role').value = role;
 
                 // Use appropriate data types if needed (e.g., Date object for birth)
             } catch (error) {

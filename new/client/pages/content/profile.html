@@ -12,6 +12,10 @@
     <header>
         <!-- NAV BTN -->
         <h1 id="logo"><span>Route</span>Wise</h1>
+        <section>
+            <a href="profile.html" id="perfilBtn" style="display: none;">Perfil</a>
+            <a href="routes.html" id="routesBtn" style="display: none;">Mapa</a>
+        </section>
     </header>
 
     <main>
@@ -71,10 +75,6 @@
                     <label for="password">Senha:</label>
                     <input id="password" type="password" placeholder="Digite palavra-passe nova...">
                 </li>
-                <li>
-                    <label for="role">Função:</label>
-                    <input id="role" type="text" readonly>
-                </li>
             </ul>
             <br>
             <button class="saveButton" id="saveButton">Guardar</button>
@@ -91,7 +91,9 @@
             <a href="contacto.html">Contactos</a>
         </nav>
     </footer>
+    <script src="../../js/login.js"></script>
     <script src="../../js/checkLogin.js"></script>
+    
     <script src="../../js/getUser.js"></script>
     <script src="../../js/updateUser.js"></script>
     <script src="../../js/mainColor.js"></script>

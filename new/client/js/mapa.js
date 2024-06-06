@@ -359,89 +359,72 @@ async function initMap() {
     }
   });
 
-  let clickCount = 0;
-let origin = null;
+  let origin = null;
 let destination = null;
-let markerOrigin = null; // Variable to store the origin marker
-let markerDestination = null; // Variable to store the destination marker
+let markerOrigin = null;
+let markerDestination = null;
 
 map.addListener("click", async (event) => {
-  clickCount++;
 
-  if (clickCount === 1) {
-    origin = event.latLng;
+  const clickedLocation = event.latLng;
 
-    // Remove previous origin marker if it exists
-    if (markerOrigin) {
-      markerOrigin.setMap(null);
+  try {
+    const geocodeResult = await geocoder.geocode({ location: clickedLocation });
+
+    if (geocodeResult.results.length === 0) {
+      throw new Error("Geocoding failed to find a valid address.");
     }
 
-    // Add new origin marker
-    markerOrigin = new google.maps.Marker({
-      position: origin,
-      map: map,
-      title: "Origin",
-    });
-  } else if (clickCount === 2) {
-    destination = event.latLng;
-    clickCount = 0; // Reset click count
+    const placeId = geocodeResult.results[0].place_id;
+    const formattedAddress = geocodeResult.results[0].formatted_address;
 
-    // Remove previous destination marker if it exists
-    if (markerDestination) {
-      markerDestination.setMap(null);
+    if (!autocompleteDirectionsHandler.originPlaceId) {  // Origin not set
+      origin = placeId;
+      markerOrigin = new google.maps.Marker({
+        position: clickedLocation,
+        map: map,
+        title: "Origin",
+      });
+      document.getElementById("origin-input").value = formattedAddress;
+      autocompleteDirectionsHandler.originPlaceId = placeId;
+    } else if (!autocompleteDirectionsHandler.destinationPlaceId) { // Destination not set
+      destination = placeId;
+      markerDestination = new google.maps.Marker({
+        position: clickedLocation,
+        map: map,
+        title: "Destination",
+      });
+      document.getElementById("destination-input").value = formattedAddress;
+      autocompleteDirectionsHandler.destinationPlaceId = placeId;
     }
 
-    // Add new destination marker
-    markerDestination = new google.maps.Marker({
-      position: destination,
-      map: map,
-      title: "Destination",
-    });
+  } catch (error) {
+    alert("Error finding address: " + error.message);
+    return;
+  }
 
+  // If both origin and destination are set, calculate route
+  if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
     try {
-      const [originResult, destinationResult] = await Promise.all([
-        geocoder.geocode({ location: origin }),
-        geocoder.geocode({ location: destination }),
-      ]);
-
-      if (
-        originResult.results.length === 0 ||
-        destinationResult.results.length === 0
-      ) {
-        throw new Error("Geocoding failed to find a valid address.");
-      }
-
-      const originPlaceId = originResult.results[0].place_id;
-      const originFormattedAddress = originResult.results[0].formatted_address; // Get formatted address
-      const destinationPlaceId = destinationResult.results[0].place_id;
-      const destinationFormattedAddress = destinationResult.results[0].formatted_address; // Get formatted address
-
-      // Set origin and destination for the route
-      autocompleteDirectionsHandler.originPlaceId = originPlaceId;
-      autocompleteDirectionsHandler.destinationPlaceId = destinationPlaceId;
       autocompleteDirectionsHandler.route();
+      // Clear markers after route calculation
+      if (markerOrigin) markerOrigin.setMap(null);
+      if (markerDestination) markerDestination.setMap(null);
 
-      // Fill text boxes with formatted addresses
-      document.getElementById("origin-input").value = originFormattedAddress;
-      document.getElementById("destination-input").value = destinationFormattedAddress;
-
-      // Remove markers after route calculation
-      markerOrigin.setMap(null);
-      markerDestination.setMap(null);
-
-      // Reset origin and destination for next route
+      // Reset the locations and markers so the user can input another route.
       origin = null;
       destination = null;
       markerOrigin = null;
       markerDestination = null;
 
+      // Optionally clear input fields after route calculation:
+      // document.getElementById("origin-input").value = '';
+      // document.getElementById("destination-input").value = '';
     } catch (error) {
-      alert("Error finding origin or destination: " + error.message);
+      alert("Error calculating route: " + error.message);
     }
   }
 });
-
-
 }
 
 class AutocompleteDirectionsHandler {

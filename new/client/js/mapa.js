@@ -360,71 +360,80 @@ async function initMap() {
   });
 
   let origin = null;
-let destination = null;
-let markerOrigin = null;
-let markerDestination = null;
+  let destination = null;
+  let markerOrigin = null;
+  let markerDestination = null;
 
-map.addListener("click", async (event) => {
-
-  const clickedLocation = event.latLng;
-
-  try {
-    const geocodeResult = await geocoder.geocode({ location: clickedLocation });
-
-    if (geocodeResult.results.length === 0) {
-      throw new Error("Geocoding failed to find a valid address.");
-    }
-
-    const placeId = geocodeResult.results[0].place_id;
-    const formattedAddress = geocodeResult.results[0].formatted_address;
-
-    if (!autocompleteDirectionsHandler.originPlaceId) {  // Origin not set
-      origin = placeId;
-      markerOrigin = new google.maps.Marker({
-        position: clickedLocation,
-        map: map,
-        title: "Origin",
-      });
-      document.getElementById("origin-input").value = formattedAddress;
-      autocompleteDirectionsHandler.originPlaceId = placeId;
-    } else if (!autocompleteDirectionsHandler.destinationPlaceId) { // Destination not set
-      destination = placeId;
-      markerDestination = new google.maps.Marker({
-        position: clickedLocation,
-        map: map,
-        title: "Destination",
-      });
-      document.getElementById("destination-input").value = formattedAddress;
-      autocompleteDirectionsHandler.destinationPlaceId = placeId;
-    }
-
-  } catch (error) {
-    alert("Error finding address: " + error.message);
-    return;
-  }
-
-  // If both origin and destination are set, calculate route
-  if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
-    try {
-      autocompleteDirectionsHandler.route();
-      // Clear markers after route calculation
+  map.addListener("click", async (event) => {
+    // If both origin and destination are already set, clear them and start over
+    if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
+      autocompleteDirectionsHandler.originPlaceId = null;
+      autocompleteDirectionsHandler.destinationPlaceId = null;
       if (markerOrigin) markerOrigin.setMap(null);
       if (markerDestination) markerDestination.setMap(null);
-
-      // Reset the locations and markers so the user can input another route.
-      origin = null;
-      destination = null;
-      markerOrigin = null;
-      markerDestination = null;
-
-      // Optionally clear input fields after route calculation:
-      // document.getElementById("origin-input").value = '';
-      // document.getElementById("destination-input").value = '';
-    } catch (error) {
-      alert("Error calculating route: " + error.message);
+      document.getElementById("origin-input").value = '';
+      document.getElementById("destination-input").value = '';
+  
+      // Since we are starting over, the next click should set the origin
+      origin = null; // Explicitly reset origin to null
     }
-  }
-});
+  
+    const clickedLocation = event.latLng;
+  
+    try {
+      const geocodeResult = await geocoder.geocode({ location: clickedLocation });
+  
+      if (geocodeResult.results.length === 0) {
+        throw new Error("Geocoding failed to find a valid address.");
+      }
+  
+      const placeId = geocodeResult.results[0].place_id;
+      const formattedAddress = geocodeResult.results[0].formatted_address;
+  
+      if (!autocompleteDirectionsHandler.originPlaceId) { 
+        origin = placeId;
+        markerOrigin = new google.maps.Marker({
+          position: clickedLocation,
+          map: map,
+          title: "Origin",
+        });
+        document.getElementById("origin-input").value = formattedAddress;
+        autocompleteDirectionsHandler.originPlaceId = placeId;
+      } else if (!autocompleteDirectionsHandler.destinationPlaceId) { 
+        destination = placeId;
+        markerDestination = new google.maps.Marker({
+          position: clickedLocation,
+          map: map,
+          title: "Destination",
+        });
+        document.getElementById("destination-input").value = formattedAddress;
+        autocompleteDirectionsHandler.destinationPlaceId = placeId;
+      }
+    } catch (error) {
+      alert("Error finding address: " + error.message);
+      return;
+    }
+  
+    // If both origin and destination are set, calculate route
+    if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
+      try {
+        autocompleteDirectionsHandler.route();
+  
+        // Clear markers after route calculation
+        if (markerOrigin) markerOrigin.setMap(null);
+        if (markerDestination) markerDestination.setMap(null);
+  
+        // Reset origin and destination so the user can input another route.
+        origin = null;
+        destination = null;
+        markerOrigin = null;
+        markerDestination = null;
+  
+      } catch (error) {
+        alert("Error calculating route: " + error.message);
+      }
+    }
+  });
 }
 
 class AutocompleteDirectionsHandler {

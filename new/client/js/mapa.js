@@ -323,10 +323,10 @@ async function initMap() {
 
   async function centerMapToAvailableLocation() {
     try {
-      if (!userLocationData) { 
+      if (!userLocationData) {
         userLocationData = await getUserLocation();
       }
-  
+
       if (userLocationData.coordinates) {
         centerMap(userLocationData.coordinates);
       } else {
@@ -350,7 +350,7 @@ async function initMap() {
   document.getElementById("use-my-location-button").addEventListener("click", () => {
     if (userLocationData && userLocationData.placeId) {
       const originInput = document.getElementById("origin-input");
-      originInput.value = userLocationData.formatted_address; 
+      originInput.value = userLocationData.formatted_address;
       autocompleteDirectionsHandler.originPlaceId = userLocationData.placeId;
       autocompleteDirectionsHandler.route();
     } else {
@@ -358,6 +358,90 @@ async function initMap() {
       alert("Please refresh the page and allow geolocation.");
     }
   });
+
+  let clickCount = 0;
+let origin = null;
+let destination = null;
+let markerOrigin = null; // Variable to store the origin marker
+let markerDestination = null; // Variable to store the destination marker
+
+map.addListener("click", async (event) => {
+  clickCount++;
+
+  if (clickCount === 1) {
+    origin = event.latLng;
+
+    // Remove previous origin marker if it exists
+    if (markerOrigin) {
+      markerOrigin.setMap(null);
+    }
+
+    // Add new origin marker
+    markerOrigin = new google.maps.Marker({
+      position: origin,
+      map: map,
+      title: "Origin",
+    });
+  } else if (clickCount === 2) {
+    destination = event.latLng;
+    clickCount = 0; // Reset click count
+
+    // Remove previous destination marker if it exists
+    if (markerDestination) {
+      markerDestination.setMap(null);
+    }
+
+    // Add new destination marker
+    markerDestination = new google.maps.Marker({
+      position: destination,
+      map: map,
+      title: "Destination",
+    });
+
+    try {
+      const [originResult, destinationResult] = await Promise.all([
+        geocoder.geocode({ location: origin }),
+        geocoder.geocode({ location: destination }),
+      ]);
+
+      if (
+        originResult.results.length === 0 ||
+        destinationResult.results.length === 0
+      ) {
+        throw new Error("Geocoding failed to find a valid address.");
+      }
+
+      const originPlaceId = originResult.results[0].place_id;
+      const originFormattedAddress = originResult.results[0].formatted_address; // Get formatted address
+      const destinationPlaceId = destinationResult.results[0].place_id;
+      const destinationFormattedAddress = destinationResult.results[0].formatted_address; // Get formatted address
+
+      // Set origin and destination for the route
+      autocompleteDirectionsHandler.originPlaceId = originPlaceId;
+      autocompleteDirectionsHandler.destinationPlaceId = destinationPlaceId;
+      autocompleteDirectionsHandler.route();
+
+      // Fill text boxes with formatted addresses
+      document.getElementById("origin-input").value = originFormattedAddress;
+      document.getElementById("destination-input").value = destinationFormattedAddress;
+
+      // Remove markers after route calculation
+      markerOrigin.setMap(null);
+      markerDestination.setMap(null);
+
+      // Reset origin and destination for next route
+      origin = null;
+      destination = null;
+      markerOrigin = null;
+      markerDestination = null;
+
+    } catch (error) {
+      alert("Error finding origin or destination: " + error.message);
+    }
+  }
+});
+
+
 }
 
 class AutocompleteDirectionsHandler {

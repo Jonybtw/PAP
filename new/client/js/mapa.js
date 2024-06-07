@@ -44,25 +44,22 @@ async function fetchAndDisplayRoutes() {
       const updateButton = document.createElement("button");
       updateButton.textContent = "Atualizar";
       updateButton.classList.add("update");
-      updateButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Stop event from bubbling up
-        handleUpdateRoute(route._id, routeDiv);
-      });
+      updateButton.addEventListener("click", () =>
+        handleUpdateRoute(route._id, routeDiv)
+      );
       routeDiv.appendChild(updateButton);
 
       // Add delete button to the routeDiv
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
       deleteButton.classList.add("delete");
-      deleteButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Stop event from bubbling up
-        handleDeleteRoute(route._id);
-      });
+      deleteButton.addEventListener("click", () =>
+        handleDeleteRoute(route._id)
+      );
       routeDiv.appendChild(deleteButton);
 
       div.appendChild(listItem);
       listItem.appendChild(routeDiv);
-      
 
       // Initialize Autocomplete for Start input
       const startInput = document.getElementById(`start_${route._id}`);
@@ -101,15 +98,13 @@ async function fetchAndDisplayRoutes() {
         });
         endInput.autocomplete = endAutocomplete;
       }
-      const useRouteButton = document.createElement("button");
-      useRouteButton.textContent = "Usar esta rota";
-      useRouteButton.addEventListener("click", (event) => {
+      // Updated click event listener:
+      routeDiv.addEventListener("click", () => {
         autocompleteDirectionsHandler.originPlaceId = "";
         autocompleteDirectionsHandler.destinationPlaceId = "";
         autocompleteDirectionsHandler.directionsRenderer.setDirections({
           routes: [],
         });
-        
 
         // Set the origin and destination from the route data
         const originInput = document.getElementById("origin-input");
@@ -120,8 +115,6 @@ async function fetchAndDisplayRoutes() {
         autocompleteDirectionsHandler.destinationPlaceId = route.End;
         autocompleteDirectionsHandler.route();
       });
-
-      routeDiv.appendChild(useRouteButton);
     }
   } catch (error) {
     console.error("Error fetching or displaying routes:", error);
@@ -368,79 +361,61 @@ async function initMap() {
 
   let origin = null;
   let destination = null;
-  let markerOrigin = null;
-  let markerDestination = null;
 
-  map.addListener("click", async (event) => {
+map.addListener("click", async (event) => {
     // If both origin and destination are already set, clear them and start over
     if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
-      autocompleteDirectionsHandler.originPlaceId = null;
-      autocompleteDirectionsHandler.destinationPlaceId = null;
-      if (markerOrigin) markerOrigin.setMap(null);
-      if (markerDestination) markerDestination.setMap(null);
-      document.getElementById("origin-input").value = '';
-      document.getElementById("destination-input").value = '';
-  
-      // Since we are starting over, the next click should set the origin
-      origin = null; // Explicitly reset origin to null
+        autocompleteDirectionsHandler.originPlaceId = null;
+        autocompleteDirectionsHandler.destinationPlaceId = null;
+        // No need to remove markers since they won't be created in this version
+        document.getElementById("origin-input").value = '';
+        document.getElementById("destination-input").value = '';
+
+        // Since we are starting over, the next click should set the origin
+        origin = null; // Explicitly reset origin to null
     }
-  
+
     const clickedLocation = event.latLng;
-  
+
     try {
-      const geocodeResult = await geocoder.geocode({ location: clickedLocation });
-  
-      if (geocodeResult.results.length === 0) {
-        throw new Error("Geocoding failed to find a valid address.");
-      }
-  
-      const placeId = geocodeResult.results[0].place_id;
-      const formattedAddress = geocodeResult.results[0].formatted_address;
-  
-      if (!autocompleteDirectionsHandler.originPlaceId) { 
-        origin = placeId;
-        markerOrigin = new google.maps.Marker({
-          position: clickedLocation,
-          map: map,
-          title: "Ponto de Partida",
-        });
-        document.getElementById("origin-input").value = formattedAddress;
-        autocompleteDirectionsHandler.originPlaceId = placeId;
-      } else if (!autocompleteDirectionsHandler.destinationPlaceId) { 
-        destination = placeId;
-        markerDestination = new google.maps.Marker({
-          position: clickedLocation,
-          map: map,
-          title: "Destino",
-        });
-        document.getElementById("destination-input").value = formattedAddress;
-        autocompleteDirectionsHandler.destinationPlaceId = placeId;
-      }
+        const geocodeResult = await geocoder.geocode({ location: clickedLocation });
+
+        if (geocodeResult.results.length === 0) {
+            throw new Error("Geocoding failed to find a valid address.");
+        }
+
+        const placeId = geocodeResult.results[0].place_id;
+        const formattedAddress = geocodeResult.results[0].formatted_address;
+
+        if (!autocompleteDirectionsHandler.originPlaceId) { 
+            origin = placeId;
+            document.getElementById("origin-input").value = formattedAddress;
+            autocompleteDirectionsHandler.originPlaceId = placeId;
+        } else if (!autocompleteDirectionsHandler.destinationPlaceId) { 
+            destination = placeId;
+            document.getElementById("destination-input").value = formattedAddress;
+            autocompleteDirectionsHandler.destinationPlaceId = placeId;
+        }
     } catch (error) {
-      alert("Error finding address: " + error.message);
-      return;
+        alert("Error finding address: " + error.message);
+        return;
     }
-  
+
     // If both origin and destination are set, calculate route
     if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
-      try {
-        autocompleteDirectionsHandler.route();
-  
-        // Clear markers after route calculation
-        if (markerOrigin) markerOrigin.setMap(null);
-        if (markerDestination) markerDestination.setMap(null);
-  
-        // Reset origin and destination so the user can input another route.
-        origin = null;
-        destination = null;
-        markerOrigin = null;
-        markerDestination = null;
-  
-      } catch (error) {
-        alert("Error calculating route: " + error.message);
-      }
+        try {
+            autocompleteDirectionsHandler.route();
+
+            // Reset origin and destination so the user can input another route.
+            origin = null;
+            destination = null;
+
+        } catch (error) {
+            alert("Error calculating route: " + error.message);
+        }
     }
-  });
+});
+
 }
 
 class AutocompleteDirectionsHandler {

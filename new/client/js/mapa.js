@@ -44,22 +44,25 @@ async function fetchAndDisplayRoutes() {
       const updateButton = document.createElement("button");
       updateButton.textContent = "Atualizar";
       updateButton.classList.add("update");
-      updateButton.addEventListener("click", () =>
-        handleUpdateRoute(route._id, routeDiv)
-      );
+      updateButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop event from bubbling up
+        handleUpdateRoute(route._id, routeDiv);
+      });
       routeDiv.appendChild(updateButton);
 
       // Add delete button to the routeDiv
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
       deleteButton.classList.add("delete");
-      deleteButton.addEventListener("click", () =>
-        handleDeleteRoute(route._id)
-      );
+      deleteButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop event from bubbling up
+        handleDeleteRoute(route._id);
+      });
       routeDiv.appendChild(deleteButton);
 
       div.appendChild(listItem);
       listItem.appendChild(routeDiv);
+      
 
       // Initialize Autocomplete for Start input
       const startInput = document.getElementById(`start_${route._id}`);
@@ -98,13 +101,15 @@ async function fetchAndDisplayRoutes() {
         });
         endInput.autocomplete = endAutocomplete;
       }
-      // Updated click event listener:
-      routeDiv.addEventListener("click", () => {
+      const useRouteButton = document.createElement("button");
+      useRouteButton.textContent = "Usar esta rota";
+      useRouteButton.addEventListener("click", (event) => {
         autocompleteDirectionsHandler.originPlaceId = "";
         autocompleteDirectionsHandler.destinationPlaceId = "";
         autocompleteDirectionsHandler.directionsRenderer.setDirections({
           routes: [],
         });
+        
 
         // Set the origin and destination from the route data
         const originInput = document.getElementById("origin-input");
@@ -115,6 +120,8 @@ async function fetchAndDisplayRoutes() {
         autocompleteDirectionsHandler.destinationPlaceId = route.End;
         autocompleteDirectionsHandler.route();
       });
+
+      routeDiv.appendChild(useRouteButton);
     }
   } catch (error) {
     console.error("Error fetching or displaying routes:", error);

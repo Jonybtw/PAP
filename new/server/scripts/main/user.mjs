@@ -48,7 +48,7 @@ export const User = {
                     name: null,
                     birth: null,
                     address: null,
-                    routes: []
+                    routes: null,
                 },
                 contacts: {
                     email: encrypt(email),

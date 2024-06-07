@@ -45,6 +45,12 @@ export const Routes = {
                 if (!resultRoutes) {
                     // Create a new routes document if not found
                     resultRoutes = { _id: new ObjectId(), routes: [] };
+                    await collectionRoutes.insertOne(resultRoutes);
+
+                    await collectionUsers.updateOne(
+                        { _id: new ObjectId(id) },
+                        { $set: { "data.routes": resultRoutes._id.toString() } }
+                    );
                 }
                 // Add new route to the routes array
                 resultRoutes.routes.push({

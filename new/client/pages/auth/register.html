@@ -30,7 +30,7 @@
         <h1 class="title2">Criar Conta</h1>
         <form id="registerForm" onsubmit="registerUser(); return false;">
           <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput" required>
-          <input type="email" placeholder="E-mail" class="email" id="emailInput" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+          <input type="email" placeholder="E-mail" class="email" id="emailInput" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">                    
           <input type="password" placeholder="Senha" class="password" id="passwordInput" required>
           <input type="password" placeholder="Confirmar Senha" class="confirmpassword" id="confirmPasswordInput" required>
           <input type="submit" class="register-button" name="register-button" id="submitButton" value="Registar Conta">

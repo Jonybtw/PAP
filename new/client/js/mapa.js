@@ -256,6 +256,26 @@ async function initMap() {
   const currentDate = new Date();
   const currentDateTimeString = currentDate.toISOString().slice(0, 16);
 
+  document.getElementById("origin-input").value = "";
+    document.getElementById("destination-input").value = "";
+    document.getElementById("departure-time").value = "";
+    document.getElementById("arrival-time").value = "";
+
+    // Clear radio buttons by unchecking them
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    radioButtons.forEach(radio => radio.checked = false);
+
+    // Clear checkboxes by unchecking them
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = false); 
+
+    // Hide buttons
+    document.getElementById("clear-directions").style.display = "none";
+    document.getElementById("save").style.display = "none";
+    document.getElementById("avoid-options").style.display = "none"; // Hide avoid options
+    document.getElementById("transit-options").style.display = "none"; // Hide transit options
+    document.getElementById("unit-system").style.display = "none"; // Hide unit system
+
   document.getElementById("departure-time").min = currentDateTimeString;
   document.getElementById("arrival-time").min = currentDateTimeString;
 

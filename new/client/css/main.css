@@ -224,7 +224,7 @@ footer nav {
 }
 
 .logoutButton, .delete-button{
-  background-color: red; /* Changed color to red */
+  background-color: red;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -232,11 +232,11 @@ footer nav {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-right: 10px; /* Add margin to separate buttons */
+  margin-right: 10px;
 }
 
 .logoutButton:hover {
-  background-color: #962121; /* Darker red on hover */
+  background-color: #962121;
 }
 
 .saveButton, .add-button, .edit-button{
@@ -330,7 +330,6 @@ input[type="checkbox"]:checked + .toggle-slider:before {
   transform: translateX(20px);
 }
 
-/* Added select box styles */
 select {
   width: 100%;
   padding: 12px 20px;

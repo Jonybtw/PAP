@@ -6,7 +6,6 @@ function fetchUserInfo() {
             try {
                 const user = JSON.parse(this.responseText);
 
-                // Access individual data points
                 const userId = user._id;
                 const username = user.data.username;
                 const name = user.data.name;
@@ -17,7 +16,6 @@ function fetchUserInfo() {
                 const isDarkMode = user.settings.isDarkMode === true;
                 const mainColor = user.settings.mainColor;
 
-                // Update HTML elements with retrieved information (excluding password)
                 document.getElementById('username').value = username;
                 document.getElementById('name').value = name;
                 document.getElementById('birth').value = birth;
@@ -27,24 +25,20 @@ function fetchUserInfo() {
                 document.getElementById('isDarkMode').checked = isDarkMode;
                 document.getElementById('mainColor').value = mainColor;
 
-                // Use appropriate data types if needed (e.g., Date object for birth)
             } catch (error) {
-                console.error('Error parsing user data:', error);
+                console.error('Erro na análise dos dados do utilizador:', error);
             }
         } else {
-            console.error('Failed to fetch user information:', this.statusText);
+            console.error('Falha ao obter informações do utilizador:', this.statusText);
         }
     };
 
     xhr.onerror = function () {
-        console.error('Network error while fetching user information');
+        console.error('Erro de rede ao obter informações do utilizador');
     };
-
-    // Replace with the correct server endpoint (ensure proper CORS configuration)
-    xhr.open('GET', 'http://127.0.0.1:420/user'); // Replace with your actual URL
+    xhr.open('GET', 'http://127.0.0.1:420/user');
     xhr.setRequestHeader('Authorization', getCookie('token'));
     xhr.send();
 }
 
-// Call the fetchUserInfo function when the page loads
 window.addEventListener('load', fetchUserInfo);

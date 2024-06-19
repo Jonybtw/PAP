@@ -10,37 +10,31 @@ const decrypt = (value) => CryptoJS.AES.decrypt(value, process.env.SECRET_AES_KE
 export const User = {
     create: async (request, response) => {
         try {
-            // Destructure user data with validation (using optional chaining)
             const { username, email, password, confirmPassword } = request.body || {};
             if (!username || !email || !password || !confirmPassword) {
-                return response.status(401).json('Missing required fields.');
+                return response.status(401).json('Campos obrigatórios em falta.');
             }
 
-            // Efficiently check for existing username and email using findOne with $or operator
             const existingUser = await collectionUsers.findOne({
                 $or: [{ 'data.username': username }, { 'contacts.email': email }]
             });
-            
+
             if (existingUser) {
                 const conflictField = existingUser.data.username === username ? 'username' : 'email';
-                return response.status(409).json(`Conflict: '${conflictField}' already exists.`);
+                return response.status(409).json(`Conflito: '${conflictField}' já existe.`);
             }
 
-            // Validate email format using a regular expression (optional)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                return response.status(400).json('Invalid email format.');
+                return response.status(400).json('Formato de email inválido.');
             }
-    
-            // Check password confirmation
+
             if (password !== confirmPassword) {
-                return response.status(400).json('Passwords do not match.');
+                return response.status(400).json('As palavras-passe não coincidem.');
             }
-    
-            // Hash password securely using bcrypt (10 rounds recommended)
+
             const hashedPassword = await bcrypt.hash(password, 12);
-    
-            // Create new user document
+
             const newUser = {
                 _id: new ObjectId(),
                 data: {
@@ -62,14 +56,13 @@ export const User = {
                     password: hashedPassword,
                 }
             };
-    
-            // Insert user into MongoDB collection
+
             const result = await collectionUsers.insertOne(newUser);
-            if(!result) response.status(401).json('Error registering user.');
-            else response.status(201).json('User registered successfully.');
+            if (!result) response.status(401).json('Erro ao registrar utilizador.');
+            else response.status(201).json('Utilizador registrado com sucesso.');
         } catch (error) {
-            console.error('Error registering user:', error);
-            response.status(500).json('Internal server error.'); // Generic error for security
+            console.error('Erro ao registrar utilizador:', error);
+            response.status(500).json('Erro interno do servidor.');
         }
     },
 
@@ -78,12 +71,12 @@ export const User = {
         if (!request.params.idUser) {
             id = request.id;
         } else if (request.params.idUser.length !== 24) {
-            response.status(404).json('Not Valid');
+            response.status(404).json('Não válido');
             return;
         } else {
             id = request.params.idUser;
         }
-        let query = {_id: new ObjectId(id)};
+        let query = { _id: new ObjectId(id) };
         let projection = {
             projection: {
                 _id: 1,
@@ -94,7 +87,7 @@ export const User = {
             }
         };
         let result = await collectionUsers.findOne(query, projection);
-        if (!result) response.status(404).json('Not Found');
+        if (!result) response.status(404).json('Não encontrado');
         else {
             response.status(200).json({
                 _id: result._id,
@@ -121,64 +114,56 @@ export const User = {
 
     update: async (request, response) => {
         try {
-            // Extract JWT token from request headers
             const token = request.headers.authorization;
             if (!token) {
-                return response.status(401).json('Authorization token missing.');
+                return response.status(401).json('Token de autorização ausente.');
             }
-    
-            // Decrypt user ID from JWT token
+
             const decodedToken = jwt.decode(token);
             if (!decodedToken || !decodedToken.id) {
-                return response.status(401).json('Invalid token.');
+                return response.status(401).json('Token inválido.');
             }
             const decryptedUserId = CryptoJS.AES.decrypt(decodedToken.id, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
-    
-            // Check if user exists
+
             const userToUpdate = await collectionUsers.findOne({ _id: new ObjectId(decryptedUserId) });
             if (!userToUpdate) {
-                return response.status(404).json('User not found.');
+                return response.status(404).json('Utilizador não encontrado.');
             }
-    
-            // Extract fields from request body
+
             const { email, routes, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
-    
-            // Update user fields if provided
+
             if (name !== undefined) userToUpdate.data.name = name ? encrypt(name) : '';
             if (birth !== undefined) userToUpdate.data.birth = birth ? encrypt(birth) : '';
             if (address !== undefined) userToUpdate.data.address = address ? encrypt(address) : '';
             if (email !== undefined) userToUpdate.contacts.email = email ? encrypt(email) : '';
             if (phone !== undefined) userToUpdate.contacts.phone = phone ? encrypt(phone) : '';
-            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? JSON.parse(isDarkMode) : false;  
+            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? JSON.parse(isDarkMode) : false;
             if (mainColor !== undefined) userToUpdate.settings.mainColor = mainColor ? mainColor : '';
             if (password !== undefined && password !== '') {
-                // Hash password
                 const hashedPassword = await bcrypt.hash(password, 12);
                 userToUpdate.auth.password = hashedPassword;
             }
-    
-            // Update user in the database
+
             await collectionUsers.updateOne({ _id: new ObjectId(decryptedUserId) }, { $set: userToUpdate });
-    
-            // Return success response
-            return response.status(200).json('User data updated successfully.');
+
+            return response.status(200).json('Dados do utilizador atualizados com sucesso.');
         } catch (error) {
-            console.error('Error updating user:', error);
-            return response.status(500).json('Internal server error.');
+            console.error('Erro ao atualizar utilizador:', error);
+            return response.status(500).json('Erro interno do servidor.');
         }
     },
 
-    delete: () => {},
+    delete: () => { },
 
     login: async (request, response) => {
         let { username, password } = request.body;
-        if (!username) {response.status(401).json('Insert username!'); return;}
-        else if (!password) {response.status(401).json('Insert password!'); return;}
+        if (!username) { response.status(401).json('Insira o nome de utilizador!'); return; }
+        else if (!password) { response.status(401).json('Insira a palavra-passe!'); return; }
         else {
-            let query = {'data.username': username};
+            let query = { 'data.username': username };
             let result = await collectionUsers.findOne(query);
-            if (!result) response.status(401).json('User not found!');
-            else if (!bcrypt.compareSync(password, result.auth.password)) response.status(401).json('Invalid!');
+            if (!result) response.status(401).json('Utilizador não encontrado!');
+            else if (!bcrypt.compareSync(password, result.auth.password)) response.status(401).json('Inválido!');
             else {
                 jwt.sign(
                     {
@@ -188,8 +173,8 @@ export const User = {
                     process.env.SECRET_TOKEN_KEY,
 
                     { expiresIn: '30d' },
-                    (error, token) => { 
-                        if (error) throw error; 
+                    (error, token) => {
+                        if (error) throw error;
                         response.status(200).json(token);
                     }
                 );

@@ -15,10 +15,10 @@ import validateTokenRouter from './scripts/utils/validate_token.mjs';
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(bodyParser.json()); // Add this line to parse JSON request bodies
-app.use(express.json()); // Move this line before your routes
+app.use(bodyParser.json());
+app.use(express.json());
 
-		app.use('/validate_token', validateTokenRouter); // Use app.use instead of app.post
+		app.use('/validate_token', validateTokenRouter);
 
 		//^ USER
 		app.post('/login', User.login);
@@ -37,33 +37,6 @@ app.use(express.json()); // Move this line before your routes
 		app.get('/routes/:id', Routes.get);
 		app.put('/routes/:id', Routes.update);
 		app.delete('/routes/:id', Routes.delete);
-				
-
-	//^ BUS AGENCIES
-		//! - Carris
-		//! - Carris Metropolitana
-		//! - MobiCascais
-		//! - TCB
-		//! - Mafrense
-		//! - Boa Viagem
-		//! - Ribatejana
-		//! - Barraqueiro Oeste
-		//! - Rodoviária do Tejo
-		//! - Rodoviária do Tejo: Rápidas
-		//! - Scotturb
-		//! - Rodoviária do Oeste: Rápidas
-	//^ TRAIN AGENCIES
-		//! - CP
-		//! - Fertagus
-	//^ METRO AGENCIES
-		//! - MTS
-		//! - Metropolitano de Lisboa
-	//^ ELETRICO AGENCIES
-		//! - Eléctrico de Sintra
-	//^ FERRY AGENCIES
-		//! - Transtejo Soflusa
-		//! - Atlantic Ferries
-	//* more info at https://moovitapp.com/index/pt/transportes_públicos-Lisboa-2460
 
 app.listen(process.env.PORT, () => {
 	console.log('\x1b[44m', 'Server is successfully connected!', '\x1b[0m');

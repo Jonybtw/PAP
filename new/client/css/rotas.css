@@ -1,6 +1,6 @@
 header {
-  position: relative; /* or absolute, fixed, depending on your needs */
-  z-index: 1000; /* any number larger than the z-index of other elements */
+  position: relative;
+  z-index: 1000;
 }
 
 #container {
@@ -92,7 +92,7 @@ header {
 
 #mode-selector h3,
 #mode-selector h4 {
-  margin-top: 0; /* Remove default top margin */
+  margin-top: 0;
 }
 
 #sidebar {
@@ -165,22 +165,21 @@ hr {
   font-weight: bold;
 }
 
-/* Basic Styling for Radio Buttons */
 input[type="radio"] {
-  -webkit-appearance: none; /* Removes default browser styling */
+  -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  margin: 0; /* Removes default margin */
-  width: 20px; /* Adjust as needed */
-  height: 20px; /* Adjust as needed */
-  border-radius: 50%; /* Makes it circular */
-  border: 2px solid #ccc; /* Adjust color and thickness */
-  outline: none; /* Removes outline on focus */
-  cursor: pointer; /* Changes cursor to pointer */
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  outline: none;
+  cursor: pointer;
 }
 
 input[type="radio"]:checked {
-  background-color: #007bff; /* Adjust color */
+  background-color: #007bff;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -189,18 +188,17 @@ input[type="radio"]:checked {
 input[type="radio"]:checked::before {
   content: "";
   display: block;
-  width: 10px; /* Adjust size */
-  height: 10px; /* Adjust size */
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: white; /* Adjust color */
+  background-color: white;
 }
 
-/* Optional: Focus State */
+
 input[type="radio"]:focus {
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adjust color and size */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Optional: Disabled State */
 input[type="radio"]:disabled {
   opacity: 0.5;
   cursor: default;
@@ -314,33 +312,32 @@ b{
 }
 
 #routeList button {
-  background-color: #4CAF50; /* Green */
+  background-color: #4CAF50;
   border: none;
   color: white;
-  padding: 8px 16px; /* Adjust as needed */
+  padding: 8px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px; /* Adjust as needed */
-  margin: 4px 2px; /* Add some spacing */
+  font-size: 14px;
+  margin: 4px 2px;
   cursor: pointer;
-  border-radius: 5px; /* Add rounded corners */
-  transition: background-color 0.3s; /* Smooth transition effect */
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 #routeList button:hover {
-  background-color: #3e8e41; /* Darker green on hover */
+  background-color: #3e8e41;
 }
 
-#routeList button.delete { /* Style specifically for the delete button */
-  background-color: #f44336; /* Red */
+#routeList button.delete {
+  background-color: #f44336;
 }
 
 #routeList button.delete:hover {
-  background-color: #700d06; /* Darker red on hover */
+  background-color: #700d06;
 }
 
-/* Styling for Travel Mode Options */
 .travel-mode-option {
   display: flex;
   align-items: center;

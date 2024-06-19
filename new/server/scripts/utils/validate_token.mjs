@@ -13,11 +13,11 @@ router.get('/', (req, res) => {
 
   jwt.verify(token, process.env.SECRET_TOKEN_KEY, (err, user) => {
     if (err) {
-      console.error('Error verifying token:', err);
+      console.error('Erro ao verificar o token:', err);
       res.clearCookie('token');
       return res.sendStatus(403);
     }
-    res.sendStatus(200); // OK
+    res.sendStatus(200);
   });
 });
 

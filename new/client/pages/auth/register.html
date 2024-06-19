@@ -11,7 +11,6 @@
 
 <body>
   <header>
-    <!-- NAV BTN -->
     <h1 id="logo"><span>Route</span>Wise</h1>
     <section>
       <a href="login.html">Iniciar Sessão</a>
@@ -57,10 +56,8 @@
             const confirmPassword = document.getElementById('confirmPasswordInput').value;
 
             if (!username || !email || !password || !confirmPassword) {
-                // If any field is empty
                 alert("Todos os campos devem ser preenchidos.");
             } else if (password !== confirmPassword) {
-                // If passwords do not match
                 alert("As senhas não correspondem.");
             } else {
                 var xhr = new XMLHttpRequest();
@@ -76,7 +73,7 @@
                         if (xhr.status === 200 || xhr.status === 201) {
                             readyToken(xhr.response);
                         } else {
-                            alert("Ocorreu um erro ao registrar. Por favor, tente novamente.");
+                            alert("Ocorreu um erro ao registar. Por favor, tente novamente.");
                         }
                     }
                 }

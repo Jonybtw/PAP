@@ -13,7 +13,9 @@ async function geocodePlaceId(geocoder, placeId) {
       result = results[0];
     })
     .catch((e) =>
-      alert("Geocode was not successful for the following reason: " + e)
+      alert(
+        "A geocodificação não foi bem-sucedida devido à seguinte razão: " + e
+      )
     );
   return result;
 }
@@ -25,7 +27,6 @@ async function fetchAndDisplayRoutes() {
 
   try {
     const fetchedRoutes = await fetchRoutesFromServer();
-    //
     for (const route of fetchedRoutes) {
       const start = await geocodePlaceId(geocoder, route.Start);
       const end = await geocodePlaceId(geocoder, route.End);
@@ -40,31 +41,27 @@ async function fetchAndDisplayRoutes() {
         <p><b>Fim:</b> <input type="text" value="${end.formatted_address}" data-field="End" data-place-id="${route.End}" id="end_${route._id}"></p>
       `;
 
-      // Add update button to the routeDiv
       const updateButton = document.createElement("button");
       updateButton.textContent = "Atualizar";
       updateButton.classList.add("update");
       updateButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Stop event from bubbling up
+        event.stopPropagation();
         handleUpdateRoute(route._id, routeDiv);
       });
       routeDiv.appendChild(updateButton);
 
-      // Add delete button to the routeDiv
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Apagar";
       deleteButton.classList.add("delete");
       deleteButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Stop event from bubbling up
+        event.stopPropagation();
         handleDeleteRoute(route._id);
       });
       routeDiv.appendChild(deleteButton);
 
       div.appendChild(listItem);
       listItem.appendChild(routeDiv);
-      
 
-      // Initialize Autocomplete for Start input
       const startInput = document.getElementById(`start_${route._id}`);
       if (!startInput.autocomplete) {
         const startAutocomplete = new google.maps.places.Autocomplete(
@@ -74,18 +71,16 @@ async function fetchAndDisplayRoutes() {
           }
         );
 
-        // Listen for place_changed to store Place ID and update input data attribute
         startAutocomplete.addListener("place_changed", () => {
           const place = startAutocomplete.getPlace();
           if (place.place_id) {
             startInput.dataset.placeId = place.place_id;
-            startInput.value = place.formatted_address; // Update displayed address in input
+            startInput.value = place.formatted_address;
           }
         });
         startInput.autocomplete = startAutocomplete;
       }
 
-      // Initialize Autocomplete for End input (same as Start input)
       const endInput = document.getElementById(`end_${route._id}`);
       if (!endInput.autocomplete) {
         const endAutocomplete = new google.maps.places.Autocomplete(endInput, {
@@ -96,7 +91,7 @@ async function fetchAndDisplayRoutes() {
           const place = endAutocomplete.getPlace();
           if (place.place_id) {
             endInput.dataset.placeId = place.place_id;
-            endInput.value = place.formatted_address; // Update displayed address in input
+            endInput.value = place.formatted_address;
           }
         });
         endInput.autocomplete = endAutocomplete;
@@ -109,12 +104,10 @@ async function fetchAndDisplayRoutes() {
         autocompleteDirectionsHandler.directionsRenderer.setDirections({
           routes: [],
         });
-        
 
-        // Set the origin and destination from the route data
         const originInput = document.getElementById("origin-input");
         const destinationInput = document.getElementById("destination-input");
-        originInput.value = start.formatted_address; // Set the values in the input fields
+        originInput.value = start.formatted_address;
         destinationInput.value = end.formatted_address;
         autocompleteDirectionsHandler.originPlaceId = route.Start;
         autocompleteDirectionsHandler.destinationPlaceId = route.End;
@@ -124,8 +117,7 @@ async function fetchAndDisplayRoutes() {
       routeDiv.appendChild(useRouteButton);
     }
   } catch (error) {
-    console.error("Error fetching or displaying routes:", error);
-    // Handle errors (e.g., display an error message to the user)
+    console.error("Erro ao buscar ou exibir rotas:", error);
   }
 }
 
@@ -155,7 +147,6 @@ function normalizeString(str) {
 }
 document.getElementById("searchBox").addEventListener("keyup", filterRoutes);
 
-// Function to fetch routes from server (replace with your actual implementation)
 async function fetchRoutesFromServer() {
   const response = await fetch("http://127.0.0.1:420/routes", {
     headers: { Authorization: getCookie("token") },
@@ -167,7 +158,6 @@ async function fetchRoutesFromServer() {
   return response.json();
 }
 
-// Function to handle deleting a route
 async function handleDeleteRoute(routeId) {
   try {
     const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
@@ -176,47 +166,38 @@ async function handleDeleteRoute(routeId) {
     });
 
     if (response.ok) {
-      // Route deleted successfully, update the displayed list
       fetchAndDisplayRoutes();
     } else {
-      console.error(`Failed to delete route: ${response.statusText}`);
-      // Handle deletion error
+      console.error(`Falha ao excluir a rota: ${response.statusText}`);
     }
   } catch (error) {
-    console.error("Error deleting route:", error);
-    // Handle network or other errors
+    console.error("Erro ao excluir a rota:", error);
   }
 }
 
 async function handleUpdateRoute(routeId, routeDiv) {
   try {
-    // Get input elements for start and end
     const startInput = routeDiv.querySelector('input[data-field="Start"]');
     const endInput = routeDiv.querySelector('input[data-field="End"]');
 
-    // Check if input elements exist
     if (!startInput || !endInput) {
-      console.error("Start or End input not found");
+      console.error("Campo de início ou fim não encontrado");
       return;
     }
 
-    // Get Place IDs directly from the input data attributes
     const startPlaceId = startInput.dataset.placeId;
     const endPlaceId = endInput.dataset.placeId;
 
-    // Check if Place IDs are valid (if not they haven't changed the fields)
     if (!startPlaceId || !endPlaceId) {
-      alert("Please select valid places from the dropdown lists.");
+      alert("Por favor, selecione lugares válidos nas listas suspensas.");
       return;
     }
 
-    // Prepare data for the update request
     const updatedData = {
-      Start: startPlaceId,
-      End: endPlaceId,
+      Início: startPlaceId,
+      Fim: endPlaceId,
     };
 
-    // Send the update request
     const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
       method: "PUT",
       headers: {
@@ -227,19 +208,16 @@ async function handleUpdateRoute(routeId, routeDiv) {
     });
 
     if (response.ok) {
-      // Refresh the route list upon successful update
       fetchAndDisplayRoutes();
     } else {
-      console.error(`Failed to update route: ${response.statusText}`);
-      // Handle the error (e.g., display an error message to the user)
+      console.error(`Falha ao atualizar rota: ${response.statusText}`);
     }
   } catch (error) {
-    console.error("Error updating route:", error);
-    // Handle other potential errors
+    console.error("Erro ao atualizar rota:", error);
   }
 }
 
-fetchAndDisplayRoutes(); // Initial fetch and display
+fetchAndDisplayRoutes();
 
 async function initMap() {
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
@@ -257,24 +235,21 @@ async function initMap() {
   const currentDateTimeString = currentDate.toISOString().slice(0, 16);
 
   document.getElementById("origin-input").value = "";
-    document.getElementById("destination-input").value = "";
-    document.getElementById("departure-time").value = "";
-    document.getElementById("arrival-time").value = "";
+  document.getElementById("destination-input").value = "";
+  document.getElementById("departure-time").value = "";
+  document.getElementById("arrival-time").value = "";
 
-    // Clear radio buttons by unchecking them
-    const radioButtons = document.querySelectorAll('input[type="radio"]');
-    radioButtons.forEach(radio => radio.checked = false);
+  const radioButtons = document.querySelectorAll('input[type="radio"]');
+  radioButtons.forEach((radio) => (radio.checked = false));
 
-    // Clear checkboxes by unchecking them
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => checkbox.checked = false); 
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach((checkbox) => (checkbox.checked = false));
 
-    // Hide buttons
-    document.getElementById("clear-directions").style.display = "none";
-    document.getElementById("save").style.display = "none";
-    document.getElementById("avoid-options").style.display = "none"; // Hide avoid options
-    document.getElementById("transit-options").style.display = "none"; // Hide transit options
-    document.getElementById("unit-system").style.display = "none"; // Hide unit system
+  document.getElementById("clear-directions").style.display = "none";
+  document.getElementById("save").style.display = "none";
+  document.getElementById("avoid-options").style.display = "none";
+  document.getElementById("transit-options").style.display = "none";
+  document.getElementById("unit-system").style.display = "none";
 
   document.getElementById("departure-time").min = currentDateTimeString;
   document.getElementById("arrival-time").min = currentDateTimeString;
@@ -292,7 +267,7 @@ async function initMap() {
 
   autocompleteDirectionsHandler = new AutocompleteDirectionsHandler(map);
 
-  let userLocationData = null; // Store coordinates, place ID, and formatted address
+  let userLocationData = null;
 
   async function getUserLocation() {
     try {
@@ -310,7 +285,7 @@ async function initMap() {
             if (status === "OK" && results[0]) {
               resolve(results[0]);
             } else {
-              reject(new Error("Geocoding failed: " + status));
+              reject(new Error("Falha na geocodificação: " + status));
             }
           });
         });
@@ -318,18 +293,18 @@ async function initMap() {
         return {
           coordinates: userLocation,
           placeId: geocodeResult.place_id,
-          formatted_address: geocodeResult.formatted_address, // Include formatted address
+          formatted_address: geocodeResult.formatted_address,
         };
       } else {
-        throw new Error("Geolocation is not supported by this browser.");
+        throw new Error("Geolocalização não é suportada por este navegador.");
       }
     } catch (error) {
       if (error.code === error.PERMISSION_DENIED) {
-        console.log("User denied geolocation permission.");
+        console.log("Permissão de geolocalização negada pelo utilizador.");
       } else {
-        console.error("Error getting user location:", error);
+        console.error("Erro ao obter a localização do utilizador:", error);
       }
-      throw error; // Re-throw the error to be handled by the calling function
+      throw error;
     }
   }
 
@@ -362,86 +337,87 @@ async function initMap() {
       }
     } catch (error) {
       if (error.message === "User denied geolocation prompt") {
-        console.log("Using IP-based location...");
+        console.log("A utilizar localização baseada no IP...");
         const ipLocation = await getLocationFromIP();
         centerMap(ipLocation);
       } else {
-        // Handle other errors (e.g., permission denied, geocoding failed)
-        alert("Error getting location: " + error.message);
+        alert("Erro ao obter a localização: " + error.message);
       }
     }
   }
 
   centerMapToAvailableLocation();
 
-  document.getElementById("use-my-location-button").addEventListener("click", () => {
-    if (userLocationData && userLocationData.placeId) {
-      const originInput = document.getElementById("origin-input");
-      originInput.value = userLocationData.formatted_address;
-      autocompleteDirectionsHandler.originPlaceId = userLocationData.placeId;
-      autocompleteDirectionsHandler.route();
-    } else {
-      // If no location data or Place ID, show error message
-      alert("Please refresh the page and allow geolocation.");
-    }
-  });
+  document
+    .getElementById("use-my-location-button")
+    .addEventListener("click", () => {
+      if (userLocationData && userLocationData.placeId) {
+        const originInput = document.getElementById("origin-input");
+        originInput.value = userLocationData.formatted_address;
+        autocompleteDirectionsHandler.originPlaceId = userLocationData.placeId;
+        autocompleteDirectionsHandler.route();
+      } else {
+        alert("Por favor, atualize a página e permita a geolocalização.");
+      }
+    });
 
   let origin = null;
   let destination = null;
 
-map.addListener("click", async (event) => {
-    // If both origin and destination are already set, clear them and start over
-    if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
-        autocompleteDirectionsHandler.originPlaceId = null;
-        autocompleteDirectionsHandler.destinationPlaceId = null;
-        // No need to remove markers since they won't be created in this version
-        document.getElementById("origin-input").value = '';
-        document.getElementById("destination-input").value = '';
+  map.addListener("click", async (event) => {
+    if (
+      autocompleteDirectionsHandler.originPlaceId &&
+      autocompleteDirectionsHandler.destinationPlaceId
+    ) {
+      autocompleteDirectionsHandler.originPlaceId = null;
+      autocompleteDirectionsHandler.destinationPlaceId = null;
+      document.getElementById("origin-input").value = "";
+      document.getElementById("destination-input").value = "";
 
-        // Since we are starting over, the next click should set the origin
-        origin = null; // Explicitly reset origin to null
+      origin = null;
     }
 
     const clickedLocation = event.latLng;
 
     try {
-        const geocodeResult = await geocoder.geocode({ location: clickedLocation });
+      const geocodeResult = await geocoder.geocode({
+        location: clickedLocation,
+      });
 
-        if (geocodeResult.results.length === 0) {
-            throw new Error("Geocoding failed to find a valid address.");
-        }
+      if (geocodeResult.results.length === 0) {
+        throw new Error("A geocodificação falhou ao encontrar um endereço válido.");
+      }
 
-        const placeId = geocodeResult.results[0].place_id;
-        const formattedAddress = geocodeResult.results[0].formatted_address;
+      const placeId = geocodeResult.results[0].place_id;
+      const formattedAddress = geocodeResult.results[0].formatted_address;
 
-        if (!autocompleteDirectionsHandler.originPlaceId) { 
-            origin = placeId;
-            document.getElementById("origin-input").value = formattedAddress;
-            autocompleteDirectionsHandler.originPlaceId = placeId;
-        } else if (!autocompleteDirectionsHandler.destinationPlaceId) { 
-            destination = placeId;
-            document.getElementById("destination-input").value = formattedAddress;
-            autocompleteDirectionsHandler.destinationPlaceId = placeId;
-        }
+      if (!autocompleteDirectionsHandler.originPlaceId) {
+        origin = placeId;
+        document.getElementById("origin-input").value = formattedAddress;
+        autocompleteDirectionsHandler.originPlaceId = placeId;
+      } else if (!autocompleteDirectionsHandler.destinationPlaceId) {
+        destination = placeId;
+        document.getElementById("destination-input").value = formattedAddress;
+        autocompleteDirectionsHandler.destinationPlaceId = placeId;
+      }
     } catch (error) {
-        alert("Error finding address: " + error.message);
-        return;
+      alert("Erro ao encontrar endereço: " + error.message);
+      return;
     }
 
-    // If both origin and destination are set, calculate route
-    if (autocompleteDirectionsHandler.originPlaceId && autocompleteDirectionsHandler.destinationPlaceId) {
-        try {
-            autocompleteDirectionsHandler.route();
-
-            // Reset origin and destination so the user can input another route.
-            origin = null;
-            destination = null;
-
-        } catch (error) {
-            alert("Error calculating route: " + error.message);
-        }
+    if (
+      autocompleteDirectionsHandler.originPlaceId &&
+      autocompleteDirectionsHandler.destinationPlaceId
+    ) {
+      try {
+        autocompleteDirectionsHandler.route();
+        origin = null;
+        destination = null;
+      } catch (error) {
+        alert("Erro ao calcular a rota: " + error.message);
+      }
     }
-});
+  });
 }
 
 class AutocompleteDirectionsHandler {
@@ -452,7 +428,6 @@ class AutocompleteDirectionsHandler {
   directionsService;
   directionsRenderer;
   fetchAndDisplayRoutes;
-  //trafficLayer;
   constructor(map) {
     this.map = map;
     this.originPlaceId = "";
@@ -460,9 +435,8 @@ class AutocompleteDirectionsHandler {
     this.travelMode = google.maps.TravelMode.WALKING;
     this.directionsService = new google.maps.DirectionsService();
     this.directionsRenderer = new google.maps.DirectionsRenderer();
-    this.unitSystem = null; // Default to metric
+    this.unitSystem = null;
     this.fetchAndDisplayRoutes = fetchAndDisplayRoutes;
-    //this.trafficLayer = new google.maps.TrafficLayer();
 
     this.directionsRenderer.setMap(map);
     sidebar = document.getElementById("sidebar");
@@ -471,7 +445,6 @@ class AutocompleteDirectionsHandler {
     const originInput = document.getElementById("origin-input");
     const destinationInput = document.getElementById("destination-input");
 
-    // Specify just the place data fields that you need.
     const originAutocomplete = new google.maps.places.Autocomplete(
       originInput,
       { fields: ["place_id"] }
@@ -532,7 +505,6 @@ class AutocompleteDirectionsHandler {
       '#unit-system input[type="radio"]'
     );
 
-    // Get references to the H4 elements
     const arrivalH4 = arrivalInput.previousElementSibling;
     const departureH4 = departureInput.previousElementSibling;
 
@@ -547,37 +519,34 @@ class AutocompleteDirectionsHandler {
         document.getElementById("avoid-highways").style.display = "block";
         document.getElementById("avoid-tolls").style.display = "block";
         document.getElementById("avoid-ferries").style.display = "block";
-        //trafficLayer.setMap(map);
       } else if (
         mode === google.maps.TravelMode.WALKING ||
         mode === google.maps.TravelMode.BICYCLING
       ) {
         avoidOptionsDiv.style.display = "block";
-        document.getElementById("avoid-highways").style.display = "none"; // Hide highways for walking/bicycling
-        document.getElementById("avoid-tolls").style.display = "none"; // Hide tolls for walking/bicycling
+        document.getElementById("avoid-highways").style.display = "none";
+        document.getElementById("avoid-tolls").style.display = "none";
         document.getElementById("avoid-ferries").style.display = "block";
-        //trafficLayer.setMap(null);
       } else {
         avoidOptionsDiv.style.display = "none";
         document.getElementById("avoid-highways").style.display = "none";
         document.getElementById("avoid-tolls").style.display = "none";
         document.getElementById("avoid-ferries").style.display = "none";
-        //trafficLayer.setMap(null);
       }
 
       if (mode === google.maps.TravelMode.DRIVING) {
         departureInput.style.display = "block";
-        departureH4.style.display = "block"; // Show H4 for departure
+        departureH4.style.display = "block";
         arrivalInput.style.display = "none";
-        arrivalH4.style.display = "none"; // Hide H4 for arrival
+        arrivalH4.style.display = "none";
         arrivalInput.value = "";
         transit_options.style.display = "none";
         document.getElementById("unit-system").style.display = "block";
       } else if (mode === google.maps.TravelMode.TRANSIT) {
         arrivalInput.style.display = "block";
-        arrivalH4.style.display = "block"; // Show H4 for arrival
+        arrivalH4.style.display = "block";
         departureInput.style.display = "block";
-        departureH4.style.display = "block"; // Show H4 for departure
+        departureH4.style.display = "block";
         transit_options.style.display = "block";
         document.getElementById("unit-system").style.display = "none";
         unitSystemRadios.forEach((radio) => {
@@ -585,9 +554,9 @@ class AutocompleteDirectionsHandler {
         });
       } else {
         arrivalInput.style.display = "none";
-        arrivalH4.style.display = "none"; // Hide H4 for arrival
+        arrivalH4.style.display = "none";
         departureInput.style.display = "none";
-        departureH4.style.display = "none"; // Hide H4 for departure
+        departureH4.style.display = "none";
         arrivalInput.value = "";
         departureInput.value = "";
         transit_options.style.display = "none";
@@ -602,11 +571,11 @@ class AutocompleteDirectionsHandler {
       const currentTime = new Date();
       const selectedTime = new Date(departureInput.value);
       if (selectedTime < currentTime) {
-        departureInput.value = ""; // Clear input if selected time is in the past
-        alert("Data introduzida do passado, volte a introduzir.");
+        departureInput.value = "";
+        alert("A data inserida é anterior à data atual. Por favor, insira uma data válida.");
       } else {
-        this.route(); // Update route on input change
-        document.getElementById("arrival-time").value = ""; // Clear arrival time
+        this.route();
+        document.getElementById("arrival-time").value = "";
       }
     });
     if (departureInput.value) {
@@ -622,10 +591,10 @@ class AutocompleteDirectionsHandler {
       const selectedTime = new Date(arrivalInput.value);
       if (selectedTime < currentTime) {
         arrivalInput.value = "";
-        alert("Data introduzida do passado, volte a introduzir."); // Clear input if selected time is in the past
+        alert("A data inserida é anterior à data atual. Por favor, insira uma data válida.");
       } else {
-        this.route(); // Update route on input change
-        document.getElementById("departure-time").value = ""; // Clear departure time
+        this.route();
+        document.getElementById("departure-time").value = "";
       }
     });
     if (arrivalInput.value) {
@@ -635,7 +604,6 @@ class AutocompleteDirectionsHandler {
   }
 
   getTransitOptions() {
-    // Get references to the checkboxes and radio buttons
     const modeCheckboxes = document.querySelectorAll(
       '#transit-options input[type="checkbox"]'
     );
@@ -643,20 +611,18 @@ class AutocompleteDirectionsHandler {
       '#transit-options input[type="radio"]'
     );
 
-    // Add event listeners to detect changes
     modeCheckboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
-        this.route(); // Update the route when a checkbox changes
+        this.route();
       });
     });
 
     routingPreferenceRadios.forEach((radio) => {
       radio.addEventListener("change", () => {
-        this.route(); // Update the route when a radio button changes
+        this.route();
       });
     });
 
-    // Function to collect selected options (unchanged)
     const getSelectedOptions = () => {
       const selectedModes = [];
       modeCheckboxes.forEach((checkbox) => {
@@ -678,8 +644,6 @@ class AutocompleteDirectionsHandler {
       };
     };
 
-    // No need to return the options directly, as they are now accessed through getSelectedOptions()
-    // Instead, return a function to get the options when needed
     return getSelectedOptions;
   }
 
@@ -704,14 +668,13 @@ class AutocompleteDirectionsHandler {
   setupPlaceChangedListener(autocomplete, mode) {
     autocomplete.bindTo("bounds", this.map);
 
-    // Remove existing 'place_changed' listeners
     google.maps.event.clearListeners(autocomplete, "place_changed");
 
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
 
       if (!place.place_id) {
-        window.alert("Please choose an option from the list.");
+        window.alert("Por favor, escolha uma opção da lista.");
         return;
       }
 
@@ -736,8 +699,8 @@ class AutocompleteDirectionsHandler {
       document.getElementById("destination-input").value = "";
       document.getElementById("arrival-time").value = "";
       document.getElementById("departure-time").value = "";
-      this.directionsRenderer.setDirections({ routes: [] }); // Clear directions
-      clearButton.style.display = "none"; // Hide the clear button after clearing the route
+      this.directionsRenderer.setDirections({ routes: [] });
+      clearButton.style.display = "none";
       saveButton.style.display = "none";
     });
   }
@@ -746,11 +709,9 @@ class AutocompleteDirectionsHandler {
     const swapButton = document.getElementById(id);
 
     swapButton.addEventListener("click", () => {
-      // Get input elements
       const originInput = document.getElementById("origin-input");
       const destinationInput = document.getElementById("destination-input");
 
-      // Remove existing Autocomplete instances (if any)
       if (originInput.autocomplete) {
         google.maps.event.clearInstanceListeners(originInput.autocomplete);
         originInput.autocomplete = null;
@@ -760,20 +721,17 @@ class AutocompleteDirectionsHandler {
         destinationInput.autocomplete = null;
       }
       console.log("Antes: " + originInput.value, destinationInput.value);
-      // Swap the values of the input fields
       [originInput.value, destinationInput.value] = [
         destinationInput.value,
         originInput.value,
       ];
       console.log("Depois: " + originInput.value, destinationInput.value);
 
-      // Swap the place IDs
       [this.originPlaceId, this.destinationPlaceId] = [
         this.destinationPlaceId,
         this.originPlaceId,
       ];
 
-      // Re-initialize Autocomplete for both inputs
       const originAutocomplete = new google.maps.places.Autocomplete(
         originInput,
         { fields: ["place_id"] }
@@ -783,11 +741,9 @@ class AutocompleteDirectionsHandler {
         { fields: ["place_id"] }
       );
 
-      // Set up place changed listeners for the re-initialized Autocomplete instances
       this.setupPlaceChangedListener(originAutocomplete, "ORIG");
       this.setupPlaceChangedListener(destinationAutocomplete, "DEST");
 
-      // Recalculate and display the route
       this.route();
     });
   }
@@ -803,10 +759,9 @@ class AutocompleteDirectionsHandler {
       destination: { placeId: this.destinationPlaceId },
       travelMode: this.travelMode,
       provideRouteAlternatives: true,
-      unitSystem: this.unitSystem, // Add the unitSystem property to the request
+      unitSystem: this.unitSystem,
     };
 
-    // Only include transit options if transit mode is selected
     if (this.travelMode === google.maps.TravelMode.TRANSIT) {
       request.transitOptions = {
         arrivalTime: this.getArrivalTime(),
@@ -816,7 +771,6 @@ class AutocompleteDirectionsHandler {
       request.unitSystem = google.maps.UnitSystem.METRIC;
     }
 
-    // Only include driving options if driving mode is selected AND departure time is set
     if (
       this.travelMode === google.maps.TravelMode.DRIVING &&
       this.getDepartureTime()
@@ -825,7 +779,7 @@ class AutocompleteDirectionsHandler {
       request.avoidTolls = this.getAvoidOptions().avoidTolls;
       request.avoidFerries = this.getAvoidOptions().avoidFerries;
       request.drivingOptions = {
-        departureTime: this.getDepartureTime(), // Requires Google Maps Platform Premium Plan
+        departureTime: this.getDepartureTime(),
       };
     }
 
@@ -837,7 +791,7 @@ class AutocompleteDirectionsHandler {
       this.travelMode === google.maps.TravelMode.WALKING ||
       this.travelMode === google.maps.TravelMode.BICYCLING
     ) {
-      request.avoidFerries = this.getAvoidOptions().avoidFerries; // Only apply ferries for walking/bicycling
+      request.avoidFerries = this.getAvoidOptions().avoidFerries;
     }
 
     document.getElementById("save").addEventListener("click", async () => {
@@ -845,20 +799,20 @@ class AutocompleteDirectionsHandler {
         const response = await fetch("http://127.0.0.1:420/routes", {
           method: "POST",
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded", // Send as JSON
+            "Content-Type": "application/x-www-form-urlencoded",
             Authorization: getCookie("token"),
           },
-          body: JSON.stringify(request), // Send the entire request object
+          body: JSON.stringify(request),
         });
         console.log(JSON.stringify(request));
 
         if (response.ok) {
           fetchAndDisplayRoutes();
         } else {
-          console.error(`Failed to save route: ${response.statusText}`);
+          console.error(`Falha ao salvar a rota: ${response.statusText}`);
         }
       } catch (error) {
-        console.error("Error saving route:", error);
+        console.error("Erro ao salvar a rota:", error);
       }
     });
 
@@ -868,9 +822,9 @@ class AutocompleteDirectionsHandler {
         document.getElementById("clear-directions").style.display = "block";
         document.getElementById("save").style.display = "block";
       } else if (status === "ZERO_RESULTS") {
-        window.alert("Sem resultados."); // Display a different message for ZERO_RESULTS
+        window.alert("Sem resultados.");
       } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {
-        window.alert("A rota excede o comprimento máximo permitido."); // Display a message for MAX_ROUTE_LENGTH_EXCEEDED
+        window.alert("A rota excede o comprimento máximo permitido.");
       } else {
         window.alert("Pedido falhou com erro: " + status);
       }

@@ -29,13 +29,12 @@ async function validateToken() {
     const token = getCookie('token');
     
     if (!token) {
-        // Token not found, redirect to login page
         if (!window.location.pathname.includes('login.html') && !window.location.pathname.includes('register.html') && !window.location.pathname.includes('profile.html')) {
             window.location.href = "../../pages/auth/login.html";
         } else if (window.location.pathname.includes('profile.html')) {
             window.location.href = "../../pages/auth/login.html";
         }
-        return; // Exit function
+        return;
     }
     
     try {
@@ -45,10 +44,10 @@ async function validateToken() {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    console.log('Token is valid');
+                    console.log('Token válido');
                 } else {
-                    console.log('Token is not valid');
-                    // Token is not valid, delete the token cookie and redirect to login page
+                    console.log('Token não válido');
+
                     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
                     window.location.href = "../../pages/auth/login.html";
                 }
@@ -56,7 +55,7 @@ async function validateToken() {
         };
         xhr.send();
     } catch (error) {
-        console.error('Error validating token:', error);
+        console.error('Erro ao validar token:', error);
     }
 }
 

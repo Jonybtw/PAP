@@ -16,7 +16,7 @@ export const Routes = {
             if (!request.params.idUser) {
                 id = request.id;
             } else if (request.params.idUser.length !== 24) {
-                response.status(404).json("Not Valid");
+                response.status(404).json("Não válido");
                 return;
             } else {
                 id = request.params.idUser;
@@ -30,7 +30,7 @@ export const Routes = {
             };
             let result = await collectionUsers.findOne(query, projection);
             if (!result) {
-                response.status(404).json("Not Found User");
+                response.status(404).json("Utilizador não encontrado");
                 return;
             } else {
                 let queryRoutes = { _id: new ObjectId(result.data?.routes) };
@@ -43,7 +43,6 @@ export const Routes = {
 
                 let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
                 if (!resultRoutes) {
-                    // Create a new routes document if not found
                     resultRoutes = { _id: new ObjectId(), routes: [] };
                     await collectionRoutes.insertOne(resultRoutes);
 
@@ -52,7 +51,6 @@ export const Routes = {
                         { $set: { "data.routes": resultRoutes._id.toString() } }
                     );
                 }
-                // Add new route to the routes array
                 resultRoutes.routes.push({
                     _id: new ObjectId(),
                     Start: requestData?.origin?.placeId,
@@ -67,7 +65,7 @@ export const Routes = {
                 };
                 let resultUpdate = await collectionRoutes.updateOne(queryUpdate, update);
                 if (!resultUpdate) {
-                    response.status(404).json("Not Found Update");
+                    response.status(404).json("Atualização não encontrada");
                     return;
                 } else {
                     response.status(200).json(resultRoutes.routes);
@@ -75,8 +73,8 @@ export const Routes = {
                 }
             }
         } catch (error) {
-            console.error('Error creating route:', error);
-            response.status(500).json({ message: 'Internal server error' });
+            console.error('Erro ao criar rota:', error);
+            response.status(500).json({ message: 'Erro interno do servidor' });
         }
     },
 
@@ -86,7 +84,7 @@ export const Routes = {
             if (!request.params.idUser) {
                 id = request.id;
             } else if (request.params.idUser.length !== 24) {
-                response.status(404).json("Not Valid");
+                response.status(404).json("Não válido");
                 return;
             } else {
                 id = request.params.idUser;
@@ -100,7 +98,7 @@ export const Routes = {
             };
             let result = await collectionUsers.findOne(query, projection);
             if (!result) {
-                response.status(404).json("Not Found User");
+                response.status(404).json("Utilizador não encontrado");
                 return;
             } else {
                 let queryRoutes = { _id: new ObjectId(result.data?.routes) };
@@ -113,7 +111,7 @@ export const Routes = {
 
                 let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
                 if (!resultRoutes) {
-                    response.status(404).json("Not Found Routes");
+                    response.status(404).json("Rotas não encontradas");
                     return;
                 } else {
                     response.status(200).json(resultRoutes.routes);
@@ -121,8 +119,8 @@ export const Routes = {
                 }
             }
         } catch (error) {
-            console.error("Error getting all routes:", error);
-            response.status(500).json({ message: "Internal server error" });
+            console.error("Erro ao obter todas as rotas:", error);
+            response.status(500).json({ message: "Erro interno do servidor" });
         }
     },
 
@@ -130,48 +128,45 @@ export const Routes = {
         try {
             let userId;
             if (!request.params.idUser) {
-                userId = request.id; // Assuming you have a mechanism to get the userId from the request
+                userId = request.id;
             } else if (request.params.idUser.length !== 24) {
-                response.status(404).json("Not Valid User ID");
+                response.status(404).json("ID de Utilizador Inválido");
                 return;
             } else {
                 userId = request.params.idUser;
             }
 
-            const routeId = request.params.id; // Get the route ID from the route parameter
+            const routeId = request.params.id;
 
-            // Fetch user data
             let query = { _id: new ObjectId(userId) };
             let projection = { projection: { _id: 1, data: 1 } };
             let result = await collectionUsers.findOne(query, projection);
 
             if (!result) {
-                response.status(404).json("Not Found User");
+                response.status(404).json("Utilizador não encontrado");
                 return;
             }
 
-            // Fetch routes data
             let queryRoutes = { _id: new ObjectId(result.data?.routes) };
             let projectionRoutes = { projection: { _id: 1, routes: 1 } };
             let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
 
             if (!resultRoutes) {
-                response.status(404).json("Not Found Routes");
+                response.status(404).json("Rotas não encontradas");
                 return;
             }
 
-            // Find the specific route
             const route = resultRoutes.routes.find(r => r._id.toString() === routeId);
 
             if (!route) {
-                response.status(404).json("Not Found Route");
+                response.status(404).json("Rota não encontrada");
                 return;
             }
 
             response.status(200).json(route);
         } catch (error) {
-            console.error("Error getting route by ID:", error);
-            response.status(500).json({ message: "Internal server error" });
+            console.error("Erro ao obter rota por ID:", error);
+            response.status(500).json({ message: "Erro interno do servidor" });
         }
     },
 
@@ -179,106 +174,97 @@ export const Routes = {
         try {
             let userId;
             if (!request.params.idUser) {
-                userId = request.id; // Assuming you have a mechanism to get the userId from the request
+                userId = request.id;
             } else if (request.params.idUser.length !== 24) {
-                response.status(404).json("Not Valid User ID");
+                response.status(404).json("ID de Utilizador Inválido");
                 return;
             } else {
                 userId = request.params.idUser;
             }
-    
-            const routeId = request.params.id; // Get the route ID from the route parameter
-    
-            // Form-encoded data validation
+
+            const routeId = request.params.id;
+
             if (!request.body.Start || !request.body.End) {
-                response.status(400).json("Invalid input data");
+                response.status(400).json("Dados de entrada inválidos");
                 return;
             }
-    
-            // Fetch user data
+
             let query = { _id: new ObjectId(userId) };
             let projection = { projection: { _id: 1, data: 1 } };
             let result = await collectionUsers.findOne(query, projection);
-    
+
             if (!result) {
-                response.status(404).json("Not Found User");
+                response.status(404).json("Utilizador não encontrado");
                 return;
             }
-    
-            // Fetch routes data
+
             let queryRoutes = { _id: new ObjectId(result.data?.routes) };
             let projectionRoutes = { projection: { _id: 1, routes: 1 } };
             let resultRoutes = await collectionRoutes.findOne(queryRoutes, projectionRoutes);
-    
+
             if (!resultRoutes) {
-                response.status(404).json("Not Found Routes");
+                response.status(404).json("Rotas não encontradas");
                 return;
             }
-    
-            // Find the specific route and update it
+
             const routeIndex = resultRoutes.routes.findIndex(r => r._id.toString() === routeId);
             if (routeIndex === -1) {
-                response.status(404).json("Not Found Route");
+                response.status(404).json("Rota não encontrada");
                 return;
             }
-    
-            // Update the route in the array
+
             resultRoutes.routes[routeIndex].Start = request.body.Start;
             resultRoutes.routes[routeIndex].End = request.body.End;
-    
-            // Update the routes document in the database
+
             await collectionRoutes.updateOne(
                 { _id: resultRoutes._id },
                 { $set: { routes: resultRoutes.routes } }
             );
-    
-            response.status(200).json(resultRoutes.routes[routeIndex]); // Return the updated route
+
+            response.status(200).json(resultRoutes.routes[routeIndex]);
         } catch (error) {
-            console.error("Error updating route:", error);
-            response.status(500).json({ message: "Internal server error" });
+            console.error("Erro ao atualizar rota:", error);
+            response.status(500).json({ message: "Erro interno do servidor" });
         }
     },
 
     delete: async (request, response) => {
         try {
-            const routeId = request.params.id; // Get route ID directly from :id parameter
+            const routeId = request.params.id;
 
-            // Convert the routeId to ObjectId for comparison
             let objectIdRouteId;
             try {
                 objectIdRouteId = new ObjectId(routeId);
             } catch (error) {
-                response.status(400).json("Invalid Route ID");
+                response.status(400).json("ID de Rota Inválido");
                 return;
             }
-            // Fetch routes data directly using routeId
+
             let queryRoutes = { "routes._id": objectIdRouteId };
             let resultRoutes = await collectionRoutes.findOne(queryRoutes);
 
             if (!resultRoutes) {
-                response.status(404).json("Not Found Routes");
+                response.status(404).json("Rotas não encontradas");
                 return;
             }
 
-            // Find the specific route and remove it (using filter method)
             const originalRoutesLength = resultRoutes.routes.length;
             resultRoutes.routes = resultRoutes.routes.filter(r => !r._id.equals(objectIdRouteId));
 
             if (resultRoutes.routes.length === originalRoutesLength) {
-                response.status(404).json("Not Found Route");
+                response.status(404).json("Rota não encontrada");
                 return;
             }
 
-            // Update the routes document in the database
             await collectionRoutes.updateOne(
                 { _id: resultRoutes._id },
                 { $set: { routes: resultRoutes.routes } }
             );
 
-            response.status(200).json(resultRoutes.routes); // Return the updated routes array
+            response.status(200).json(resultRoutes.routes);
         } catch (error) {
-            console.error("Error deleting route:", error);
-            response.status(500).json({ message: "Internal server error" });
+            console.error("Erro ao eliminar rota:", error);
+            response.status(500).json({ message: "Erro interno do servidor" });
         }
     },
 };

@@ -9,22 +9,27 @@ header {
   gap: 10px;
 }
 
+.search-div, #rotas, #routeInfo {
+  width: 30vw;
+}
+
+#routeInfo {
+  padding: 0 !important;
+}
+
 #rotas {
-  width: 25vw;
-  height: 100vh;
+  height: 85vh;
   padding: 10px;
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  border: 1px solid black;
 }
 
 #mapa {
   width: 75vw;
-  height: 100vh;
-  padding: 10px;
+  height: 90vh;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border: 1px solid black;
+  overflow: hidden;
 }
 
 .gm-iv-address div{
@@ -62,18 +67,6 @@ header {
   margin: 0;
 }
 
-#origin-input,
-#destination-input {
-  background-color: #fff;
-  font-size: 15px;
-  margin-left: 12px;
-}
-
-#origin-input:focus,
-#destination-input:focus {
-  border-color: #4d90fe;
-}
-
 #mode-selector * {
   color: #333 !important;
 }
@@ -81,7 +74,6 @@ header {
 #mode-selector {
   background-color: #4d90fe;
   padding: 15px;
-  max-width: fit-content;
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 15px;
@@ -103,6 +95,7 @@ header {
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
+  max-height: 85vh;
 }
 
 #sidebar {
@@ -249,7 +242,6 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 #origin-input.controls.pac-target-input, #destination-input.controls.pac-target-input {
   margin-left: 0px;
   width: 75%;
-  margin: 8px 0;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
@@ -291,20 +283,6 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 
 #save:hover {
   background-color: rgb(20, 0, 92);
-}
-
-#swap-places {
-  background-color: rgb(0, 174, 255);
-  border: none;
-  padding: 7.5px;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#swap-places:hover {
-  background-color: rgb(0, 155, 226);
 }
 
 b{

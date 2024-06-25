@@ -1,6 +1,9 @@
 var map;
 var autocompleteDirectionsHandler;
 
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 const { Map } = await google.maps.importLibrary("maps");
 const { Geocoder } = await google.maps.importLibrary("geocoding");
 const geocoder = new google.maps.Geocoder();
@@ -22,7 +25,7 @@ async function geocodePlaceId(geocoder, placeId) {
 
 async function fetchAndDisplayRoutes() {
   const div = document.getElementById("routeList");
-
+  div.style.padding = 0;
   div.innerHTML = "";
 
   try {
@@ -126,6 +129,8 @@ function filterRoutes() {
     document.getElementById("searchBox").value.toLowerCase()
   );
   const routeListItems = document.querySelectorAll("#routeList li");
+  const noResultsMessage = document.getElementById("noResultsMessage");
+  let hasResults = false;
 
   routeListItems.forEach((item) => {
     const routeDiv = item.querySelector(".route");
@@ -139,7 +144,11 @@ function filterRoutes() {
     const isMatch =
       startAddress.includes(searchTerm) || endAddress.includes(searchTerm);
     item.style.display = isMatch ? "" : "none";
+    if (isMatch) {
+      hasResults = true;
+    }
   });
+  noResultsMessage.style.display = hasResults ? "none" : "block";
 }
 
 function normalizeString(str) {
@@ -247,6 +256,7 @@ async function initMap() {
 
   document.getElementById("clear-directions").style.display = "none";
   document.getElementById("save").style.display = "none";
+  document.getElementById("noRouteFound").style.display = "block";
   document.getElementById("avoid-options").style.display = "none";
   document.getElementById("transit-options").style.display = "none";
   document.getElementById("unit-system").style.display = "none";
@@ -439,7 +449,7 @@ class AutocompleteDirectionsHandler {
     this.fetchAndDisplayRoutes = fetchAndDisplayRoutes;
 
     this.directionsRenderer.setMap(map);
-    sidebar = document.getElementById("sidebar");
+    this.sidebar = document.getElementById("sidebar");
     this.directionsRenderer.setPanel(sidebar);
 
     const originInput = document.getElementById("origin-input");
@@ -695,6 +705,7 @@ class AutocompleteDirectionsHandler {
     clearButton.addEventListener("click", () => {
       this.originPlaceId = "";
       this.destinationPlaceId = "";
+      document.getElementById("noRouteFound").style.display = "block";
       document.getElementById("origin-input").value = "";
       document.getElementById("destination-input").value = "";
       document.getElementById("arrival-time").value = "";
@@ -821,6 +832,7 @@ class AutocompleteDirectionsHandler {
         me.directionsRenderer.setDirections(response);
         document.getElementById("clear-directions").style.display = "block";
         document.getElementById("save").style.display = "block";
+        document.getElementById("noRouteFound").style.display = "none";
       } else if (status === "ZERO_RESULTS") {
         window.alert("Sem resultados.");
       } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {

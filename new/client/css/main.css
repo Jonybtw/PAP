@@ -3,6 +3,7 @@
   --secondary-color: whitesmoke;
   --background-color: #333;
   --text-color: whitesmoke;
+  --main-color: #3498db; /* Add main color variable */
 }
 
 @font-face {
@@ -37,9 +38,12 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: fixed;
+  position: sticky;
+  top: 0; /* Stick the header to the top of the viewport */
+  z-index: 999; /* Ensure the header stays above other content */
   width: 100%;
 }
+
 
 header section {
   display: flex;
@@ -66,9 +70,100 @@ html {
 
 main {
   background-color: var(--secondary-color);
-  min-width: 100%;
-  min-height: 100dvh;
+  color: var(--text-color);
   padding-top: 4rem;
+  padding: 40px 20px;
+  font-family: proxima, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.slogan {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.slogan .title {
+  font-size: 3em;
+  color: black;
+}
+
+.slogan .wise {
+  color: var(--main-color);
+}
+
+.slogan .tagline {
+  font-size: 1.5em;
+  color: black;
+}
+
+.slogan .blue {
+  color: var(--main-color);
+}
+
+.proposta-de-valor {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.proposta-de-valor h2 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.pontos-de-valor {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.ponto {
+  flex: 1;
+  margin: 10px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.ponto h3 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.ponto p {
+  color: var(--background-color);
+}
+
+.chamada-para-acao {
+  text-align: center;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 40px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chamada-para-acao h2 {
+  margin-bottom: 20px;
+}
+
+.chamada-para-acao p {
+  margin-bottom: 20px;
+}
+
+.chamada-para-acao .botao-cta {
+  display: inline-block;
+  background-color: var(--text-color);
+  color: var(--primary-color);
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.chamada-para-acao .botao-cta:hover {
+  background-color: #e6e6e6;
 }
 
 footer {
@@ -202,27 +297,6 @@ footer nav {
   background-color: #2980b9;
 }
 
-.title {
-  padding-top: 25px;
-  color: black;
-}
-
-.tagline {
-  color: black;
-}
-
-.wise{
-  color: var(--main-color);
-}
-
-.blue {
-  color: var(--main-color);
-}
-
-.slogan{
-  text-align: center;
-}
-
 .logoutButton, .delete-button{
   background-color: red;
   color: white;
@@ -342,6 +416,6 @@ select {
   color: #000000;
 }
 
-select option{
-  color:#000000;
+select option {
+  color: #000000;
 }

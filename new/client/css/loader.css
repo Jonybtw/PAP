@@ -9,7 +9,7 @@
   justify-content: center;
   background: #333333;
   transition: opacity 0.75s, visibility 0.75s;
-  z-index: 1000; /* Ensure it's on top of other content */
+  z-index: 1000;
 }
 
 .loader--hidden {

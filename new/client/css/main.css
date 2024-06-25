@@ -3,7 +3,7 @@
   --secondary-color: whitesmoke;
   --background-color: #333;
   --text-color: whitesmoke;
-  --main-color: #3498db; /* Add main color variable */
+  --main-color: #3498db;
 }
 
 @font-face {
@@ -39,8 +39,8 @@ header {
   align-items: center;
   justify-content: space-between;
   position: sticky;
-  top: 0; /* Stick the header to the top of the viewport */
-  z-index: 999; /* Ensure the header stays above other content */
+  top: 0;
+  z-index: 999;
   width: 100%;
 }
 
@@ -74,6 +74,7 @@ main {
   padding-top: 4rem;
   padding: 40px 20px;
   font-family: proxima, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  
 }
 
 .slogan {
@@ -109,7 +110,7 @@ main {
 
 .proposta-de-valor h2 {
   text-align: center;
-  color: var(--primary-color);
+  color: var(--main-color);
   margin-bottom: 20px;
 }
 
@@ -127,7 +128,7 @@ main {
 }
 
 .ponto h3 {
-  color: var(--primary-color);
+  color: var(--main-color);
   margin-bottom: 10px;
 }
 
@@ -137,7 +138,7 @@ main {
 
 .chamada-para-acao {
   text-align: center;
-  background-color: var(--primary-color);
+  background-color: var(--main-color);
   color: var(--text-color);
   padding: 40px 20px;
   border-radius: 8px;
@@ -155,7 +156,7 @@ main {
 .chamada-para-acao .botao-cta {
   display: inline-block;
   background-color: var(--text-color);
-  color: var(--primary-color);
+  color: var(--main-color);
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;

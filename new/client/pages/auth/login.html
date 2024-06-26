@@ -29,6 +29,11 @@
                 <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput" required>
                 <input type="password" placeholder="Palavra-passe" class="password" id="passwordInput" required>
             </div>
+            <div class="remember-me">  
+                <input type="checkbox" id="rememberMeCheckbox">
+                <label for="rememberMeCheckbox">Lembrar-me</label>
+            </div>
+            <br>
             <button class="search-button" type="submit" onclick="loginFunc()">Iniciar Sessão</button>
             <br><br>
             <p>Não tenho conta, <a href="register.html">criar uma</a>.</p>
@@ -48,6 +53,7 @@
         function loginFunc() {
             const username = document.getElementById('usernameInput');
             const password = document.getElementById('passwordInput');
+            const rememberMe = document.getElementById('rememberMeCheckbox').checked;
 
             if (!username.value || !password.value) {
                 alert('Por favor, insira o nome de utilizador e a palavra-passe.');
@@ -57,6 +63,7 @@
                 var data = new URLSearchParams();
                 data.append('username', username.value);
                 data.append('password', password.value);
+                data.append('rememberMe', rememberMe);
 
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4) {

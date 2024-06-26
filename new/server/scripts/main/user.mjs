@@ -156,7 +156,7 @@ export const User = {
     delete: () => { },
 
     login: async (request, response) => {
-        let { username, password } = request.body;
+        let { username, password, rememberMe } = request.body;
         if (!username) { response.status(401).json('Insira o nome de utilizador!'); return; }
         else if (!password) { response.status(401).json('Insira a palavra-passe!'); return; }
         else {
@@ -165,14 +165,14 @@ export const User = {
             if (!result) response.status(401).json('Utilizador não encontrado!');
             else if (!bcrypt.compareSync(password, result.auth.password)) response.status(401).json('Inválido!');
             else {
+                let expiresIn = request.body.rememberMe === 'true' ? '7d' : '5h';
                 jwt.sign(
                     {
                         id: encrypt(new ObjectId(result._id).toString()),
                         username: encrypt(result.data.username)
                     },
                     process.env.SECRET_TOKEN_KEY,
-
-                    { expiresIn: '30d' },
+                    { expiresIn },
                     (error, token) => {
                         if (error) throw error;
                         response.status(200).json(token);

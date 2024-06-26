@@ -142,21 +142,13 @@ export const User = {
       } = request.body ?? {};
 
       const updateFields = {};
-      if (name !== undefined)
-        updateFields["data.name"] = name ? encrypt(name) : "";
-      if (birth !== undefined)
-        updateFields["data.birth"] = birth ? encrypt(birth) : "";
-      if (address !== undefined)
-        updateFields["data.address"] = address ? encrypt(address) : "";
-      if (email !== undefined)
-        updateFields["contacts.email"] = email ? encrypt(email) : "";
-      if (phone !== undefined)
-        updateFields["contacts.phone"] = phone ? encrypt(phone) : "";
-      if (isDarkMode !== undefined)
-        updateFields["settings.isDarkMode"] =
-          isDarkMode !== null ? JSON.parse(isDarkMode) : false;
-      if (mainColor !== undefined)
-        updateFields["settings.mainColor"] = mainColor ? mainColor : "";
+      if (name !== undefined) updateFields["data.name"] = name ? encrypt(name) : "";
+      if (birth !== undefined) updateFields["data.birth"] = birth ? encrypt(birth) : "";
+      if (address !== undefined) updateFields["data.address"] = address ? encrypt(address) : "";
+      if (email !== undefined) updateFields["contacts.email"] = email ? encrypt(email) : "";
+      if (phone !== undefined) updateFields["contacts.phone"] = phone ? encrypt(phone) : "";
+      if (isDarkMode !== undefined) updateFields["settings.isDarkMode"] = isDarkMode !== null ? JSON.parse(isDarkMode) : false;
+      if (mainColor !== undefined) updateFields["settings.mainColor"] = mainColor ? mainColor : "";
       if (password !== undefined && password !== "") {
         const hashedPassword = await bcrypt.hash(password, 12);
         updateFields["auth.password"] = hashedPassword;
@@ -230,29 +222,18 @@ export const User = {
     }
   },
 
-  forgotPassword: async (req, res) => {
-    const email = req.body.email;
+  forgotPassword: async (request, response) => {
+    const email = request.body.email;
 
     try {
       const users = await collectionUsers.find().toArray(); 
       const user = users.find(user => decrypt(user.contacts.email) === email);
 
       if (!user) {
-        return res.status(404).json("Não foi encontrado um utilizador com esse email.");
+        return response.status(404).json("Não foi encontrado um utilizador com esse email.");
       }
 
-      const resetToken = CryptoJS.lib.WordArray.random(20).toString(CryptoJS.enc.Hex); 
-
-      const resetTokenExpires = Date.now() + 3600000;
-      await collectionUsers.updateOne(
-        { _id: user._id },
-        {
-          $set: {
-            "auth.resetToken": resetToken,
-            "auth.resetTokenExpires": resetTokenExpires,
-          },
-        }
-      );
+      const resetToken = jwt.sign({ userId: user._id }, process.env.SECRET_TOKEN_KEY, { expiresIn: '1h' });
 
       const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
@@ -294,7 +275,7 @@ export const User = {
                 font-size: 24px; 
                 font-weight: bold; 
               }
-              .logo span { color: ${user.settings?.mainColor || '#007bff'}; } /* User's main color or default */
+              .logo span { color: ${user.settings?.mainColor || '#007bff'}; }
             </style>
           </head>
           <body>
@@ -321,52 +302,55 @@ export const User = {
       transporter.sendMail(message, (err, info) => {
         if (err) {
           console.log("Ocorreu um erro. " + err.message);
-          return res.status(500).json("Erro ao enviar email");
+          return response.status(500).json("Erro ao enviar email");
         }
 
         console.log("Email enviado: %s", info.messageId);
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-        res.json("Email enviado, verifique a sua caixa de entrada.");
+        response.json("Email enviado, verifique a sua caixa de entrada.");
       });
   } catch (error) {
       console.error(error);
-      res.status(500).json("Erro no servidor.");
+      response.status(500).json("Erro no servidor.");
   }
 },
 
-  resetPassword: async (req, res) => {
-    const resetToken = req.params.token;
-    const { password, confirmPassword } = req.body;
+resetPassword: async (request, response) => {
+  const resetToken = request.params.token; // Use params to extract token
+  const { password } = request.body;
 
-    try {
-        const user = await collectionUsers.findOne({
-            'auth.resetToken': resetToken,
-            'auth.resetTokenExpires': { $gt: Date.now() }
-        });
+  try {
+      const decodedToken = jwt.verify(resetToken, process.env.SECRET_TOKEN_KEY);
+      const userId = decodedToken.userId;
 
-        if (!user) {
-            return res.status(400).json('Inválido ou token expirado.');
-        }
+      let query = { _id: new ObjectId(userId) };
+      const user = await collectionUsers.findOne(query);
+      
+      if (!user) {
+          return response.status(404).json('Utilizador não encontrado.');
+      }
 
-        if (password !== confirmPassword) {
-            return res.status(400).json('Palavras-passe não coincidem.');
-        }
+      const hashedPassword = await bcrypt.hash(password, 12); 
 
-        const hashedPassword = await bcrypt.hash(password, 12); 
+      const updateResult = await collectionUsers.updateOne(
+          query,
+          { $set: { 'auth.password': hashedPassword } }
+      );
 
-        await collectionUsers.updateOne(
-            { _id: user._id },
-            { 
-                $set: { 'auth.password': hashedPassword },
-                $unset: { 'auth.resetToken': '', 'auth.resetTokenExpires': '' } 
-            }
-        );
+      if (updateResult.modifiedCount === 1) {
+          response.json('Palavra-passe redefinida com sucesso.'); 
+      } else {
+          response.status(404).json('Utilizador não encontrado.');
+      }
 
-        res.json('Palavra-passe redefinida com sucesso.');
-    } catch (error) {
-        console.error('Erro ao redefinir palavra-passe:', error);
-        res.status(500).json('Erro no servidor.');
-    }
-  },
+  } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+          return response.status(401).json('Token expirado.');
+      }
+      
+      console.error('Erro ao redefinir palavra-passe:', error);
+      response.status(500).json('Erro no servidor.'); 
+  }
+},
 };

@@ -289,6 +289,16 @@ async function initMap() {
     mapTypeControl: true,
   });
 
+  google.maps.event.addListenerOnce(map, "tilesloaded", function () {
+    const loader = document.querySelector(".loader");
+
+    loader.classList.add("loader--hidden");
+
+    loader.addEventListener("transitionend", () => {
+      loader.remove();
+    });
+  });
+
   autocompleteDirectionsHandler = new AutocompleteDirectionsHandler(map);
 
   let userLocationData = null;
@@ -409,7 +419,9 @@ async function initMap() {
       });
 
       if (geocodeResult.results.length === 0) {
-        throw new Error("A geocodificação falhou ao encontrar um endereço válido.");
+        throw new Error(
+          "A geocodificação falhou ao encontrar um endereço válido."
+        );
       }
 
       const placeId = geocodeResult.results[0].place_id;
@@ -596,7 +608,9 @@ class AutocompleteDirectionsHandler {
       const selectedTime = new Date(departureInput.value);
       if (selectedTime < currentTime) {
         departureInput.value = "";
-        alert("A data inserida é anterior à data atual. Por favor, insira uma data válida.");
+        alert(
+          "A data inserida é anterior à data atual. Por favor, insira uma data válida."
+        );
       } else {
         this.route();
         document.getElementById("arrival-time").value = "";
@@ -615,7 +629,9 @@ class AutocompleteDirectionsHandler {
       const selectedTime = new Date(arrivalInput.value);
       if (selectedTime < currentTime) {
         arrivalInput.value = "";
-        alert("A data inserida é anterior à data atual. Por favor, insira uma data válida.");
+        alert(
+          "A data inserida é anterior à data atual. Por favor, insira uma data válida."
+        );
       } else {
         this.route();
         document.getElementById("departure-time").value = "";

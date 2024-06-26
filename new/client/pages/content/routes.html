@@ -49,10 +49,11 @@
                       <i class="bi bi-arrow-down-up"></i>
                     </button>
                   </div>
-                  <button id="save" style="display: none;">Guardar Rota</button>
-                  <button id="clear-directions" style="display: none;">Limpar Rota</button>
+                  <div class="btn-group" role="group" aria-label="Basic mixed styles example" style="width: 100%; padding: 1rem 0;">
+                    <button type="button" class="btn btn-danger" id="save" disabled>Guardar Rota</button>
+                    <button type="button" class="btn btn-warning" id="clear-directions" disabled>Limpar Rota</button>
+                  </div>
                   <div id="mode-selector" class="controls">
-                    
                     <h4>Meio de Deslocação:</h4>
                     <input type="radio" name="type" id="changemode-driving" />
                     <label for="changemode-driving">Carro 🚗</label><br>
@@ -68,10 +69,9 @@
                     <h4 style="display: none;">Chegada á(s):</h4>
                     <input style="color: black;" type="datetime-local" min="" id="arrival-time">
                     </div>
-        
                   </div>
                   
-                  <div id="transit-options" style="display: none;"> 
+                  <div id="transit-options" style="display: none; width: 100%;min-width: 100%;"> 
                     <h3>Opções de Transporte Público</h3>
                     <h4>Preferência:</h4>
                     <input type="checkbox" id="mode-rail" value="RAIL">
@@ -91,13 +91,13 @@
                     <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
                     <label for="preference-less-walking">Menos trajetos a pé</label><br>
                   </div>
-                  <div id="avoid-options" style="display: none;">
+                  <div id="avoid-options" style="display: none;width: 100%;min-width: 100%;">
                     <h4>Evitar:</h4>
                     <label id="avoid-highways"><input type="checkbox" id="avoid-highways"> Auto-estradas</label>
                     <label id="avoid-tolls"><input type="checkbox" id="avoid-tolls"> Portagens</label>
                     <label id="avoid-ferries"><input type="checkbox" id="avoid-ferries"> Ferries</label>
                   </div>
-                  <div id="unit-system" style="display: none;">
+                  <div id="unit-system" style="display: none;width: 100%;min-width: 100%;">
                     <h4>Unidade de distância:</h4>
                     <input type="radio" id="metric" name="units" value="METRIC">
                     <label for="metric">km</label>
@@ -114,12 +114,12 @@
               </div>
             </div>
             <div class="tab-pane fade search-div" id="routes-tab-pane" role="tabpanel" aria-labelledby="routes-tab" tabindex="2">
-              <div style="padding: 10px; max-height: 85vh;">
+              <div style="padding: 10px; max-height: 85vh; overflow: auto;">
                 <input type="text" id="searchBox" placeholder="Procurar rotas guardadas..." />
                 <div>
                   <div></div>
                   <hr>
-                  <ul id="routeList"></ul>
+                  <div id="routeList"></div>
                   <div id="noResultsMessage" style="display: none; color:rgba(0,0,0,0.5); text-align: center;">Sem resultados</div>
                 </div>
               </div>

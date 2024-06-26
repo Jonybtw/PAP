@@ -171,8 +171,7 @@ export const User = {
                         username: encrypt(result.data.username)
                     },
                     process.env.SECRET_TOKEN_KEY,
-
-                    { expiresIn: '30d' },
+                    { expiresIn: '5h' },
                     (error, token) => {
                         if (error) throw error;
                         response.status(200).json(token);

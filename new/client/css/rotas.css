@@ -254,7 +254,7 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 .pac-container *, .gm-style-iw * {
   color: black !important;
 }
-
+/*
 #clear-directions {
   background-color: red;
   border: none;
@@ -268,8 +268,8 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 
 #clear-directions:hover {
   background-color: #571313;
-}
-
+}*/
+/*
 #save {
   background-color: rgb(55, 0, 255);
   border: none;
@@ -283,12 +283,12 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 
 #save:hover {
   background-color: rgb(20, 0, 92);
-}
+}*/
 
 b{
   color: black;
 }
-
+/*
 #routeList button {
   background-color: #4CAF50;
   border: none;
@@ -314,7 +314,7 @@ b{
 
 #routeList button.delete:hover {
   background-color: #700d06;
-}
+}*/
 
 .travel-mode-option {
   display: flex;

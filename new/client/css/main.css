@@ -43,6 +43,7 @@ header {
   z-index: 999;
   width: 100%;
   max-height: 4rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 
@@ -105,7 +106,7 @@ main {
   background-color: #fff;
   padding: 20px;
   margin-bottom: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
 }
 
@@ -143,7 +144,7 @@ main {
   color: var(--text-color);
   padding: 40px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .chamada-para-acao h2 {
@@ -168,6 +169,10 @@ main {
   background-color: #e6e6e6;
 }
 
+.botao-cta{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
 footer {
   background-color: var(--background-color);
   padding: 1rem;
@@ -176,6 +181,7 @@ footer {
   align-items: center;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 footer span#mark {
@@ -349,12 +355,21 @@ ul, li {
   list-style: none;
 }
 
+ul{
+  padding-left: 0px !important;
+}
+
+a:not(.botao-cta) {
+  color: white !important;
+}
+
 li{
   margin-bottom: 10px;
 }
 
 #username, #name, #birth, #address, #email, #phone, #password, #role{
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 input[type="text"], input[type="password"], input[type="date"], input[type="email"] {

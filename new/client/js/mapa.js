@@ -1,6 +1,9 @@
 var map;
 var autocompleteDirectionsHandler;
 
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 const { Map } = await google.maps.importLibrary("maps");
 const { Geocoder } = await google.maps.importLibrary("geocoding");
 const geocoder = new google.maps.Geocoder();
@@ -22,7 +25,7 @@ async function geocodePlaceId(geocoder, placeId) {
 
 async function fetchAndDisplayRoutes() {
   const div = document.getElementById("routeList");
-
+  div.style.padding = 0;
   div.innerHTML = "";
 
   try {
@@ -37,27 +40,40 @@ async function fetchAndDisplayRoutes() {
       const routeDiv = document.createElement("div");
       routeDiv.classList.add("route");
       routeDiv.innerHTML = `
-        <p><b>Início:</b> <input type="text" value="${start.formatted_address}" data-field="Start" data-place-id="${route.Start}" id="start_${route._id}"></p>
-        <p><b>Fim:</b> <input type="text" value="${end.formatted_address}" data-field="End" data-place-id="${route.End}" id="end_${route._id}"></p>
+        <div>
+          <div class="input-group mb-3" style="gap: 5px;">
+            <span class="input-group-text bg-secondary text-white" id="basic-addon1" style="min-width: 4rem;display: flex;justify-content: center;">Início</span>
+            <input type="text" class="form-control" placeholder="Início" aria-label="Início" aria-describedby="basic-addon1" value="${start.formatted_address}"  data-field="Start" data-place-id="${route.Start}" id="start_${route._id}">
+          </div>
+          <div class="input-group mb-3" style="gap: 5px;">
+            <span class="input-group-text bg-secondary text-white" id="basic-addon1" style="min-width: 4rem;dispslay: flex;justify-content: center;">Fim</span>
+            <input type="text" class="form-control" placeholder="Fim" aria-label="Fim" aria-describedby="basic-addon1" value="${end.formatted_address}" data-field="End" data-place-id="${route.End}" id="end_${route._id}">
+          </div>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example" id="btns">
+        </div>
       `;
-
+      let btnsGroup = routeDiv.children['btns'];
       const updateButton = document.createElement("button");
+      updateButton.type = "button";
+      updateButton.className = "btn btn-warning";
       updateButton.textContent = "Atualizar";
       updateButton.classList.add("update");
       updateButton.addEventListener("click", (event) => {
         event.stopPropagation();
         handleUpdateRoute(route._id, routeDiv);
       });
-      routeDiv.appendChild(updateButton);
+      btnsGroup.appendChild(updateButton);
 
       const deleteButton = document.createElement("button");
-      deleteButton.textContent = "Apagar";
-      deleteButton.classList.add("delete");
+      deleteButton.type = "button";
+      deleteButton.className = "btn btn-danger delete";
+      deleteButton.innerHTML = `Apagar`;
       deleteButton.addEventListener("click", (event) => {
         event.stopPropagation();
         handleDeleteRoute(route._id);
       });
-      routeDiv.appendChild(deleteButton);
+      btnsGroup.appendChild(deleteButton);
 
       div.appendChild(listItem);
       listItem.appendChild(routeDiv);
@@ -97,7 +113,9 @@ async function fetchAndDisplayRoutes() {
         endInput.autocomplete = endAutocomplete;
       }
       const useRouteButton = document.createElement("button");
-      useRouteButton.textContent = "Usar esta rota";
+      useRouteButton.type = "button";
+      useRouteButton.className = "btn btn-success";
+      useRouteButton.innerHTML = `Usar esta rota`;
       useRouteButton.addEventListener("click", (event) => {
         autocompleteDirectionsHandler.originPlaceId = "";
         autocompleteDirectionsHandler.destinationPlaceId = "";
@@ -113,8 +131,7 @@ async function fetchAndDisplayRoutes() {
         autocompleteDirectionsHandler.destinationPlaceId = route.End;
         autocompleteDirectionsHandler.route();
       });
-
-      routeDiv.appendChild(useRouteButton);
+      btnsGroup.appendChild(useRouteButton);
     }
   } catch (error) {
     console.error("Erro ao buscar ou exibir rotas:", error);
@@ -126,6 +143,8 @@ function filterRoutes() {
     document.getElementById("searchBox").value.toLowerCase()
   );
   const routeListItems = document.querySelectorAll("#routeList li");
+  const noResultsMessage = document.getElementById("noResultsMessage");
+  let hasResults = false;
 
   routeListItems.forEach((item) => {
     const routeDiv = item.querySelector(".route");
@@ -139,7 +158,11 @@ function filterRoutes() {
     const isMatch =
       startAddress.includes(searchTerm) || endAddress.includes(searchTerm);
     item.style.display = isMatch ? "" : "none";
+    if (isMatch) {
+      hasResults = true;
+    }
   });
+  noResultsMessage.style.display = hasResults ? "none" : "block";
 }
 
 function normalizeString(str) {
@@ -194,8 +217,8 @@ async function handleUpdateRoute(routeId, routeDiv) {
     }
 
     const updatedData = {
-      Início: startPlaceId,
-      Fim: endPlaceId,
+      Start: startPlaceId,
+      End: endPlaceId,
     };
 
     const response = await fetch(`http://127.0.0.1:420/routes/${routeId}`, {
@@ -245,8 +268,9 @@ async function initMap() {
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach((checkbox) => (checkbox.checked = false));
 
-  document.getElementById("clear-directions").style.display = "none";
-  document.getElementById("save").style.display = "none";
+  document.getElementById("clear-directions").disabled = true;
+  document.getElementById("save").disabled = true;
+  document.getElementById("noRouteFound").style.display = "block";
   document.getElementById("avoid-options").style.display = "none";
   document.getElementById("transit-options").style.display = "none";
   document.getElementById("unit-system").style.display = "none";
@@ -451,7 +475,7 @@ class AutocompleteDirectionsHandler {
     this.fetchAndDisplayRoutes = fetchAndDisplayRoutes;
 
     this.directionsRenderer.setMap(map);
-    sidebar = document.getElementById("sidebar");
+    this.sidebar = document.getElementById("sidebar");
     this.directionsRenderer.setPanel(sidebar);
 
     const originInput = document.getElementById("origin-input");
@@ -711,13 +735,14 @@ class AutocompleteDirectionsHandler {
     clearButton.addEventListener("click", () => {
       this.originPlaceId = "";
       this.destinationPlaceId = "";
+      document.getElementById("noRouteFound").style.display = "block";
       document.getElementById("origin-input").value = "";
       document.getElementById("destination-input").value = "";
       document.getElementById("arrival-time").value = "";
       document.getElementById("departure-time").value = "";
       this.directionsRenderer.setDirections({ routes: [] });
-      clearButton.style.display = "none";
-      saveButton.style.display = "none";
+      clearButton.disabled = true;
+      saveButton.disabled = true;
     });
   }
 
@@ -835,8 +860,9 @@ class AutocompleteDirectionsHandler {
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {
         me.directionsRenderer.setDirections(response);
-        document.getElementById("clear-directions").style.display = "block";
-        document.getElementById("save").style.display = "block";
+        document.getElementById("clear-directions").disabled = false;
+        document.getElementById("save").disabled = false;
+        document.getElementById("noRouteFound").style.display = "none";
       } else if (status === "ZERO_RESULTS") {
         window.alert("Sem resultados.");
       } else if (status === "MAX_ROUTE_LENGTH_EXCEEDED") {

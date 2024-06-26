@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RouteWise</title>
+  <link rel="stylesheet" href="../../css/rotas.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+  <link rel="stylesheet" href="../../css/mapa.css" />
+</head>
+
+<body>
+  <header>
+    <h1 id="logo"><span>Route</span>Wise</h1>
+    <section>
+      <a href="profile.html" id="perfilBtn" style="display: none;">Perfil</a>
+      <a href="routes.html" id="routesBtn" style="display: none;">Mapa</a>
+    </section>
+  </header>
+
+  <main>
+    <div id="container">
+      <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
+        <div>
+          <input id="origin-input" class="controls" type="text" placeholder="Ponto de partida" />
+          <button id="use-my-location-button">Local onde se encontra</button>
+          <input id="destination-input" class="controls" type="text" placeholder="Destino" />
+          <button id="save" style="display: none;">Guardar Rota</button>
+          <button id="clear-directions" style="display: none;">Limpar Rota</button>
+          <button id="swap-places"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5" />
+            </svg></button>
+          <div id="mode-selector" class="controls">
+              <h4>Meio de Deslocação:</h4>
+              <input type="radio" name="type" id="changemode-driving" />
+              <label for="changemode-driving">Carro 🚗</label><br>
+              <input type="radio" name="type" id="changemode-transit" />
+              <label for="changemode-transit">Transportes Públicos 🚌</label><br>
+              <input type="radio" name="type" id="changemode-walking" />
+              <label for="changemode-walking">A pé🚶‍♂️</label><br>
+              <input type="radio" name="type" id="changemode-bicycling" />
+              <label for="changemode-bicycling">Bicicleta 🚲</label>
+            <div>
+              <h4 style="display: none;">Partir á(s):</h4>
+              <input style="color: black;" type="datetime-local" min="" id="departure-time">
+              <h4 style="display: none;">Chegada á(s):</h4>
+              <input style="color: black;" type="datetime-local" min="" id="arrival-time">
+            </div>
+
+          </div>
+          <div id="transit-options" style="display: none;"> 
+            <h3>Opções de Transporte Público</h3>
+            <h4>Preferência:</h4>
+            <input type="checkbox" id="mode-rail" value="RAIL">
+            <label for="mode-rail">Metropolitano</label><br>
+            <input type="checkbox" id="mode-bus" value="BUS">
+            <label for="mode-bus">Autocarro</label><br>
+            <input type="checkbox" id="mode-subway" value="SUBWAY">
+            <label for="mode-subway">Metro</label><br>
+            <input type="checkbox" id="mode-train" value="TRAIN">
+            <label for="mode-train">Comboio</label><br>
+            <input type="checkbox" id="mode-tram" value="TRAM">
+            <label for="mode-tram">Elétrico</label><br>
+      
+            <h4>Trajeto:</h4>
+            <input type="radio" name="routingPreference" id="preference-fewer-transfers" value="FEWER_TRANSFERS">
+            <label for="preference-fewer-transfers">Menos transbordos</label><br>
+            <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
+            <label for="preference-less-walking">Menos trajetos a pé</label><br>
+          </div>
+          <div id="avoid-options" style="display: none;">
+            <h4>Evitar:</h4>
+            <label id="avoid-highways"><input type="checkbox" id="avoid-highways"> Auto-estradas</label>
+            <label id="avoid-tolls"><input type="checkbox" id="avoid-tolls"> Portagens</label>
+            <label id="avoid-ferries"><input type="checkbox" id="avoid-ferries"> Ferries</label>
+          </div>
+          <div id="unit-system" style="display: none;">
+            <h4>Unidade de distância:</h4>
+            <input type="radio" id="metric" name="units" value="METRIC">
+            <label for="metric">km</label>
+            <input type="radio" id="imperial" name="units" value="IMPERIAL">
+            <label for="imperial">milhas</label><br>
+          </div>
+        </div>
+        <div id="routeInfo">
+          <div id="sidebar"></div>
+        </div>
+        <hr />
+        <input type="text" id="searchBox" placeholder="Procurar rotas guardadas..." />
+        <div>
+          <div>
+
+          </div>
+          <ul id="routeList"></ul>
+        </div>
+      </div>
+
+      <div id="mapa">
+        <div id="mapBox">
+          <script>
+            ((g) => {
+              var h,
+                a,
+                k,
+                p = "The Google Maps JavaScript API",
+                c = "google",
+                l = "importLibrary",
+                q = "__ib__",
+                m = document,
+                b = window;
+              b = b[c] || (b[c] = {});
+              var d = b.maps || (b.maps = {}),
+                r = new Set(),
+                e = new URLSearchParams(),
+                u = () =>
+                  h ||
+                  (h = new Promise(async (f, n) => {
+                    await (a = m.createElement("script"));
+                    e.set("libraries", [...r] + "");
+                    for (k in g)
+                      e.set(
+                        k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                        g[k]
+                      );
+                    e.set("callback", c + ".maps." + q);
+                    a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                    d[q] = f;
+                    a.onerror = () => (h = n(Error(p + " could not load.")));
+                    a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                    m.head.append(a);
+                  }));
+              d[l]
+                ? console.warn(p + " only loads once. Ignoring:", g)
+                : (d[l] = (f, ...n) =>
+                  r.add(f) && u().then(() => d[l](f, ...n)));
+            })({
+              key: "AIzaSyCbBIsvLZVSeAsg1ViFzdC3IwzTdvTUpFU",
+              v: "beta",
+              language: "pt-PT",
+            });
+          </script>
+          <script src="../../js/login.js""></script>
+          <script type="module" src="../../js/mapa.js"></script>
+          <div id="map" style="height: 100%; width: 100%"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <h1 id="logo"><span>Route</span>Wise</h1>
+    <span>Navegue com <span id="mark">Inteligência</span>, Navegue com
+      <span id="mark">Eficiência</span></span>
+    <nav>
+      <a href="sobrenos.html">Sobre Nós</a>
+      <a href="contacto.html">Contactos</a>
+    </nav>
+  </footer>
+  <script src="../../js/checkLogin.js"></script>
+  <script src="../../js/mainColor.js"></script>
+  <script src="../../js/logout.js"></script>
+</body>
+</html>
+

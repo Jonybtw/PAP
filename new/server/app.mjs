@@ -24,6 +24,7 @@ app.use(express.json());
 		app.post('/login', User.login);
 		app.post('/user', User.create);
 		app.post('/forgot-password', User.forgotPassword);
+		app.put('/reset-password/:token', User.resetPassword);
 
 		app.use(Auth.use);
 
@@ -31,7 +32,6 @@ app.use(express.json());
 		app.get('/user', User.get);
 		app.put('/user', User.update);
 		app.delete('/user', User.delete);
-		app.post('/reset-password/:token', User.resetPassword);
 
 		//! CRUD ROUTES
 		app.post('/routes', Routes.create);

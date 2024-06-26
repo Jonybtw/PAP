@@ -254,92 +254,119 @@ export const User = {
         }
       );
 
-      nodemailer.createTestAccount((err, account) => {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+          user: 'syble99@ethereal.email',
+          pass: 'SYwNadm2CksPbZR51S'
+        }
+      });
+
+      let message = {
+        from: 'RouteWise <no-reply@routewise.com>',
+        to: decrypt(user.contacts.email),
+        subject: 'Mudança de Palavra-Passe',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: sans-serif; background-color: #f4f4f4; color: #333; }
+              .container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                padding: 20px; 
+                background-color: #fff; 
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+              }
+              h2 { color: #333; }
+              .button { 
+                display: inline-block; 
+                padding: 10px 20px; 
+                background-color: #007bff; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+              }
+              .logo { 
+                font-size: 24px; 
+                font-weight: bold; 
+              }
+              .logo span { color: ${user.settings?.mainColor || '#007bff'}; } /* User's main color or default */
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1 class="logo">Route<span>Wise</span></h1>
+              <h2>Olá, ${user.data.username}!</h2>
+              <p>Recebemos uma solicitação para redefinir a palavra-passe da sua conta RouteWise em ${new Date().toLocaleString()}.</p>
+              <p>Para redefinir a sua palavra-passe clique no botão abaixo, caso o botão não funcione copie e cole o link abaixo no seu navegador:</p>
+      
+              <a href="http://127.0.0.1:5550/new/client/pages/auth/reset-password.html?token=${resetToken}" class="button">Redefinir Senha</a>
+      
+              <p>Link para redefinição de palavra-passe:</p>
+              <p><a href="http://127.0.0.1:5550/new/client/pages/auth/reset-password.html?token=${resetToken}">http://127.0.0.1:5550/new/client/pages/auth/reset-password/${resetToken}</a></p>
+      
+              <p>Este link expirará em 1 hora.</p>
+              <p>Se você não solicitou a redefinição da palavra-passe, pode ignorar este email. Sua palavra-passe permanecerá inalterada.</p>
+              <p>Se precisar de ajuda, entre em contato com nossa equipa de suporte em <a href="mailto:support@routewise.com">support@routewise.com</a>.</p>
+            </div>
+          </body>
+          </html>
+        `
+      };
+
+      transporter.sendMail(message, (err, info) => {
         if (err) {
-          console.error("Falha ao criar conta de teste: " + err.message);
-          return res.status(500).json("Erro ao criar conta - Ethereal Email");
+          console.log("Ocorreu um erro. " + err.message);
+          return res.status(500).json("Erro ao enviar email");
         }
 
-        console.log("Credenciais obtidas, enviando email...");
+        console.log("Email enviado: %s", info.messageId);
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-        let transporter = nodemailer.createTransport({
-          host: account.smtp.host,
-          port: account.smtp.port,
-          secure: account.smtp.secure,
-          auth: {
-            user: account.user,
-            pass: account.pass,
-          },
-        });
-
-        let message = {
-          from: "Your App Name <no-reply@routewise.com>",
-          to: decrypt(user.contacts.email),
-          subject: "Password Reset",
-          text: `
-            You are receiving this email because you (or someone else) have requested the reset of the password for your account.
-            Please click on the following link, or paste this into your browser to complete the process:
-
-            ${process.env.FRONTEND_URL}/reset-password/${resetToken}
-
-            This link will expire in 1 hour. If you did not request this, please ignore this email and your password will remain unchanged.
-          `,
-        };
-
-        transporter.sendMail(message, (err, info) => {
-          if (err) {
-            console.log("Error occurred. " + err.message);
-            return res.status(500).json("Error sending email");
-          }
-
-          console.log("Message sent: %s", info.messageId);
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-          res.json("Password reset email sent");
-        });
+        res.json("Email enviado, verifique a sua caixa de entrada.");
       });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
-      res.status(500).json("Server Error");
-    }
-  },
+      res.status(500).json("Erro no servidor.");
+  }
+},
 
   resetPassword: async (req, res) => {
     const resetToken = req.params.token;
     const { password, confirmPassword } = req.body;
 
     try {
-      // 1. Find User by Reset Token:
-      const user = await collectionUsers.findOne({
-        "auth.resetToken": resetToken,
-        "auth.resetTokenExpires": { $gt: Date.now() }, // Check if token is not expired
-      });
+        const user = await collectionUsers.findOne({
+            'auth.resetToken': resetToken,
+            'auth.resetTokenExpires': { $gt: Date.now() }
+        });
 
-      if (!user) {
-        return res.status(400).json("Invalid or expired token");
-      }
-
-      // 2. Validate Passwords:
-      if (password !== confirmPassword) {
-        return res.status(400).json("Passwords do not match");
-      }
-
-      // 3. Hash the New Password:
-      const hashedPassword = await bcrypt.hash(password, 12);
-
-      // 4. Update Password and Clear Reset Token:
-      await collectionUsers.updateOne(
-        { _id: user._id },
-        {
-          $set: { "auth.password": hashedPassword },
-          $unset: { "auth.resetToken": "", "auth.resetTokenExpires": "" },
+        if (!user) {
+            return res.status(400).json('Inválido ou token expirado.');
         }
-      );
 
-      res.json("Password reset successful");
+        if (password !== confirmPassword) {
+            return res.status(400).json('Palavras-passe não coincidem.');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 12); 
+
+        await collectionUsers.updateOne(
+            { _id: user._id },
+            { 
+                $set: { 'auth.password': hashedPassword },
+                $unset: { 'auth.resetToken': '', 'auth.resetTokenExpires': '' } 
+            }
+        );
+
+        res.json('Palavra-passe redefinida com sucesso.');
     } catch (error) {
-      console.error("Error resetting password:", error);
-      res.status(500).json("Server Error");
+        console.error('Erro ao redefinir palavra-passe:', error);
+        res.status(500).json('Erro no servidor.');
     }
   },
 };

@@ -1,8 +1,12 @@
 var map;
 var autocompleteDirectionsHandler;
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipTriggerList = document.querySelectorAll(
+  '[data-bs-toggle="tooltip"]'
+);
+const tooltipList = [...tooltipTriggerList].map(
+  (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
+);
 
 const { Map } = await google.maps.importLibrary("maps");
 const { Geocoder } = await google.maps.importLibrary("geocoding");
@@ -53,7 +57,7 @@ async function fetchAndDisplayRoutes() {
         <div class="btn-group" role="group" aria-label="Basic mixed styles example" id="btns">
         </div>
       `;
-      let btnsGroup = routeDiv.children['btns'];
+      let btnsGroup = routeDiv.children["btns"];
       const updateButton = document.createElement("button");
       updateButton.type = "button";
       updateButton.className = "btn btn-warning";
@@ -761,12 +765,11 @@ class AutocompleteDirectionsHandler {
         google.maps.event.clearInstanceListeners(destinationInput.autocomplete);
         destinationInput.autocomplete = null;
       }
-      console.log("Antes: " + originInput.value, destinationInput.value);
+
       [originInput.value, destinationInput.value] = [
         destinationInput.value,
         originInput.value,
       ];
-      console.log("Depois: " + originInput.value, destinationInput.value);
 
       [this.originPlaceId, this.destinationPlaceId] = [
         this.destinationPlaceId,
@@ -835,7 +838,9 @@ class AutocompleteDirectionsHandler {
       request.avoidFerries = this.getAvoidOptions().avoidFerries;
     }
 
-    document.getElementById("save").addEventListener("click", async () => {
+    const saveButton = document.getElementById("save");
+    saveButton.removeEventListener("click", this.saveRouteHandler);
+    this.saveRouteHandler = async () => {
       try {
         const response = await fetch("http://127.0.0.1:420/routes", {
           method: "POST",
@@ -845,7 +850,6 @@ class AutocompleteDirectionsHandler {
           },
           body: JSON.stringify(request),
         });
-        console.log(JSON.stringify(request));
 
         if (response.ok) {
           fetchAndDisplayRoutes();
@@ -855,7 +859,8 @@ class AutocompleteDirectionsHandler {
       } catch (error) {
         console.error("Erro ao salvar a rota:", error);
       }
-    });
+    };
+    saveButton.addEventListener("click", this.saveRouteHandler);
 
     this.directionsService.route(request, (response, status) => {
       if (status === "OK") {

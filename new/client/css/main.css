@@ -314,6 +314,22 @@ footer nav {
   background-color: #962121;
 }
 
+.deleteUserButton{
+  background-color: rgb(143, 0, 0);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+.deleteUserButton:hover {
+  background-color: rgb(105, 0, 0);
+}
+
 .saveButton, .add-button, .edit-button{
   background-color: var(--primary-color);
   color: white;

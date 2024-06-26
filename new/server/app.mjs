@@ -29,7 +29,7 @@ app.use(express.json());
 		//! CRUD USER
 		app.get('/user', User.get);
 		app.put('/user', User.update);
-		//app.delete('/user', User.delete);
+		app.delete('/user', User.delete);
 
 		//! CRUD ROUTES
 		app.post('/routes', Routes.create);

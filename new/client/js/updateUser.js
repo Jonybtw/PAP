@@ -15,7 +15,7 @@ function updateUserInfo() {
         return;
     }
 
-    if (!/^\d+$/.test(phone)) {
+    if (phone !== '' && !/^\d+$/.test(phone)) {
         alert('Por favor, insira um número de telefone válido contendo apenas dígitos.');
         return;
     }

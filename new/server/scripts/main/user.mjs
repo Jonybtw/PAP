@@ -114,46 +114,59 @@ export const User = {
 
     update: async (request, response) => {
         try {
-            const token = request.headers.authorization;
-            if (!token) {
-                return response.status(401).json('Token de autorização ausente.');
-            }
-
-            const decodedToken = jwt.decode(token);
-            if (!decodedToken || !decodedToken.id) {
-                return response.status(401).json('Token inválido.');
-            }
-            const decryptedUserId = CryptoJS.AES.decrypt(decodedToken.id, process.env.SECRET_AES_KEY).toString(CryptoJS.enc.Utf8);
-
-            const userToUpdate = await collectionUsers.findOne({ _id: new ObjectId(decryptedUserId) });
+            let id = request.id;
+    
+            let query = { _id: new ObjectId(id) };
+            let userToUpdate = await collectionUsers.findOne(query);
+    
             if (!userToUpdate) {
                 return response.status(404).json('Utilizador não encontrado.');
             }
-
-            const { email, routes, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
-
-            if (name !== undefined) userToUpdate.data.name = name ? encrypt(name) : '';
-            if (birth !== undefined) userToUpdate.data.birth = birth ? encrypt(birth) : '';
-            if (address !== undefined) userToUpdate.data.address = address ? encrypt(address) : '';
-            if (email !== undefined) userToUpdate.contacts.email = email ? encrypt(email) : '';
-            if (phone !== undefined) userToUpdate.contacts.phone = phone ? encrypt(phone) : '';
-            if (isDarkMode !== undefined) userToUpdate.settings.isDarkMode = isDarkMode !== null ? JSON.parse(isDarkMode) : false;
-            if (mainColor !== undefined) userToUpdate.settings.mainColor = mainColor ? mainColor : '';
+    
+            const { email, password, name, birth, address, phone, isDarkMode, mainColor } = request.body ?? {};
+    
+            const updateFields = {};
+            if (name !== undefined) updateFields['data.name'] = name ? encrypt(name) : '';
+            if (birth !== undefined) updateFields['data.birth'] = birth ? encrypt(birth) : '';
+            if (address !== undefined) updateFields['data.address'] = address ? encrypt(address) : '';
+            if (email !== undefined) updateFields['contacts.email'] = email ? encrypt(email) : '';
+            if (phone !== undefined) updateFields['contacts.phone'] = phone ? encrypt(phone) : '';
+            if (isDarkMode !== undefined) updateFields['settings.isDarkMode'] = isDarkMode !== null ? JSON.parse(isDarkMode) : false;
+            if (mainColor !== undefined) updateFields['settings.mainColor'] = mainColor ? mainColor : '';
             if (password !== undefined && password !== '') {
                 const hashedPassword = await bcrypt.hash(password, 12);
-                userToUpdate.auth.password = hashedPassword;
+                updateFields['auth.password'] = hashedPassword;
             }
-
-            await collectionUsers.updateOne({ _id: new ObjectId(decryptedUserId) }, { $set: userToUpdate });
-
-            return response.status(200).json('Dados do utilizador atualizados com sucesso.');
+    
+            const result = await collectionUsers.updateOne(query, { $set: updateFields });
+    
+            if (result.modifiedCount === 1) {
+                return response.status(200).json('Dados do utilizador atualizados com sucesso.');
+            } else {
+                return response.status(404).json('Utilizador não encontrado ou dados não modificados.');
+            }
         } catch (error) {
             console.error('Erro ao atualizar utilizador:', error);
             return response.status(500).json('Erro interno do servidor.');
         }
     },
+    
 
-    delete: () => { },
+    delete: async (request, response) => {
+        let id = request.id;
+    
+        let query = { _id: new ObjectId(id) };
+        let result = await collectionUsers.deleteOne(query);
+    
+        if (!result) response.status(404).json('Não encontrado');
+        else {
+            if (result.deletedCount === 1) {
+                return response.status(200).json('Utilizador removido com sucesso.');
+            } else {
+                return response.status(404).json('Utilizador não encontrado.');
+            }
+        }
+    },
 
     login: async (request, response) => {
         let { username, password, rememberMe } = request.body;

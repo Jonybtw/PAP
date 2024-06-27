@@ -14,7 +14,7 @@
 </head>
 <body>
 
-  <div class="loader"></div>
+  <!--<div class="loader"></div>-->
   <header>
     <h1 id="logo"><span>Route</span>Wise</h1>
     <section>
@@ -27,7 +27,7 @@
     <main>
       <div id="container">
         <div>
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" type="button" role="tab" aria-controls="search-tab-pane" aria-selected="true">Procurar</button>
             </li>
@@ -37,7 +37,7 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="routes-tab" data-bs-toggle="tab" data-bs-target="#routes-tab-pane" type="button" role="tab" aria-controls="routes-tab-pane" aria-selected="false">Rotas</button>
             </li>
-          </ul>
+            </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="search-tab-pane" role="tabpanel" aria-labelledby="search-tab" tabindex="0">
               <div id="rotas" style="overflow: hidden; overflow-y: scroll;">
@@ -60,14 +60,30 @@
                   </div>
                   <div id="mode-selector" class="controls">
                     <h4>Meio de Deslocação:</h4>
-                    <input type="radio" name="type" id="changemode-driving" />
-                    <label for="changemode-driving">Carro 🚗</label><br>
-                    <input type="radio" name="type" id="changemode-transit" />
-                    <label for="changemode-transit">Transportes Públicos 🚌</label><br>
-                    <input type="radio" name="type" id="changemode-walking" />
-                    <label for="changemode-walking">A pé🚶‍♂️</label><br>
-                    <input type="radio" name="type" id="changemode-bicycling" />
-                    <label for="changemode-bicycling">Bicicleta 🚲</label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-driving">
+                      <label class="form-check-label" for="changemode-driving">
+                        🚗 Carro 
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-transit">
+                      <label class="form-check-label" for="changemode-transit">
+                        🚌 Transportes Públicos 
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-walking">
+                      <label class="form-check-label" for="changemode-walking">
+                        🚶‍♂️ &nbsp;&nbsp;A pé
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-bicycling">
+                      <label class="form-check-label" for="changemode-bicycling">
+                        🚲 Bicicleta
+                      </label>
+                    </div>
                     <div>
                     <h4 style="display: none;">Partir á(s):</h4>
                     <input style="color: black;" type="datetime-local" min="" id="departure-time">
@@ -91,10 +107,18 @@
                     <label for="mode-tram">Elétrico</label><br>
               
                     <h4>Trajeto:</h4>
-                    <input type="radio" name="routingPreference" id="preference-fewer-transfers" value="FEWER_TRANSFERS">
-                    <label for="preference-fewer-transfers">Menos transbordos</label><br>
-                    <input type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
-                    <label for="preference-less-walking">Menos trajetos a pé</label><br>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="routingPreference" id="preference-fewer-transfers" value="FEWER_TRANSFERS">
+                      <label class="form-check-label" for="preference-fewer-transfers">
+                        Menos transbordos
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="routingPreference" id="preference-less-walking" value="LESS_WALKING">
+                      <label class="form-check-label" for="preference-fewer-transfers">
+                        Menos trajetos a pé
+                      </label>
+                    </div>
                   </div>
                   <div id="avoid-options" style="display: none;width: 100%;min-width: 100%;">
                     <h4>Evitar:</h4>
@@ -104,10 +128,18 @@
                   </div>
                   <div id="unit-system" style="display: none;width: 100%;min-width: 100%;">
                     <h4>Unidade de distância:</h4>
-                    <input type="radio" id="metric" name="units" value="METRIC">
-                    <label for="metric">km</label>
-                    <input type="radio" id="imperial" name="units" value="IMPERIAL">
-                    <label for="imperial">milhas</label><br>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="units" id="metric" value="METRIC">
+                      <label class="form-check-label" for="metric">
+                        Km
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="units" id="imperial" value="IMPERIAL">
+                      <label class="form-check-label" for="imperial">
+                        Milhas
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>

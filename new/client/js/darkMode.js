@@ -70,6 +70,8 @@ function resetStyles() {
     document.querySelector('.slogan .title').style.color = '';
     document.querySelector('.slogan .tagline').style.color = '';
     document.querySelector('.rounded-box').style.backgroundColor = '';
+    document.querySelector('.nav-link').style.color = "";
+    document.querySelector('.nav-link.active').style.color = "";
 
     const noRouteFound = document.getElementById('noRouteFound');
     if (noRouteFound) {

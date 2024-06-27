@@ -76,7 +76,7 @@ main {
   padding-top: 4rem;
   padding: 40px 20px;
   font-family: proxima, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  
+  min-height: calc(100vh - 232px);
 }
 
 .slogan {

@@ -254,6 +254,11 @@ div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {
 .pac-container *, .gm-style-iw * {
   color: black !important;
 }
+
+.nav-link.active{
+  background-color: rgb(133, 133, 133);
+}
+
 /*
 #clear-directions {
   background-color: red;

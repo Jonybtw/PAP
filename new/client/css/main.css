@@ -402,27 +402,24 @@ header.dark-mode, footer.dark-mode {
 }
 
 main.dark-mode {
-  background-color: #343a40; /* Default dark background color for main */
+  background-color: #343a40;
 }
 
-/* Default styles (light mode) */
 #noRouteFound {
-  color: black !important; /* Default text color */
+  color: black !important;
 }
 
 #sidebar {
-  background-color: #ffffff !important; /* Default background color */
+  background-color: #ffffff !important;
 }
 
-/* Dark mode styles */
 .dark-mode #noRouteFound {
-  color: white !important; /* Text color in dark mode */
+  color: white !important;
 }
 
 .dark-mode #sidebar {
-  background-color: white !important; /* Background color in dark mode */
+  background-color: white !important;
 }
-
 
 .toggle-switch {
   position: relative;

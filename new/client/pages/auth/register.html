@@ -15,10 +15,10 @@
   <body>
     <div class="loader"></div>
     <header>
-      <h1 id="logo"><span>Route</span>Wise</h1>
+      <a href="/new/client/" style="text-decoration: none; font-size: 2.5rem;"id="logo"><span>Route</span>Wise</a>
       <section>
-        <a href="login.html">Iniciar Sessão</a>
-        <a href="register.html">Registar Conta</a>
+        <a href="login.html" class="btn btn-primary">Iniciar Sessão</a>
+        <a href="register.html" class="btn btn-primary">Registar Conta</a>
       </section>
     </header>
 
@@ -37,14 +37,14 @@
             <input
               type="text"
               placeholder="Nome de utilizador"
-              class="username"
+              class="form-control control susername"
               id="usernameInput"
               required
             />
             <input
               type="email"
               placeholder="E-mail"
-              class="email"
+              class="form-control control email"
               id="emailInput"
               required
               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
@@ -52,20 +52,20 @@
             <input
               type="password"
               placeholder="Senha"
-              class="password"
+              class="form-control control password"
               id="passwordInput"
               required
             />
             <input
               type="password"
               placeholder="Confirmar Senha"
-              class="confirmpassword"
+              class="form-control control confirmpassword"
               id="confirmPasswordInput"
               required
             />
             <input
               type="submit"
-              class="register-button"
+              class="btn btn-primary register-button"
               name="register-button"
               id="submitButton"
               value="Registar Conta"

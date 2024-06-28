@@ -16,10 +16,10 @@
 <body>
     <div class="loader"></div>
     <header>
-        <h1 id="logo"><span>Route</span>Wise</h1>
+        <a href="/new/client/" style="text-decoration: none; font-size: 2.5rem;"id="logo"><span>Route</span>Wise</a>
         <section>
-            <a href="profile.html" id="perfilBtn" style="display: none;">Perfil</a>
-            <a href="routes.html" id="routesBtn" style="display: none;">Mapa</a>
+            <a href="profile.html" class="btn btn-primary" id="perfilBtn" style="display: none;">Perfil</a>
+            <a href="routes.html" class="btn btn-primary" id="routesBtn" style="display: none;">Mapa</a>
         </section>
     </header>
 
@@ -33,27 +33,27 @@
             <ul class="profile-info">
                 <li>
                     <label for="username">Nome de Utilizador:</label>
-                    <input id="username" type="text" readonly>
+                    <input class="form-control controls" id="username" type="text" readonly>
                 </li>
                 <li>
                     <label for="name">Nome Completo:</label>
-                    <input id="name" type="text">
+                    <input class="form-control controls" id="name" type="text">
                 </li>
                 <li>
                     <label for="birth">Data de Nascimento:</label>
-                    <input id="birth" type="date">
+                    <input class="form-control controls" id="birth" type="date">
                 </li>
                 <li>
                     <label for="address">Endereço:</label>
-                    <input id="address" type="text">
+                    <input class="form-control controls" id="address" type="text">
                 </li>
                 <li>
                     <label for="email">Email:</label>
-                    <input id="email" type="email">
+                    <input class="form-control controls" id="email" type="email">
                 </li>
                 <li>
                     <label for="phone">Telefone:</label>
-                    <input id="phone" type="text">
+                    <input class="form-control controls" id="phone" type="text">
                 </li>
             </ul>
             <br>
@@ -78,13 +78,13 @@
             <ul class="profile-auth">
                 <li>
                     <label for="password">Senha:</label>
-                    <input id="password" type="password" placeholder="Digite palavra-passe nova...">
+                    <input class="form-control controls" id="password" type="password" placeholder="Digite palavra-passe nova...">
                 </li>
             </ul>
             <br>
-            <button class="saveButton" id="saveButton">Guardar</button>
-            <button class="logoutButton">Sair</button>
-            <button class="deleteUserButton" id="deleteUserButton">Apagar Conta</button>
+                <button type="button" class="btn btn-primary saveButton" id="saveButton">Guardar</button>
+                <button type="button" class="btn btn-danger logoutButton">Sair</button>
+                <button type="button" class="btn btn btn-warning deleteUserButton" id="deleteUserButton">Apagar Conta</button>
         </div>
         <br>
     </main>

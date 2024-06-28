@@ -438,17 +438,17 @@ main.dark-mode {
   color: black;
 }
 
-/* Light mode styles for navigation links */
+
 .light-mode .nav-link {
   color: black;
 }
 
 .light-mode .nav-link:hover {
-  color: #555555; /* Adjust the hover color as needed */
+  color: #555555;
 }
 
 .light-mode .nav-link.active {
-  color: #000000; /* Bold color for active link */
+  color: #000000;
 }
 
 

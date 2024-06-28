@@ -16,10 +16,10 @@
 <body>
     <div class="loader"></div>
     <header>
-        <h1 id="logo"><span>Route</span>Wise</h1>
+        <a href="/new/client/" style="text-decoration: none; font-size: 2.5rem;"id="logo"><span>Route</span>Wise</a>
         <section>
-            <a href="login.html">Iniciar Sessão</a>
-            <a href="register.html">Registar Conta</a>
+            <a href="login.html" class="btn btn-primary">Iniciar Sessão</a>
+            <a href="register.html" class="btn btn-primary">Registar Conta</a>
         </section>
     </header>
 
@@ -31,15 +31,15 @@
         <div class="rounded-box">
             <div class="input-group">
                 <h1 class="title2">Iniciar Sessão</h1>
-                <input type="text" placeholder="Nome de utilizador" class="username" id="usernameInput" required>
-                <input type="password" placeholder="Palavra-passe" class="password" id="passwordInput" required>
+                <input type="text" placeholder="Nome de utilizador" class="form-control controls username" style="border-radius: 4px; width: 100%" id="usernameInput" required>
+                <input type="password" placeholder="Palavra-passe" class="form-control controls password" style="border-radius: 4px; width: 100%" id="passwordInput" required>
             </div>
             <div class="remember-me">  
-                <input type="checkbox" id="rememberMeCheckbox">
+                <input type="checkbox" class="form-check-input" id="rememberMeCheckbox">
                 <label for="rememberMeCheckbox">Manter a sessão</label>
             </div>
             <br>
-            <button class="search-button" type="submit" onclick="loginFunc()">Iniciar Sessão</button>
+            <button class="search-button btn btn-primary"  type="submit" onclick="loginFunc()">Iniciar Sessão</button>
             <br><br>
             <p>Esqueci-me da palavra-passe, <a href="recover-password.html">redefinir palavra-passe</a>.</p>
             <p>Não tenho conta, <a href="register.html">criar uma</a>.</p>

@@ -19,8 +19,8 @@
   <header>
     <a href="/new/client/" style="text-decoration: none; font-size: 2.5rem;"id="logo"><span>Route</span>Wise</a>
     <section>
-      <a href="profile.html" class="btn btn-primary" id="perfilBtn" style="display: none;">Perfil</a>
-      <a href="routes.html" class="btn btn-primary" id="routesBtn" style="display: none;">Mapa</a>
+      <a href="profile.html" class="btn btn-primary" id="perfilBtn" style="display: none;"><i class="bi bi-person-fill"></i> Perfil</a>
+      <a href="routes.html" class="btn btn-primary" id="routesBtn" style="display: none;"><i class="bi bi-geo-alt-fill"></i> Mapa</a>
     </section>
   </header>
 
@@ -30,13 +30,13 @@
         <div>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" type="button" role="tab" aria-controls="search-tab-pane" aria-selected="true">Procurar</button>
+              <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" type="button" role="tab" aria-controls="search-tab-pane" aria-selected="true"><i class="bi bi-search" style="color: black"></i> Procurar</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-tab-pane" type="button" role="tab" aria-controls="single-tab-pane" aria-selected="false">Rota</button>
+              <button class="nav-link" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-tab-pane" type="button" role="tab" aria-controls="single-tab-pane" aria-selected="false"><i class="bi bi-sign-turn-left" style="color: black"></i> Rota</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="routes-tab" data-bs-toggle="tab" data-bs-target="#routes-tab-pane" type="button" role="tab" aria-controls="routes-tab-pane" aria-selected="false">Rotas</button>
+              <button class="nav-link" id="routes-tab" data-bs-toggle="tab" data-bs-target="#routes-tab-pane" type="button" role="tab" aria-controls="routes-tab-pane" aria-selected="false"><i class="bi bi-map" style="color: black"></i> Rotas</button>
             </li>
             </ul>
           <div class="tab-content" id="myTabContent">
@@ -56,33 +56,33 @@
                     </button>
                   </div>
                   <div class="btn-group" role="group" aria-label="Basic mixed styles example" style="width: 100%; padding: 1rem 0;">
-                    <button type="button" class="btn btn-danger" id="save" disabled>Guardar Rota</button>
-                    <button type="button" class="btn btn-warning" id="clear-directions" disabled>Limpar Rota</button>
+                    <button type="button" class="btn btn-danger" id="save" disabled><i class="bi bi-floppy2-fill"></i> Guardar Rota</button>
+                    <button type="button" class="btn btn-warning" id="clear-directions" disabled><i class="bi bi-trash" style="color: black;"></i> Limpar Rota</button>
                   </div>
                   <div id="mode-selector" class="controls">
                     <h4>Meio de Deslocação:</h4>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-driving">
                       <label class="form-check-label" for="changemode-driving">
-                        🚗 Carro 
+                        <i class="bi bi-car-front-fill"></i> Carro 
                       </label>
                     </div>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-transit">
                       <label class="form-check-label" for="changemode-transit">
-                        🚌 Transportes Públicos 
+                        <i class="bi bi-bus-front-fill"></i> Transportes Públicos 
                       </label>
                     </div>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-walking">
                       <label class="form-check-label" for="changemode-walking">
-                        🚶‍♂️ &nbsp;&nbsp;A pé
+                        <i class="bi bi-person-walking"></i> A pé
                       </label>
                     </div>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="flexRadioDefault" id="changemode-bicycling">
                       <label class="form-check-label" for="changemode-bicycling">
-                        🚲 Bicicleta
+                        <i class="bi bi-bicycle"></i> Bicicleta
                       </label>
                     </div>
                     <div>

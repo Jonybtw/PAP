@@ -548,9 +548,9 @@ class AutocompleteDirectionsHandler {
     const arrivalH4 = arrivalInput.previousElementSibling;
     const departureH4 = departureInput.previousElementSibling;
   
-    // Check if the event listener is already attached
+
     if (!radioButton.hasEventListener) {
-      radioButton.hasEventListener = true; // Custom property to track event listener state
+      radioButton.hasEventListener = true;
   
       radioButton.addEventListener("click", () => {
         this.travelMode = mode;
@@ -663,7 +663,7 @@ class AutocompleteDirectionsHandler {
   
     modeCheckboxes.forEach((checkbox) => {
       if (!checkbox.hasEventListener) {
-        checkbox.hasEventListener = true; // Custom property to track event listener state
+        checkbox.hasEventListener = true;
         checkbox.addEventListener("change", () => {
           this.route();
         });
@@ -672,7 +672,7 @@ class AutocompleteDirectionsHandler {
   
     routingPreferenceRadios.forEach((radio) => {
       if (!radio.hasEventListener) {
-        radio.hasEventListener = true; // Custom property to track event listener state
+        radio.hasEventListener = true;
         radio.addEventListener("change", () => {
           this.route();
         });

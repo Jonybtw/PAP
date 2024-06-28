@@ -61,7 +61,7 @@ async function fetchAndDisplayRoutes() {
       const updateButton = document.createElement("button");
       updateButton.type = "button";
       updateButton.className = "btn btn-warning";
-      updateButton.textContent = "Atualizar";
+      updateButton.innerHTML = `<i class="bi bi-arrow-clockwise" style="color: black;"></i> Atualizar`;
       updateButton.classList.add("update");
       updateButton.addEventListener("click", (event) => {
         event.stopPropagation();
@@ -72,7 +72,8 @@ async function fetchAndDisplayRoutes() {
       const deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.className = "btn btn-danger delete";
-      deleteButton.innerHTML = `Apagar`;
+      deleteButton.innerHTML = `<i class="bi bi-trash"></i> 
+      Apagar`;
       deleteButton.addEventListener("click", (event) => {
         event.stopPropagation();
         handleDeleteRoute(route._id);
@@ -119,7 +120,7 @@ async function fetchAndDisplayRoutes() {
       const useRouteButton = document.createElement("button");
       useRouteButton.type = "button";
       useRouteButton.className = "btn btn-success";
-      useRouteButton.innerHTML = `Usar esta rota`;
+      useRouteButton.innerHTML = `<i class="bi bi-check"></i> Usar esta rota`;
       useRouteButton.addEventListener("click", (event) => {
         autocompleteDirectionsHandler.originPlaceId = "";
         autocompleteDirectionsHandler.destinationPlaceId = "";

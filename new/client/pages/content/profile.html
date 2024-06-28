@@ -30,32 +30,55 @@
         </div>
         <div class="rounded-box">
             <h2>Perfil</h2>
-            <ul class="profile-info">
-                <li>
-                    <label for="username">Nome de Utilizador:</label>
-                    <input class="form-control controls" id="username" type="text" readonly>
-                </li>
-                <li>
-                    <label for="name">Nome Completo:</label>
-                    <input class="form-control controls" id="name" type="text">
-                </li>
-                <li>
-                    <label for="birth">Data de Nascimento:</label>
-                    <input class="form-control controls" id="birth" type="date">
-                </li>
-                <li>
-                    <label for="address">Endereço:</label>
-                    <input class="form-control controls" id="address" type="text">
-                </li>
-                <li>
-                    <label for="email">Email:</label>
-                    <input class="form-control controls" id="email" type="email">
-                </li>
-                <li>
-                    <label for="phone">Telefone:</label>
-                    <input class="form-control controls" id="phone" type="text">
-                </li>
-            </ul>
+            <style>
+                .input-container {
+                    position: relative;
+                    margin-bottom: 1rem;
+                }
+                .input-icon {
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-10%);
+                    pointer-events: none;
+                }
+                .form-control {
+                    padding-right: 30px;
+                }
+            </style>
+            <div>
+                <ul class="profile-info">
+                    <li class="input-container">
+                        <label for="username">Nome de Utilizador:</label>
+                        <input class="form-control controls" id="username" type="text" readonly>
+                        <i class="bi bi-person-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                    <li class="input-container">
+                        <label for="name">Nome Completo:</label>
+                        <input class="form-control controls" id="name" type="text">
+                        <i class="bi bi-person-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                    <li class="input-container">
+                        <label for="birth">Data de Nascimento:</label>
+                        <input class="form-control controls" id="birth" type="date">
+                    </li>
+                    <li class="input-container">
+                        <label for="address">Endereço:</label>
+                        <input class="form-control controls" id="address" type="text">
+                        <i class="bi bi-geo-alt-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                    <li class="input-container">
+                        <label for="email">Email:</label>
+                        <input class="form-control controls" id="email" type="email">
+                        <i class="bi bi-envelope-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                    <li class="input-container">
+                        <label for="phone">Telefone:</label>
+                        <input class="form-control controls" id="phone" type="text">
+                        <i class="bi bi-phone-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                </ul>
+            </div>
             <br>
             <h2>Configurações</h2>
             <ul class="profile-settings">
@@ -74,13 +97,16 @@
                 </li>
             </ul>
             <br>
-            <h2>Autenticação</h2>
-            <ul class="profile-auth">
-                <li>
-                    <label for="password">Senha:</label>
-                    <input class="form-control controls" id="password" type="password" placeholder="Digite palavra-passe nova...">
-                </li>
-            </ul>
+            <div>
+                <h2>Autenticação</h2>
+                <ul class="profile-auth">
+                    <li class="input-container">
+                        <label for="password">Senha:</label>
+                        <input class="form-control controls" id="password" type="password" placeholder="Digite palavra-passe nova...">
+                        <i class="bi bi-key-fill input-icon" style="font-size: 25px; color: black;"></i>
+                    </li>
+                </ul>
+            </div>
             <br>
                 <button type="button" class="btn btn-primary saveButton" id="saveButton"><i class="bi bi-cloud-download"></i> Guardar</button>
                 <button type="button" class="btn btn-danger logoutButton"><i class="bi bi-box-arrow-right"></i> Sair</button>

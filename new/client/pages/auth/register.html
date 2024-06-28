@@ -33,40 +33,45 @@
       <div class="rounded-box">
         <div class="input-group">
           <h1 class="title2">Criar Conta</h1>
-          <form id="registerForm" onsubmit="registerUser(); return false;">
-            <input
-              type="text"
-              placeholder="Nome de utilizador"
-              class="form-control control susername"
-              id="usernameInput"
-              required
-            />
-            <input
-              type="email"
-              placeholder="E-mail"
-              class="form-control control email"
-              id="emailInput"
-              required
-              pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
-            />
-            <input
-              type="password"
-              placeholder="Palavra-passe"
-              class="form-control control password"
-              id="passwordInput"
-              required
-            />
-            <input
-              type="password"
-              placeholder="Confirmar palavra-passe"
-              class="form-control control confirmpassword"
-              id="confirmPasswordInput"
-              required
-            />
-            <button type="submit" class="btn btn-primary register-button" name="register-button" id="submitButton">
-              <i class="bi bi-person-plus"></i> Registar Conta 
-            </button>
-          </form>
+          <div>
+            <style>
+              .input-container {
+                  position: relative;
+                  margin-bottom: 1rem;
+              }
+              .input-icon {
+                  position: absolute;
+                  right: 10px;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  pointer-events: none;
+              }
+              .form-control {
+                  padding-right: 30px;
+              }
+          </style>
+            <form id="registerForm" onsubmit="registerUser(); return false;">
+                <div class="input-container">
+                    <input type="text" placeholder="Nome de utilizador" class="form-control susername" id="usernameInput" required>
+                    <i class="bi bi-person-fill input-icon" style="font-size: 25px; color: black;"></i>
+                </div>
+                <div class="input-container">
+                    <input type="email" placeholder="E-mail" class="form-control email" id="emailInput" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
+                    <i class="bi bi-envelope-fill input-icon" style="font-size: 25px; color: black;"></i>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Palavra-passe" class="form-control password" id="passwordInput" required>
+                    <i class="bi bi-key-fill input-icon" style="font-size: 25px; color: black;"></i>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Confirmar palavra-passe" class="form-control confirmpassword" id="confirmPasswordInput" required>
+                    <i class="bi bi-key-fill input-icon" style="font-size: 25px; color: black;"></i>
+                </div>
+                <button type="submit" class="btn btn-primary register-button" name="register-button" id="submitButton">
+                    <i class="bi bi-person-plus"></i> Registar Conta
+                </button>
+            </form>
+        </div>
           <p>Já tenho conta, <a href="login.html">iniciar sessão</a>.</p>
         </div>
       </div>

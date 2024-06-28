@@ -7,7 +7,7 @@ function fetchUserInfo() {
                 const user = JSON.parse(this.responseText);
                 const isDarkMode = user.settings.isDarkMode;
 
-                // Apply dark mode if enabled
+                // Apply dark or light mode based on user settings
                 if (isDarkMode) {
                     applyTheme('dark');
                 } else {
@@ -32,21 +32,26 @@ function fetchUserInfo() {
 
 function applyTheme(theme) {
     const toggleSwitch = document.getElementById('isDarkMode');
-    
+
     if (theme === 'dark') {
         document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
         document.querySelector('header').classList.add('dark-mode');
+        document.querySelector('header').classList.remove('light-mode');
         document.querySelector('footer').classList.add('dark-mode');
+        document.querySelector('footer').classList.remove('light-mode');
         document.querySelector('main').classList.add('dark-mode');
+        document.querySelector('main').classList.remove('light-mode');
         toggleSwitch.checked = true;
         setDarkModeStyles();
     } else {
+        document.body.classList.add('light-mode');
         document.body.classList.remove('dark-mode');
         document.querySelector('header').classList.remove('dark-mode');
         document.querySelector('footer').classList.remove('dark-mode');
         document.querySelector('main').classList.remove('dark-mode');
         toggleSwitch.checked = false;
-        resetStyles();
+        setLightModeStyles();
     }
 }
 
@@ -55,6 +60,11 @@ function setDarkModeStyles() {
     document.querySelector('.slogan .tagline').style.color = 'white';
     document.querySelector('.rounded-box').style.backgroundColor = '#2b3035';
 
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.style.color = 'white';
+    });
+
     const noRouteFound = document.getElementById('noRouteFound');
     if (noRouteFound) {
         noRouteFound.style.color = 'white';
@@ -62,25 +72,27 @@ function setDarkModeStyles() {
 
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
-        sidebar.style.backgroundColor = 'white';
+        sidebar.style.backgroundColor = '#2b3035';
     }
 }
 
-function resetStyles() {
-    document.querySelector('.slogan .title').style.color = '';
-    document.querySelector('.slogan .tagline').style.color = '';
-    document.querySelector('.rounded-box').style.backgroundColor = '';
-    document.querySelector('.nav-link').style.color = "";
-    document.querySelector('.nav-link.active').style.color = "";
+function setLightModeStyles() {
+    document.querySelector('.slogan .title').style.color = 'black';
+    document.querySelector('.slogan .tagline').style.color = 'black';
+
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.style.color = 'black';
+    });
 
     const noRouteFound = document.getElementById('noRouteFound');
     if (noRouteFound) {
-        noRouteFound.style.color = '';
+        noRouteFound.style.color = 'black';
     }
 
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
-        sidebar.style.backgroundColor = '';
+        sidebar.style.backgroundColor = '#f8f9fa';
     }
 }
 

@@ -421,6 +421,37 @@ main.dark-mode {
   background-color: white !important;
 }
 
+.dark-mode .nav-link {
+  color: white;
+}
+
+.dark-mode .nav-link:hover {
+  color: #bbbbbb;
+}
+
+.dark-mode .nav-link.active {
+  color: #f8f9fa;
+}
+
+.light-mode {
+  background-color: white;
+  color: black;
+}
+
+/* Light mode styles for navigation links */
+.light-mode .nav-link {
+  color: black;
+}
+
+.light-mode .nav-link:hover {
+  color: #555555; /* Adjust the hover color as needed */
+}
+
+.light-mode .nav-link.active {
+  color: #000000; /* Bold color for active link */
+}
+
+
 .toggle-switch {
   position: relative;
   display: inline-block;

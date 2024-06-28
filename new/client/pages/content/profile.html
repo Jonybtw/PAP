@@ -45,6 +45,10 @@
                 .form-control {
                     padding-right: 30px;
                 }
+                .form-control-color {
+                    padding-right: revert;
+                    display: inline;
+                }
             </style>
             <div>
                 <ul class="profile-info">
@@ -93,7 +97,7 @@
                 <li>
                     <br>
                     <label for="mainColor">Cor Principal:</label>
-                    <input id="mainColor" type="color">
+                    <input id="mainColor" class="form-control form-control-color" type="color">
                 </li>
             </ul>
             <br>

@@ -7,7 +7,6 @@ function fetchUserInfo() {
                 const user = JSON.parse(this.responseText);
                 const isDarkMode = user.settings.isDarkMode;
 
-                // Apply dark or light mode based on user settings
                 if (isDarkMode) {
                     applyTheme('dark');
                 } else {

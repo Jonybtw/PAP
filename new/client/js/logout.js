@@ -1,4 +1,3 @@
-
 window.onload = function() {
     var logoutButtons = document.getElementsByClassName('logoutButton');
 

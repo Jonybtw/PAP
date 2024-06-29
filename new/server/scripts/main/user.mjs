@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { collectionUsers } from "../database/conn.mjs";
+import { collectionUsers, collectionRoutes } from "../database/conn.mjs";
 import nodemailer from "nodemailer";
 import CryptoJS from "crypto-js";
 import bcrypt from "bcrypt";
@@ -174,18 +174,35 @@ export const User = {
   },
 
   delete: async (request, response) => {
-    let id = request.id;
+    try {
+      let id = request.id;
 
-    let query = { _id: new ObjectId(id) };
-    let result = await collectionUsers.deleteOne(query);
+      if (!ObjectId.isValid(id)) {
+        return response.status(400).json("ID de utilizador inválido.");
+      }
 
-    if (!result) response.status(404).json("Não encontrado");
-    else {
-      if (result.deletedCount === 1) {
-        return response.status(200).json("Utilizador removido com sucesso.");
-      } else {
+      let query = { _id: new ObjectId(id) };
+
+      const user = await collectionUsers.findOne(query);
+
+      if (!user) {
         return response.status(404).json("Utilizador não encontrado.");
       }
+
+      const result = await collectionUsers.deleteOne(query);
+
+      if (result.deletedCount === 0) {
+        return response.status(404).json("Utilizador não encontrado.");
+      }
+
+      if (user.data && user.data.routes) {
+        await collectionRoutes.deleteOne({ _id: new ObjectId(user.data.routes) });
+      }
+
+      return response.status(200).json("Utilizador e rotas associadas removidos com sucesso.");
+    } catch (error) {
+      console.error("Erro ao eliminar utilizador:", error);
+      return response.status(500).json("Erro no servidor.");
     }
   },
 
@@ -317,7 +334,7 @@ export const User = {
 },
 
 resetPassword: async (request, response) => {
-  const resetToken = request.params.token; // Use params to extract token
+  const resetToken = request.params.token;
   const { password } = request.body;
 
   try {

@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Falha ao apagar a sua conta. Por favor tente mais tarde.');
             };
 
-            xhr.send(); // No request body needed for DELETE
+            xhr.send();
         }
     });
 });

@@ -71,6 +71,11 @@
 
     <footer>
         <h1 id="logo"><span>Route</span>Wise</h1>
+        <p>&copy; <span id="year"></span> RouteWise. Todos os direitos reservados.</p>
+        <script>
+            const currentYear = new Date().getFullYear();
+            document.getElementById('year').textContent = currentYear;
+        </script>
         <span>Navegue com <span id="mark">Inteligência</span>, Navegue com <span id="mark">Eficiência</span></span>
         <nav>
             <a href="../content/sobrenos.html">Sobre Nós</a>

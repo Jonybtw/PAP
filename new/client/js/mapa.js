@@ -855,13 +855,17 @@ class AutocompleteDirectionsHandler {
     saveButton.removeEventListener("click", this.saveRouteHandler);
     this.saveRouteHandler = async () => {
       try {
+        const requestBody = {
+          origin: request.origin,
+          destination: request.destination
+        };
         const response = await fetch("http://127.0.0.1:420/routes", {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization: getCookie("token"),
           },
-          body: JSON.stringify(request),
+          body: JSON.stringify(requestBody),
         });
 
         if (response.ok) {

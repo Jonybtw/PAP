@@ -359,7 +359,7 @@ ul{
   padding-left: 0px !important;
 }
 
-a:not(.botao-cta) {
+a:not(.adp a, .botao-cta) {
   color: white !important;
 }
 

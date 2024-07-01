@@ -224,7 +224,7 @@ div.adp *, td *, .adp-summary *, .adp-list * {
 }
 
 .adp a {
-  color: blue;
+  color: blue !important;
 }
 
 div.warnbox-content, div.warnbox-c1, div.warnbox-c2 {

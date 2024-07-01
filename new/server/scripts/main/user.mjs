@@ -62,10 +62,10 @@ export const User = {
       };
 
       const result = await collectionUsers.insertOne(newUser);
-      if (!result) response.status(401).json("Erro ao registrar utilizador.");
-      else response.status(201).json("Utilizador registrado com sucesso.");
+      if (!result) response.status(401).json("Erro ao registar utilizador.");
+      else response.status(201).json("Utilizador registado com sucesso.");
     } catch (error) {
-      console.error("Erro ao registrar utilizador:", error);
+      console.error("Erro ao registar utilizador:", error);
       response.status(500).json("Erro interno do servidor.");
     }
   },
@@ -264,7 +264,7 @@ export const User = {
       let message = {
         from: 'RouteWise <no-reply@routewise.com>',
         to: decrypt(user.contacts.email),
-        subject: 'Mudança de Palavra-Passe',
+        subject: 'Redefinição de Palavra-Passe',
         html: `
           <!DOCTYPE html>
           <html>
@@ -299,7 +299,7 @@ export const User = {
             <div class="container">
               <h1 class="logo">Route<span>Wise</span></h1>
               <h2>Olá, ${user.data.username}!</h2>
-              <p>Recebemos uma solicitação para redefinir a palavra-passe da sua conta RouteWise em ${new Date().toLocaleString()}.</p>
+              <p>Recebemos uma solicitação para redefinir a palavra-passe da sua conta RouteWise em <b>${new Date().toLocaleString()}</b>.</p>
               <p>Para redefinir a sua palavra-passe clique no botão abaixo, caso o botão não funcione copie e cole o link abaixo no seu navegador:</p>
       
               <a href="http://127.0.0.1:5550/new/client/pages/auth/reset-password.html?token=${resetToken}" class="button">Redefinir Senha</a>
@@ -307,7 +307,7 @@ export const User = {
               <p>Link para redefinição de palavra-passe:</p>
               <p><a href="http://127.0.0.1:5550/new/client/pages/auth/reset-password.html?token=${resetToken}">http://127.0.0.1:5550/new/client/pages/auth/reset-password/${resetToken}</a></p>
       
-              <p>Este link expirará em 1 hora.</p>
+              <p>Este link expirará em <b>1 hora</b>.</p>
               <p>Se você não solicitou a redefinição da palavra-passe, pode ignorar este email. Sua palavra-passe permanecerá inalterada.</p>
               <p>Se precisar de ajuda, entre em contato com nossa equipa de suporte em <a href="mailto:support@routewise.com">support@routewise.com</a>.</p>
             </div>

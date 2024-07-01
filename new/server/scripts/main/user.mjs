@@ -54,7 +54,7 @@ export const User = {
         },
         settings: {
           isDarkMode: null,
-          mainColor: null,
+          mainColor: "#3498db",
         },
         auth: {
           password: hashedPassword,
